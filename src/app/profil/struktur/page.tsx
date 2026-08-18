@@ -12,13 +12,12 @@ export default function StrukturPage() {
   const { schoolInfo } = useData();
 
   const hierarchy = [
-    { role: "Ketua Pembina Yayasan", name: "", level: 1 },
-    { role: "Ketua Yayasan Pondok Pesantren", name: "", level: 2 },
-    { role: "Kepala SMA Al-Furqon", name: "", level: 3 },
-    { role: "Waka Kurikulum", name: "", level: 4 },
-    { role: "Waka Kesiswaan & IT", name: "", level: 4 },
-    { role: "Koordinator Keagamaan & Tahfidz", name: "", level: 4 },
-    { role: "Ketua Tim Adiwiyata", name: "", level: 4 },
+    { role: "Ketua Yayasan & Pengasuh Pondok Pesantren Al-Furqon", name: "KH. Mashuri Abdurrohiem", level: 1 },
+    { role: "Kadep Pendidikan", name: "Dr. H. Abdul Muid, M.Pd.I.", level: 2 },
+    { role: "Kepala Sekolah", name: "Suryanto, S.Pd., M.Pd.", level: 3 },
+    { role: "Wk. Kurikulum", name: "Triana Dewitasari, S.Pd.", level: 4 },
+    { role: "Wk. Kesiswaan", name: "Suherman, M.Pd. I.", level: 4 },
+    { role: "Tata Usaha (TU)", name: "Siti Alfiyatus Sa'diyah, S.Pd", level: 4 },
   ];
 
   return (

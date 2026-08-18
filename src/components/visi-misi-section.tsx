@@ -1,13 +1,20 @@
 "use client";
 
 import React from "react";
-import { Sparkles, HeartHandshake, BookOpen, Trees, ShieldCheck, CheckCircle2 } from "lucide-react";
+import { Sparkles, HeartHandshake, Zap, Users, Brain, BookOpen, ShieldCheck, CheckCircle2 } from "lucide-react";
 import { useData } from "@/context/data-context";
 
 export const VisiMisiSection: React.FC = () => {
   const { schoolInfo } = useData();
 
-  const missionIcons = [HeartHandshake, BookOpen, ShieldCheck, Trees];
+  const missionIcons = [
+    HeartHandshake,
+    Zap,
+    Users,
+    Brain,
+    BookOpen,
+    ShieldCheck,
+  ];
 
   return (
     <section id="visi-misi" className="py-20 bg-slate-900 text-white relative overflow-hidden">

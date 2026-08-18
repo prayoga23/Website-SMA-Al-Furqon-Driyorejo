@@ -3,12 +3,14 @@
 import React, { useState } from "react";
 import { AdminSidebar } from "@/components/admin-sidebar";
 import { useData } from "@/context/data-context";
-import { Plus, Trash2, Calendar, X } from "lucide-react";
+import { Plus, Trash2, Edit3, Calendar, X } from "lucide-react";
 import { AgendaItem } from "@/lib/types";
 
 export default function AdminAgendaPage() {
-  const { agendas, addAgenda, deleteAgenda } = useData();
+  const { agendas, addAgenda, updateAgenda, deleteAgenda } = useData();
   const [modalOpen, setModalOpen] = useState(false);
+  const [editingItem, setEditingItem] = useState<AgendaItem | null>(null);
+
   const [title, setTitle] = useState("");
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
@@ -16,22 +18,52 @@ export default function AdminAgendaPage() {
   const [category, setCategory] = useState<AgendaItem["category"]>("Akademik");
   const [description, setDescription] = useState("");
 
-  const handleAdd = (e: React.FormEvent) => {
-    e.preventDefault();
-    addAgenda({
-      title,
-      date: date || new Date().toISOString().split("T")[0],
-      time: time || "08:00 - 12:00 WIB",
-      location: location || "SMA Al-Furqon Driyorejo",
-      category,
-      description,
-    });
-    setModalOpen(false);
+  const openAddModal = () => {
+    setEditingItem(null);
     setTitle("");
     setDate("");
     setTime("");
     setLocation("");
+    setCategory("Akademik");
     setDescription("");
+    setModalOpen(true);
+  };
+
+  const openEditModal = (item: AgendaItem) => {
+    setEditingItem(item);
+    setTitle(item.title);
+    setDate(item.date);
+    setTime(item.time);
+    setLocation(item.location);
+    setCategory(item.category);
+    setDescription(item.description);
+    setModalOpen(true);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (editingItem) {
+      updateAgenda(editingItem.id, {
+        title,
+        date: date || editingItem.date,
+        time: time || "08:00 - 12:00 WIB",
+        location: location || "SMA Al-Furqon Driyorejo",
+        category,
+        description,
+      });
+    } else {
+      addAgenda({
+        title,
+        date: date || new Date().toISOString().split("T")[0],
+        time: time || "08:00 - 12:00 WIB",
+        location: location || "SMA Al-Furqon Driyorejo",
+        category,
+        description,
+      });
+    }
+
+    setModalOpen(false);
   };
 
   return (
@@ -48,7 +80,7 @@ export default function AdminAgendaPage() {
           </div>
 
           <button
-            onClick={() => setModalOpen(true)}
+            onClick={openAddModal}
             className="px-4 py-2.5 rounded-xl bg-amber-500 text-slate-950 font-bold text-xs flex items-center gap-1.5 hover:bg-amber-400 shadow transition-colors"
           >
             <Plus className="w-4 h-4" />
@@ -58,17 +90,19 @@ export default function AdminAgendaPage() {
 
         {modalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-            <div className="bg-white dark:bg-[#0E241E] max-w-lg w-full rounded-3xl p-6 shadow-2xl space-y-4">
+            <div className="bg-white dark:bg-[#0E241E] max-w-lg w-full rounded-3xl p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto border border-slate-200 dark:border-emerald-900/60">
               <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-emerald-900/40">
-                <h3 className="font-bold text-sm font-heading">Tambah Agenda Baru</h3>
+                <h3 className="font-bold text-sm font-heading">
+                  {editingItem ? "Edit Agenda Sekolah" : "Tambah Agenda Baru"}
+                </h3>
                 <button onClick={() => setModalOpen(false)} className="text-slate-400">
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
-              <form onSubmit={handleAdd} className="space-y-3 text-xs">
+              <form onSubmit={handleSubmit} className="space-y-3.5 text-xs">
                 <div>
-                  <label className="block font-bold mb-1">Judul Agenda *</label>
+                  <label className="block font-bold mb-1 text-slate-700 dark:text-slate-200">Judul Agenda *</label>
                   <input
                     type="text"
                     required
@@ -80,7 +114,7 @@ export default function AdminAgendaPage() {
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block font-bold mb-1">Tanggal *</label>
+                    <label className="block font-bold mb-1 text-slate-700 dark:text-slate-200">Tanggal *</label>
                     <input
                       type="date"
                       required
@@ -91,7 +125,7 @@ export default function AdminAgendaPage() {
                   </div>
 
                   <div>
-                    <label className="block font-bold mb-1">Kategori *</label>
+                    <label className="block font-bold mb-1 text-slate-700 dark:text-slate-200">Kategori *</label>
                     <select
                       value={category}
                       onChange={(e) => setCategory(e.target.value as any)}
@@ -107,7 +141,7 @@ export default function AdminAgendaPage() {
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block font-bold mb-1">Waktu Wajib *</label>
+                    <label className="block font-bold mb-1 text-slate-700 dark:text-slate-200">Waktu Wajib *</label>
                     <input
                       type="text"
                       placeholder="07:30 - 12:00 WIB"
@@ -118,7 +152,7 @@ export default function AdminAgendaPage() {
                   </div>
 
                   <div>
-                    <label className="block font-bold mb-1">Lokasi *</label>
+                    <label className="block font-bold mb-1 text-slate-700 dark:text-slate-200">Lokasi *</label>
                     <input
                       type="text"
                       placeholder="Gedung Utama"
@@ -130,9 +164,9 @@ export default function AdminAgendaPage() {
                 </div>
 
                 <div>
-                  <label className="block font-bold mb-1">Keterangan Singkat *</label>
+                  <label className="block font-bold mb-1 text-slate-700 dark:text-slate-200">Keterangan Singkat *</label>
                   <textarea
-                    rows={2}
+                    rows={3}
                     required
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
@@ -150,9 +184,9 @@ export default function AdminAgendaPage() {
                   </button>
                   <button
                     type="submit"
-                    className="px-4 py-2 rounded-xl bg-amber-500 text-slate-950 font-bold"
+                    className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold transition-colors"
                   >
-                    Simpan Agenda
+                    {editingItem ? "Simpan Perubahan" : "Simpan Agenda"}
                   </button>
                 </div>
               </form>
@@ -187,12 +221,22 @@ export default function AdminAgendaPage() {
                     </span>
                   </td>
                   <td className="p-3 text-right">
-                    <button
-                      onClick={() => deleteAgenda(item.id)}
-                      className="p-1.5 rounded bg-red-100 dark:bg-red-950 text-red-600 hover:bg-red-200 transition-colors"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
+                    <div className="flex items-center justify-end gap-1.5">
+                      <button
+                        onClick={() => openEditModal(item)}
+                        className="p-1.5 rounded bg-blue-100 dark:bg-blue-950 text-blue-600 hover:bg-blue-200 transition-colors"
+                        title="Edit Agenda"
+                      >
+                        <Edit3 className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => deleteAgenda(item.id)}
+                        className="p-1.5 rounded bg-red-100 dark:bg-red-950 text-red-600 hover:bg-red-200 transition-colors"
+                        title="Hapus Agenda"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}

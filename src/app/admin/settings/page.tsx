@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { AdminSidebar } from "@/components/admin-sidebar";
 import { useData } from "@/context/data-context";
 import { Settings, Save, CheckCircle } from "lucide-react";
+import { ImageUploadInput } from "@/components/image-upload-input";
 
 export default function AdminSettingsPage() {
   const { schoolInfo, updateSchoolInfo } = useData();
@@ -18,6 +19,8 @@ export default function AdminSettingsPage() {
     email: schoolInfo.email,
     whatsapp: schoolInfo.whatsapp,
     vision: schoolInfo.vision,
+    headmasterName: schoolInfo.headmasterName,
+    headmasterPhoto: schoolInfo.headmasterPhoto || "",
     headmasterWelcome: schoolInfo.headmasterWelcome,
   });
 
@@ -119,6 +122,24 @@ export default function AdminSettingsPage() {
               />
             </div>
           </div>
+
+          <div>
+            <label className="block font-bold text-slate-700 dark:text-slate-200 mb-1">Nama Kepala Sekolah *</label>
+            <input
+              type="text"
+              required
+              value={form.headmasterName}
+              onChange={(e) => setForm({ ...form, headmasterName: e.target.value })}
+              className="w-full p-3 rounded-xl bg-slate-50 dark:bg-[#081612] border border-slate-200 dark:border-emerald-900/60 font-semibold"
+            />
+          </div>
+
+          {/* Local Image Upload for Headmaster Photo */}
+          <ImageUploadInput
+            value={form.headmasterPhoto}
+            onChange={(imgData) => setForm({ ...form, headmasterPhoto: imgData })}
+            label="Upload Foto Profil Kepala Sekolah *"
+          />
 
           <div>
             <label className="block font-bold text-slate-700 dark:text-slate-200 mb-1">Tagline Sekolah *</label>

@@ -164,7 +164,7 @@ export default function ProfilPage() {
               },
               {
                 title: "Visi & Misi",
-                desc: "Nilai luhur dan 4 misi pembentukan karakter siswa.",
+                desc: "Nilai luhur dan 6 poin misi pembentukan karakter siswa.",
                 href: "/profil/visi-misi",
                 icon: Target,
               },

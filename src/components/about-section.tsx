@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -14,11 +14,56 @@ import {
   Quote,
   ShieldCheck,
   Target,
+  ChevronLeft,
+  ChevronRight,
+  UserCheck,
 } from "lucide-react";
 import { useData } from "@/context/data-context";
 
 export const AboutSection: React.FC = () => {
   const { schoolInfo } = useData();
+  const [activeSlide, setActiveSlide] = useState<number>(0);
+
+  const slides = [
+    {
+      id: "pengasuh",
+      leaderTitle: "Ketua Yayasan & Pengasuh Pondok Pesantren Al - Furqon",
+      name: "KH. Mashuri Abdurrohiem",
+      role: "Ketua Yayasan & Pengasuh PP. Al-Furqon",
+      image: "/gambar kyai.jpg",
+      fitStyle: "object-cover object-[center_15%]",
+      photoTag: "KH. Mashuri Abdurrohiem (Pengasuh Pondok Pesantren Al-Furqon bersama Bu Nyai)",
+      headingText: "Selayang Pandang SMA PP. Al-Furqon",
+      quoteText:
+        "SMA PP. Al Furqon merupakan lembaga pendidikan dengan penyelenggara Pondok Pesantren Al Furqon yang didirikan dan diasuh oleh KH. Mashuri Abdurrohiem. Kami hadir dan siap untuk memenuhi kebutuhan masyarakat akan pentingnya pendidikan karakter Islami yang kuat dan memiliki kemampuan berpikir kritis, kolaboratif, kreatif, inovatif serta komunikatif. Program dan lingkungan kondusif yang kami tawarkan insyaAllah akan menempa dan memproses santri meraih asa.",
+      badge: "Pondok Pesantren Al-Furqon Driyorejo",
+      location: "Wedoroanom, Gresik",
+    },
+    {
+      id: "kepala-sekolah",
+      leaderTitle: "Kepala Sekolah",
+      name: "Ust. Suryanto, S.Pd., M.Pd.",
+      role: "Kepala Sekolah SMA Al-Furqon Driyorejo",
+      image: "/foto-kepala-sekolah.png",
+      fitStyle: "object-contain bg-[#033aa7] dark:bg-[#022873] p-1.5",
+      photoTag: "Ust. Suryanto, S.Pd., M.Pd. (Kepala Sekolah SMA Al-Furqon Driyorejo)",
+      headingText: "Kata Pengantar Kepala Sekolah",
+      quoteText:
+        "Puji syukur kepada Allah SWT, Tuhan Yang Maha Esa yang telah memberikan rahmat dan anugerah-Nya. Salah satu tujuan dari sarana ini adalah sebagai sarana informasi bagi masyarakat tentang seluruh program dan kegiatan yang ada di SMA Al Furqon Pondok Pesantren Al Furqon Driyorejo Gresik. Semoga dengan adanya sarana ini dapat membantu dan memberi manfaat, terutama informasi yang berhubungan dengan pendidikan, ilmu pengetahuan dan informasi seputar sekolah. Besar harapan kami, sarana ini dapat memberi manfaat bagi semua pihak yang ada di lingkup pendidikan dan pemerhati pendidikan.",
+      badge: "SMA Al-Furqon Driyorejo",
+      location: "Wedoroanom, Gresik",
+    },
+  ];
+
+  const currentSlide = slides[activeSlide];
+
+  const nextSlide = () => {
+    setActiveSlide((prev) => (prev + 1) % slides.length);
+  };
+
+  const prevSlide = () => {
+    setActiveSlide((prev) => (prev - 1 + slides.length) % slides.length);
+  };
 
   const statCards = [
     {
@@ -35,7 +80,7 @@ export const AboutSection: React.FC = () => {
     },
     {
       title: "Jumlah Siswa",
-      value: `${schoolInfo.stats.students}+`,
+      value: `-`,
       icon: Users,
       desc: "Santri & Pelajar",
     },
@@ -43,11 +88,11 @@ export const AboutSection: React.FC = () => {
       title: "Guru & Staf",
       value: `${schoolInfo.stats.teachers}`,
       icon: GraduationCap,
-      desc: "Tenaga Pendidik S1/S2",
+      desc: "Tenaga Pendidik S1/S2/S3",
     },
     {
       title: "Prestasi Terukir",
-      value: `${schoolInfo.stats.achievementsCount}+`,
+      value: `-`,
       icon: Sparkles,
       desc: "Tingkat Kabupaten - Nasional",
     },
@@ -77,33 +122,74 @@ export const AboutSection: React.FC = () => {
       ></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-16">
-        
+
         {/* Upper Split Layout: Selayang Pandang & Leadership */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          
+
           {/* Left Visual & Leadership Card */}
           <div className="lg:col-span-5 relative">
-            <div className="relative mx-auto max-w-md lg:max-w-none space-y-6">
-              
-              {/* Main Photo Card */}
-              <div className="rounded-3xl overflow-hidden shadow-2xl border-4 border-white dark:border-emerald-950 aspect-[4/3] relative group">
+            <div className="relative mx-auto max-w-md lg:max-w-none space-y-5">
+
+              {/* Slide Switcher Buttons */}
+              <div className="flex items-center justify-between gap-2 bg-slate-200/80 dark:bg-emerald-950/80 p-1.5 rounded-2xl border border-slate-300 dark:border-emerald-900/50 shadow-inner">
+                <button
+                  onClick={() => setActiveSlide(0)}
+                  className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${activeSlide === 0
+                    ? "bg-[#064E3B] text-white shadow-md scale-[1.02]"
+                    : "text-slate-700 dark:text-slate-300 hover:bg-slate-300/60 dark:hover:bg-emerald-900/50"
+                    }`}
+                >
+                  <UserCheck className="w-3.5 h-3.5 text-amber-300" />
+                  <span>Pengasuh PP</span>
+                </button>
+                <button
+                  onClick={() => setActiveSlide(1)}
+                  className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${activeSlide === 1
+                    ? "bg-[#064E3B] text-white shadow-md scale-[1.02]"
+                    : "text-slate-700 dark:text-slate-300 hover:bg-slate-300/60 dark:hover:bg-emerald-900/50"
+                    }`}
+                >
+                  <UserCheck className="w-3.5 h-3.5 text-amber-300" />
+                  <span>Kepala Sekolah</span>
+                </button>
+              </div>
+
+              {/* Main Photo Card with Carousel Controls */}
+              <div className="rounded-3xl overflow-hidden shadow-2xl border-4 border-white dark:border-emerald-950 aspect-[4/3] relative group bg-slate-900">
                 <img
-                  src="/gambar kyai.jpg"
-                  alt="Kegiatan Pembelajaran SMA Al-Furqon"
-                  className="w-full h-full object-cover object-[center_15%] group-hover:scale-105 transition-transform duration-500"
+                  key={currentSlide.id}
+                  src={currentSlide.image}
+                  alt={currentSlide.name}
+                  className={`w-full h-full ${currentSlide.fitStyle} transition-all duration-500`}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-                
-                <div className="absolute bottom-4 left-4 right-4 text-white">
-                  <span className="bg-amber-400 text-slate-900 text-[10px] font-extrabold px-2.5 py-1 rounded-md mb-1 inline-block uppercase">
-                    Sekolah Berkinerja Baik Nasional
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-black/10 pointer-events-none"></div>
+
+                {/* Arrow Controls */}
+                <button
+                  onClick={prevSlide}
+                  className="absolute left-2.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/40 hover:bg-black/80 text-white flex items-center justify-center backdrop-blur-sm transition-all border border-white/20 shadow"
+                  title="Foto Sebelumnya"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={nextSlide}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/40 hover:bg-black/80 text-white flex items-center justify-center backdrop-blur-sm transition-all border border-white/20 shadow"
+                  title="Foto Selanjutnya"
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </button>
+
+                <div className="absolute bottom-3.5 left-3 right-3 text-white">
+                  <span className="bg-amber-400 text-slate-900 text-[9px] font-extrabold px-2 py-1 rounded-md mb-1 inline-block uppercase shadow-sm">
+                    {currentSlide.photoTag}
                   </span>
-                  <p className="text-xs font-bold text-amber-200">SMA AL-FURQON DRIYOREJO</p>
-                  <p className="text-[11px] text-slate-200">Pondok Pesantren Al-Furqon Gresik</p>
+                  <p className="text-xs font-bold text-amber-200">{currentSlide.name}</p>
+                  <p className="text-[11px] text-slate-200">{currentSlide.role}</p>
                 </div>
               </div>
 
-              {/* Leadership Box (Pengasuh & Kepala Sekolah) */}
+              {/* Leadership Box (Interactive Row Selection) */}
               <div className="bg-white dark:bg-[#0E241E] p-5 rounded-2xl border border-slate-200 dark:border-emerald-900/50 shadow-xl space-y-3">
                 <div className="flex items-center gap-2 border-b border-slate-100 dark:border-emerald-900/40 pb-2">
                   <ShieldCheck className="w-5 h-5 text-[#047857] dark:text-emerald-400" />
@@ -113,52 +199,66 @@ export const AboutSection: React.FC = () => {
                 </div>
 
                 <div className="space-y-2 text-xs">
-                  <div className="flex justify-between items-center p-2 rounded-xl bg-slate-50 dark:bg-emerald-950/40">
-                    <span className="text-slate-500 dark:text-slate-400 font-medium">Pendiri / Pengasuh PP:</span>
-                    <span className="font-bold text-slate-900 dark:text-amber-300">KH. Mashuri Abdurrohim</span>
+                  <div
+                    onClick={() => setActiveSlide(0)}
+                    className={`flex justify-between items-center p-2.5 rounded-xl cursor-pointer transition-all border ${activeSlide === 0
+                      ? "bg-emerald-50 dark:bg-emerald-950/80 border-emerald-400/50 shadow-sm"
+                      : "bg-slate-50 dark:bg-emerald-950/30 border-transparent hover:bg-slate-100"
+                      }`}
+                  >
+                    <span className="text-slate-600 dark:text-slate-400 font-medium">Pengasuh Pondok Pesantren :</span>
+                    <span className="font-bold text-slate-900 dark:text-amber-300">KH. Mashuri Abdurrohiem</span>
                   </div>
-                  <div className="flex justify-between items-center p-2 rounded-xl bg-slate-50 dark:bg-emerald-950/40">
-                    <span className="text-slate-500 dark:text-slate-400 font-medium">Kepala Sekolah:</span>
-                    <span className="font-bold text-slate-900 dark:text-emerald-400">Suryanto, M.Pd.</span>
+                  <div
+                    onClick={() => setActiveSlide(1)}
+                    className={`flex justify-between items-center p-2.5 rounded-xl cursor-pointer transition-all border ${activeSlide === 1
+                      ? "bg-emerald-50 dark:bg-emerald-950/80 border-emerald-400/50 shadow-sm"
+                      : "bg-slate-50 dark:bg-emerald-950/30 border-transparent hover:bg-slate-100"
+                      }`}
+                  >
+                    <span className="text-slate-600 dark:text-slate-400 font-medium">Kepala Sekolah :</span>
+                    <span className="font-bold text-slate-900 dark:text-emerald-400">Suryanto, S.Pd., M.Pd.</span>
                   </div>
-                </div>
-
-                <div className="pt-1 text-center">
-                  <span className="inline-block text-[11px] font-bold italic text-amber-600 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/80 px-3 py-1 rounded-full border border-amber-200 dark:border-amber-800">
-                    Slogan: Dzikir - Fikir - Ikhtiar - Tawakal
-                  </span>
                 </div>
               </div>
 
             </div>
           </div>
 
-          {/* Right Column: Selayang Pandang Full Text */}
+          {/* Right Column: Dynamic Selayang Pandang / Kata Pengantar Card */}
           <div className="lg:col-span-7 space-y-6">
             <div>
               <span className="text-xs font-extrabold tracking-widest text-[#047857] dark:text-emerald-400 uppercase bg-emerald-100/70 dark:bg-emerald-950/80 px-3.5 py-1.5 rounded-full inline-block mb-3 border border-emerald-300/40">
-                SELAYANG PANDANG
+                SELAYANG PANDANG & SAMBUTAN
               </span>
               <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white font-heading leading-tight">
                 Membina Generasi Unggul Intelektual & Anggun Moralitas
               </h2>
             </div>
 
-            {/* Selayang Pandang Highlight Card */}
-            <div className="bg-gradient-to-r from-emerald-50 via-white to-amber-50/50 dark:from-[#0E241E] dark:via-[#0E241E] dark:to-emerald-950/40 p-6 sm:p-8 rounded-3xl border-l-4 border-[#064E3B] dark:border-emerald-400 shadow-md relative space-y-4">
+            {/* Dynamic Highlight Speech Card */}
+            <div className="bg-gradient-to-r from-emerald-50 via-white to-amber-50/50 dark:from-[#0E241E] dark:via-[#0E241E] dark:to-emerald-950/40 p-6 sm:p-8 rounded-3xl border-l-4 border-[#064E3B] dark:border-emerald-400 shadow-md relative space-y-4 transition-all duration-300">
               <Quote className="w-10 h-10 text-emerald-200 dark:text-emerald-800 absolute top-4 right-4 opacity-50" />
 
-              <h3 className="font-extrabold text-lg text-[#064E3B] dark:text-emerald-400 font-heading">
-                Selayang Pandang SMA PP. Al-Furqon
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full bg-amber-400/20 border border-amber-400/40 text-amber-700 dark:text-amber-300">
+                  {currentSlide.leaderTitle}
+                </span>
+              </div>
+
+              <h3 className="font-extrabold text-lg sm:text-xl text-[#064E3B] dark:text-emerald-400 font-heading">
+                {currentSlide.headingText}
               </h3>
 
               <p className="text-sm text-slate-700 dark:text-slate-200 leading-relaxed italic relative z-10 font-medium">
-                &quot;SMA PP. Al Furqon merupakan lembaga pendidikan dengan penyelenggara Pondok Pesantren Al Furqon yang didirikan dan diasuh oleh <strong>KH. Mashuri Abdurrohim</strong>. Kami hadir dan siap untuk memenuhi kebutuhan masyarakat akan pentingnya pendidikan karakter Islami yang kuat dan memiliki kemampuan berpikir kritis, kolaboratif, kreatif, inovatif serta komunikatif. Program dan lingkungan kondusif yang kami tawarkan insyaAllah akan menempa dan memproses santri meraih asa.&quot;
+                &quot;{currentSlide.quoteText}&quot;
               </p>
 
-              <div className="pt-2 border-t border-slate-200/60 dark:border-emerald-900/40 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
-                <span className="font-semibold text-slate-700 dark:text-slate-300">Pondok Pesantren Al-Furqon Driyorejo</span>
-                <span className="text-emerald-600 dark:text-emerald-400 font-bold">Wedoroanom, Gresik</span>
+              <div className="pt-3 border-t border-slate-200/60 dark:border-emerald-900/40 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 flex-wrap gap-2">
+                <span className="font-semibold text-slate-700 dark:text-slate-300">
+                  Oleh: <strong className="text-[#064E3B] dark:text-emerald-300">{currentSlide.name}</strong>
+                </span>
+                <span className="text-emerald-600 dark:text-emerald-400 font-bold">{currentSlide.badge}</span>
               </div>
             </div>
 

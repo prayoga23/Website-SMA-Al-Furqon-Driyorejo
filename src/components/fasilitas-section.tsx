@@ -17,9 +17,27 @@ import {
   X,
   ArrowRight,
   Calendar,
+  BookOpen,
+  Shield,
+  Wifi,
 } from "lucide-react";
+import { useData } from "@/context/data-context";
+
+const iconMap: Record<string, React.ElementType> = {
+  Building2,
+  FlaskConical,
+  Laptop,
+  Trophy,
+  BookOpen,
+  Shield,
+  Wifi,
+  Sparkles,
+  GraduationCap,
+  Award,
+};
 
 export const FasilitasSection: React.FC = () => {
+  const { facilities } = useData();
   const [showBrochureModal, setShowBrochureModal] = useState(false);
 
   const keunggulanList = [
@@ -53,36 +71,7 @@ export const FasilitasSection: React.FC = () => {
     },
   ];
 
-  const fasilitasList = [
-    {
-      title: "Ruang Kelas Modern",
-      desc: "Ruang belajar ber-AC yang bersih, berteknologi multimedia interaktif, pencahayaan ergonomis, dan suasana belajar yang kondusif.",
-      icon: Building2,
-      tag: "Fasilitas Belajar",
-      image: "https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80",
-    },
-    {
-      title: "Laboratorium Canggih",
-      desc: "Laboratorium Sains MIPA (Fisika, Kimia, Biologi) dengan peralatan eksperimen modern berstandar praktikum dan penelitian siswa.",
-      icon: FlaskConical,
-      tag: "Riset & Eksperimen",
-      image: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=800&q=80",
-    },
-    {
-      title: "Lab Informatika Digital",
-      desc: "Laboratorium komputer multimedia spesifikasi tinggi, jaringan internet ultra-cepat, serta laboratorium IoT & literasi Artificial Intelligence.",
-      icon: Laptop,
-      tag: "Teknologi & Digital",
-      image: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=800&q=80",
-    },
-    {
-      title: "Area Olahraga Terbaik",
-      desc: "Fasilitas olahraga outdoor & indoor lengkap mencakup lapangan serbaguna futsal, basket, voli, serta gelanggang seni pencak silat.",
-      icon: Trophy,
-      tag: "Kebugaran & Seni",
-      image: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80",
-    },
-  ];
+
 
   return (
     <section id="fasilitas" className="py-20 bg-[#FDFBF7] dark:bg-[#081612] relative overflow-hidden">
@@ -168,11 +157,11 @@ export const FasilitasSection: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {fasilitasList.map((fas, idx) => {
-              const Icon = fas.icon;
+            {facilities.map((fas) => {
+              const Icon = iconMap[fas.iconName || "Building2"] || Building2;
               return (
                 <div
-                  key={idx}
+                  key={fas.id}
                   className="bg-white dark:bg-[#0E241E] rounded-3xl overflow-hidden border border-slate-100 dark:border-emerald-900/40 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between group"
                 >
                   <div>
@@ -205,7 +194,7 @@ export const FasilitasSection: React.FC = () => {
                   <div className="px-6 pb-6 pt-2">
                     <div className="w-full py-2 px-3 rounded-xl bg-slate-50 dark:bg-emerald-950/40 text-[11px] font-medium text-slate-600 dark:text-slate-300 flex items-center justify-between border border-slate-100 dark:border-emerald-900/40">
                       <span>Standar Kualitas</span>
-                      <span className="font-bold text-[#047857] dark:text-emerald-400">Terbaik & Modern</span>
+                      <span className="font-bold text-[#047857] dark:text-emerald-400">{fas.standard || "Terbaik & Modern"}</span>
                     </div>
                   </div>
                 </div>

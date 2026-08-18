@@ -12,6 +12,7 @@ import {
   PPDBApplicant,
   FAQItem,
   TestimonialItem,
+  FacilityItem,
 } from "@/lib/types";
 import {
   initialSchoolInfo,
@@ -24,6 +25,7 @@ import {
   initialApplicants,
   initialFAQs,
   initialTestimonials,
+  initialFacilities,
 } from "@/lib/data-store";
 
 interface DataContextType {
@@ -37,6 +39,7 @@ interface DataContextType {
   applicants: PPDBApplicant[];
   faqs: FAQItem[];
   testimonials: TestimonialItem[];
+  facilities: FacilityItem[];
   darkMode: boolean;
   setDarkMode: (val: boolean) => void;
   // State Mutations (Admin CMS Actions)
@@ -45,13 +48,20 @@ interface DataContextType {
   updateNews: (id: string, item: Partial<NewsItem>) => void;
   deleteNews: (id: string) => void;
   addAgenda: (item: Omit<AgendaItem, "id">) => void;
+  updateAgenda: (id: string, item: Partial<AgendaItem>) => void;
   deleteAgenda: (id: string) => void;
   addAchievement: (item: Omit<AchievementItem, "id">) => void;
+  updateAchievement: (id: string, item: Partial<AchievementItem>) => void;
   deleteAchievement: (id: string) => void;
   addTeacher: (item: Omit<TeacherItem, "id">) => void;
+  updateTeacher: (id: string, item: Partial<TeacherItem>) => void;
   deleteTeacher: (id: string) => void;
   addGalleryItem: (item: Omit<GalleryItem, "id">) => void;
+  updateGalleryItem: (id: string, item: Partial<GalleryItem>) => void;
   deleteGalleryItem: (id: string) => void;
+  addFacility: (item: Omit<FacilityItem, "id">) => void;
+  updateFacility: (id: string, item: Partial<FacilityItem>) => void;
+  deleteFacility: (id: string) => void;
   submitPPDB: (applicant: Omit<PPDBApplicant, "id" | "registrationNumber" | "registrationDate" | "status">) => PPDBApplicant;
   updateApplicantStatus: (id: string, status: PPDBApplicant["status"]) => void;
 }
@@ -72,6 +82,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [applicants, setApplicants] = useState<PPDBApplicant[]>(initialApplicants);
   const [faqs] = useState<FAQItem[]>(initialFAQs);
   const [testimonials] = useState<TestimonialItem[]>(initialTestimonials);
+  const [facilities, setFacilities] = useState<FacilityItem[]>(initialFacilities);
 
   // Load saved state from LocalStorage on mount
   useEffect(() => {
@@ -80,7 +91,16 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (savedDark !== null) setDarkModeState(JSON.parse(savedDark));
 
       const savedInfo = localStorage.getItem(STORAGE_KEY_PREFIX + "school_info");
-      if (savedInfo) setSchoolInfo(JSON.parse(savedInfo));
+      if (savedInfo) {
+        const parsed = JSON.parse(savedInfo);
+        // Refresh vision & missions if legacy or missing
+        if (!parsed.vision || parsed.vision.includes("Terwujudnya warga") || !parsed.missions || parsed.missions.length !== 6) {
+          parsed.vision = initialSchoolInfo.vision;
+          parsed.missions = initialSchoolInfo.missions;
+          localStorage.setItem(STORAGE_KEY_PREFIX + "school_info", JSON.stringify(parsed));
+        }
+        setSchoolInfo(parsed);
+      }
 
       const savedNews = localStorage.getItem(STORAGE_KEY_PREFIX + "news");
       if (savedNews) setNews(JSON.parse(savedNews));
@@ -92,13 +112,24 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (savedAchieve) setAchievements(JSON.parse(savedAchieve));
 
       const savedTeachers = localStorage.getItem(STORAGE_KEY_PREFIX + "teachers");
-      if (savedTeachers) setTeachers(JSON.parse(savedTeachers));
+      if (savedTeachers) {
+        const parsed = JSON.parse(savedTeachers);
+        if (parsed.length !== initialTeachers.length || !parsed[0]?.name) {
+          localStorage.setItem(STORAGE_KEY_PREFIX + "teachers", JSON.stringify(initialTeachers));
+          setTeachers(initialTeachers);
+        } else {
+          setTeachers(parsed);
+        }
+      }
 
       const savedGallery = localStorage.getItem(STORAGE_KEY_PREFIX + "gallery");
       if (savedGallery) setGallery(JSON.parse(savedGallery));
 
       const savedApplicants = localStorage.getItem(STORAGE_KEY_PREFIX + "applicants");
       if (savedApplicants) setApplicants(JSON.parse(savedApplicants));
+
+      const savedFacilities = localStorage.getItem(STORAGE_KEY_PREFIX + "facilities");
+      if (savedFacilities) setFacilities(JSON.parse(savedFacilities));
     } catch (e) {
       console.error("Error loading local storage:", e);
     }
@@ -152,6 +183,12 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.setItem(STORAGE_KEY_PREFIX + "agendas", JSON.stringify(updated));
   };
 
+  const updateAgenda = (id: string, item: Partial<AgendaItem>) => {
+    const updated = agendas.map((a) => (a.id === id ? { ...a, ...item } : a));
+    setAgendas(updated);
+    localStorage.setItem(STORAGE_KEY_PREFIX + "agendas", JSON.stringify(updated));
+  };
+
   const deleteAgenda = (id: string) => {
     const updated = agendas.filter((a) => a.id !== id);
     setAgendas(updated);
@@ -164,6 +201,12 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       id: "achieve-" + Date.now(),
     };
     const updated = [newItem, ...achievements];
+    setAchievements(updated);
+    localStorage.setItem(STORAGE_KEY_PREFIX + "achievements", JSON.stringify(updated));
+  };
+
+  const updateAchievement = (id: string, item: Partial<AchievementItem>) => {
+    const updated = achievements.map((a) => (a.id === id ? { ...a, ...item } : a));
     setAchievements(updated);
     localStorage.setItem(STORAGE_KEY_PREFIX + "achievements", JSON.stringify(updated));
   };
@@ -184,6 +227,12 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.setItem(STORAGE_KEY_PREFIX + "teachers", JSON.stringify(updated));
   };
 
+  const updateTeacher = (id: string, item: Partial<TeacherItem>) => {
+    const updated = teachers.map((t) => (t.id === id ? { ...t, ...item } : t));
+    setTeachers(updated);
+    localStorage.setItem(STORAGE_KEY_PREFIX + "teachers", JSON.stringify(updated));
+  };
+
   const deleteTeacher = (id: string) => {
     const updated = teachers.filter((t) => t.id !== id);
     setTeachers(updated);
@@ -200,10 +249,38 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.setItem(STORAGE_KEY_PREFIX + "gallery", JSON.stringify(updated));
   };
 
+  const updateGalleryItem = (id: string, item: Partial<GalleryItem>) => {
+    const updated = gallery.map((g) => (g.id === id ? { ...g, ...item } : g));
+    setGallery(updated);
+    localStorage.setItem(STORAGE_KEY_PREFIX + "gallery", JSON.stringify(updated));
+  };
+
   const deleteGalleryItem = (id: string) => {
     const updated = gallery.filter((g) => g.id !== id);
     setGallery(updated);
     localStorage.setItem(STORAGE_KEY_PREFIX + "gallery", JSON.stringify(updated));
+  };
+
+  const addFacility = (item: Omit<FacilityItem, "id">) => {
+    const newItem: FacilityItem = {
+      ...item,
+      id: "fac-" + Date.now(),
+    };
+    const updated = [...facilities, newItem];
+    setFacilities(updated);
+    localStorage.setItem(STORAGE_KEY_PREFIX + "facilities", JSON.stringify(updated));
+  };
+
+  const updateFacility = (id: string, item: Partial<FacilityItem>) => {
+    const updated = facilities.map((f) => (f.id === id ? { ...f, ...item } : f));
+    setFacilities(updated);
+    localStorage.setItem(STORAGE_KEY_PREFIX + "facilities", JSON.stringify(updated));
+  };
+
+  const deleteFacility = (id: string) => {
+    const updated = facilities.filter((f) => f.id !== id);
+    setFacilities(updated);
+    localStorage.setItem(STORAGE_KEY_PREFIX + "facilities", JSON.stringify(updated));
   };
 
   const submitPPDB = (
@@ -243,6 +320,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
         applicants,
         faqs,
         testimonials,
+        facilities,
         darkMode,
         setDarkMode,
         updateSchoolInfo,
@@ -250,13 +328,20 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
         updateNews,
         deleteNews,
         addAgenda,
+        updateAgenda,
         deleteAgenda,
         addAchievement,
+        updateAchievement,
         deleteAchievement,
         addTeacher,
+        updateTeacher,
         deleteTeacher,
         addGalleryItem,
+        updateGalleryItem,
         deleteGalleryItem,
+        addFacility,
+        updateFacility,
+        deleteFacility,
         submitPPDB,
         updateApplicantStatus,
       }}

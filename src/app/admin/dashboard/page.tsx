@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { AdminSidebar } from "@/components/admin-sidebar";
 import { useData } from "@/context/data-context";
 import {
+  Building2,
   Newspaper,
   Trophy,
   GraduationCap,
@@ -19,7 +20,7 @@ import Link from "next/link";
 
 export default function AdminDashboardPage() {
   const router = useRouter();
-  const { news, achievements, teachers, gallery, applicants, updateApplicantStatus } = useData();
+  const { news, achievements, teachers, gallery, applicants, facilities, updateApplicantStatus } = useData();
 
   useEffect(() => {
     const token = localStorage.getItem("sma_admin_token");
@@ -29,6 +30,7 @@ export default function AdminDashboardPage() {
   }, [router]);
 
   const stats = [
+    { title: "Fasilitas Modern", count: facilities.length, icon: Building2, color: "bg-indigo-600" },
     { title: "Berita & Pengumuman", count: news.length, icon: Newspaper, color: "bg-blue-500" },
     { title: "Prestasi Terdaftar", count: achievements.length, icon: Trophy, color: "bg-amber-500" },
     { title: "Guru & Staf", count: teachers.length, icon: GraduationCap, color: "bg-emerald-600" },
@@ -93,6 +95,14 @@ export default function AdminDashboardPage() {
             Aksi Cepat Manajemen
           </h3>
           <div className="flex items-center gap-3 flex-wrap">
+            <Link
+              href="/admin/fasilitas"
+              className="px-4 py-2.5 rounded-xl bg-indigo-600 text-white font-bold text-xs flex items-center gap-1.5 hover:bg-indigo-500 transition-colors shadow"
+            >
+              <Plus className="w-4 h-4" />
+              <span>Kelola Fasilitas</span>
+            </Link>
+
             <Link
               href="/admin/berita"
               className="px-4 py-2.5 rounded-xl bg-[#064E3B] text-amber-300 font-bold text-xs flex items-center gap-1.5 hover:bg-[#047857] transition-colors"

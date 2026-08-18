@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
+  Building2,
   LayoutDashboard,
   Newspaper,
   Calendar,
@@ -25,6 +26,7 @@ export const AdminSidebar: React.FC = () => {
 
   const menu = [
     { name: "Dashboard Overview", href: "/admin/dashboard", icon: LayoutDashboard },
+    { name: "Kelola Fasilitas", href: "/admin/fasilitas", icon: Building2 },
     { name: "Kelola Berita", href: "/admin/berita", icon: Newspaper },
     { name: "Kelola Agenda", href: "/admin/agenda", icon: Calendar },
     { name: "Kelola Prestasi", href: "/admin/prestasi", icon: Trophy },

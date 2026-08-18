@@ -168,3 +168,14 @@ export interface TestimonialItem {
   content: string;
   rating: number;
 }
+
+export interface FacilityItem {
+  id: string;
+  title: string;
+  desc: string;
+  iconName?: string;
+  tag: string;
+  image: string;
+  standard?: string;
+}
+
