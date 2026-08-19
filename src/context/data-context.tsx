@@ -56,6 +56,8 @@ interface DataContextType {
   addTeacher: (item: Omit<TeacherItem, "id">) => void;
   updateTeacher: (id: string, item: Partial<TeacherItem>) => void;
   deleteTeacher: (id: string) => void;
+  setTeachersData: (items: TeacherItem[]) => void;
+  resetTeachersToDefault: () => void;
   addGalleryItem: (item: Omit<GalleryItem, "id">) => void;
   updateGalleryItem: (id: string, item: Partial<GalleryItem>) => void;
   deleteGalleryItem: (id: string) => void;
@@ -113,12 +115,15 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       const savedTeachers = localStorage.getItem(STORAGE_KEY_PREFIX + "teachers");
       if (savedTeachers) {
-        const parsed = JSON.parse(savedTeachers);
-        if (parsed.length !== initialTeachers.length || !parsed[0]?.name) {
-          localStorage.setItem(STORAGE_KEY_PREFIX + "teachers", JSON.stringify(initialTeachers));
+        try {
+          const parsed = JSON.parse(savedTeachers);
+          if (Array.isArray(parsed) && parsed.length > 0 && parsed[0]?.name) {
+            setTeachers(parsed);
+          } else {
+            setTeachers(initialTeachers);
+          }
+        } catch {
           setTeachers(initialTeachers);
-        } else {
-          setTeachers(parsed);
         }
       }
 
@@ -239,6 +244,16 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.setItem(STORAGE_KEY_PREFIX + "teachers", JSON.stringify(updated));
   };
 
+  const setTeachersData = (items: TeacherItem[]) => {
+    setTeachers(items);
+    localStorage.setItem(STORAGE_KEY_PREFIX + "teachers", JSON.stringify(items));
+  };
+
+  const resetTeachersToDefault = () => {
+    setTeachers(initialTeachers);
+    localStorage.setItem(STORAGE_KEY_PREFIX + "teachers", JSON.stringify(initialTeachers));
+  };
+
   const addGalleryItem = (item: Omit<GalleryItem, "id">) => {
     const newItem: GalleryItem = {
       ...item,
@@ -336,6 +351,8 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
         addTeacher,
         updateTeacher,
         deleteTeacher,
+        setTeachersData,
+        resetTeachersToDefault,
         addGalleryItem,
         updateGalleryItem,
         deleteGalleryItem,
