@@ -116,9 +116,17 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const savedTeachers = localStorage.getItem(STORAGE_KEY_PREFIX + "teachers");
       if (savedTeachers) {
         try {
-          const parsed = JSON.parse(savedTeachers);
+          const parsed: TeacherItem[] = JSON.parse(savedTeachers);
           if (Array.isArray(parsed) && parsed.length > 0 && parsed[0]?.name) {
-            setTeachers(parsed);
+            const updated = parsed.map((t) => {
+              const match = initialTeachers.find((init) => init.id === t.id || init.name === t.name);
+              if (match && match.photo.startsWith("/foto-guru/")) {
+                return { ...t, photo: match.photo };
+              }
+              return t;
+            });
+            setTeachers(updated);
+            localStorage.setItem(STORAGE_KEY_PREFIX + "teachers", JSON.stringify(updated));
           } else {
             setTeachers(initialTeachers);
           }
