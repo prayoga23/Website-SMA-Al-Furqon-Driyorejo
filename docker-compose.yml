@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  nextjs-app-alfurqon:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nextjs-app-alfurqon
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    networks:
+      - proxy-network
+
+networks:
+  proxy-network:
+    external: true
