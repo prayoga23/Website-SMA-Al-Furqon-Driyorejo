@@ -1,22 +1,7 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans, Inter } from "next/font/google";
 import "./globals.css";
 import { DataProvider } from "@/context/data-context";
 import DisableInspect from "@/components/disable-inspect";
-
-const plusJakartaSans = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  variable: "--font-heading",
-  weight: ["400", "500", "600", "700", "800"],
-  display: "swap",
-});
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-sans",
-  weight: ["300", "400", "500", "600", "700"],
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: "SMA AL-FURQON DRIYOREJO | Official School Website 2026",
@@ -54,7 +39,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="id" className={`${plusJakartaSans.variable} ${inter.variable}`}>
+    <html lang="id">
       <body className="font-sans antialiased bg-[#FDFBF7] dark:bg-[#091512] text-slate-800 dark:text-slate-100 transition-colors duration-300">
         <DisableInspect />
         <DataProvider>{children}</DataProvider>
@@ -62,3 +47,4 @@ export default function RootLayout({
     </html>
   );
 }
+
