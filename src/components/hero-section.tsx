@@ -66,56 +66,56 @@ export const HeroSection: React.FC = () => {
           </div>
 
           {/* Floating Information Cards Column */}
-          <div className="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="lg:col-span-5 grid grid-cols-2 gap-3 sm:gap-4">
             {/* Card 1 */}
-            <div className="bg-white/10 dark:bg-emerald-950/40 backdrop-blur-md border border-white/15 dark:border-emerald-500/20 p-5 rounded-2xl text-white shadow-xl hover:bg-white/15 transition-all duration-300 group">
-              <div className="w-12 h-12 rounded-xl bg-amber-400/20 border border-amber-400/40 flex items-center justify-center text-amber-300 mb-3 group-hover:scale-110 transition-transform">
-                <ShieldCheck className="w-6 h-6" />
+            <div className="bg-white/10 backdrop-blur-md border border-white/15 p-3.5 sm:p-5 rounded-2xl text-white shadow-xl hover:bg-white/15 transition-all duration-300 group">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-amber-400/20 border border-amber-400/40 flex items-center justify-center text-amber-300 mb-2.5 sm:mb-3 group-hover:scale-110 transition-transform">
+                <ShieldCheck className="w-5 h-5 sm:w-6 sm:h-6" />
               </div>
-              <h3 className="font-bold text-base font-heading mb-1 text-white">
+              <h3 className="font-bold text-xs sm:text-base font-heading mb-0.5 sm:mb-1 text-white">
                 Akreditasi {schoolInfo.accreditation}
               </h3>
-              <p className="text-xs text-emerald-100/80 leading-relaxed">
-                Jaminan mutu pendidikan nasional berstandar tinggi dan terpercaya.
+              <p className="text-[10px] sm:text-xs text-emerald-100/80 leading-relaxed">
+                Jaminan mutu pendidikan tinggi & terpercaya.
               </p>
             </div>
 
             {/* Card 2 */}
-            <div className="bg-white/10 dark:bg-emerald-950/40 backdrop-blur-md border border-white/15 dark:border-emerald-500/20 p-5 rounded-2xl text-white shadow-xl hover:bg-white/15 transition-all duration-300 group">
-              <div className="w-12 h-12 rounded-xl bg-emerald-400/20 border border-emerald-400/40 flex items-center justify-center text-emerald-300 mb-3 group-hover:scale-110 transition-transform">
-                <BookOpenCheck className="w-6 h-6" />
+            <div className="bg-white/10 backdrop-blur-md border border-white/15 p-3.5 sm:p-5 rounded-2xl text-white shadow-xl hover:bg-white/15 transition-all duration-300 group">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-emerald-400/20 border border-emerald-400/40 flex items-center justify-center text-emerald-300 mb-2.5 sm:mb-3 group-hover:scale-110 transition-transform">
+                <BookOpenCheck className="w-5 h-5 sm:w-6 sm:h-6" />
               </div>
-              <h3 className="font-bold text-base font-heading mb-1 text-white">
+              <h3 className="font-bold text-xs sm:text-base font-heading mb-0.5 sm:mb-1 text-white">
                 Pendidikan Islami
               </h3>
-              <p className="text-xs text-emerald-100/80 leading-relaxed">
-                Metode UMMI Al-Qur'an & kurikulum karakter pembiasaan santri.
+              <p className="text-[10px] sm:text-xs text-emerald-100/80 leading-relaxed">
+                Metode UMMI Al-Qur'an & pembiasaan santri.
               </p>
             </div>
 
             {/* Card 3 */}
-            <div className="bg-white/10 dark:bg-emerald-950/40 backdrop-blur-md border border-white/15 dark:border-emerald-500/20 p-5 rounded-2xl text-white shadow-xl hover:bg-white/15 transition-all duration-300 group">
-              <div className="w-12 h-12 rounded-xl bg-teal-400/20 border border-teal-400/40 flex items-center justify-center text-teal-300 mb-3 group-hover:scale-110 transition-transform">
-                <Users className="w-6 h-6" />
+            <div className="bg-white/10 backdrop-blur-md border border-white/15 p-3.5 sm:p-5 rounded-2xl text-white shadow-xl hover:bg-white/15 transition-all duration-300 group">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-teal-400/20 border border-teal-400/40 flex items-center justify-center text-teal-300 mb-2.5 sm:mb-3 group-hover:scale-110 transition-transform">
+                <Users className="w-5 h-5 sm:w-6 sm:h-6" />
               </div>
-              <h3 className="font-bold text-base font-heading mb-1 text-white">
+              <h3 className="font-bold text-xs sm:text-base font-heading mb-0.5 sm:mb-1 text-white">
                 Pengembangan Minat
               </h3>
-              <p className="text-xs text-emerald-100/80 leading-relaxed">
-                10+ Ekstrakurikuler terpadu & pembinaan bakat kepemimpinan.
+              <p className="text-[10px] sm:text-xs text-emerald-100/80 leading-relaxed">
+                10+ Ekstrakurikuler terpadu & kepemimpinan.
               </p>
             </div>
 
             {/* Card 4 */}
-            <div className="bg-white/10 dark:bg-emerald-950/40 backdrop-blur-md border border-white/15 dark:border-emerald-500/20 p-5 rounded-2xl text-white shadow-xl hover:bg-white/15 transition-all duration-300 group">
-              <div className="w-12 h-12 rounded-xl bg-amber-400/20 border border-amber-400/40 flex items-center justify-center text-amber-300 mb-3 group-hover:scale-110 transition-transform">
-                <Award className="w-6 h-6" />
+            <div className="bg-white/10 backdrop-blur-md border border-white/15 p-3.5 sm:p-5 rounded-2xl text-white shadow-xl hover:bg-white/15 transition-all duration-300 group">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-amber-400/20 border border-amber-400/40 flex items-center justify-center text-amber-300 mb-2.5 sm:mb-3 group-hover:scale-110 transition-transform">
+                <Award className="w-5 h-5 sm:w-6 sm:h-6" />
               </div>
-              <h3 className="font-bold text-base font-heading mb-1 text-white">
+              <h3 className="font-bold text-xs sm:text-base font-heading mb-0.5 sm:mb-1 text-white">
                 Berorientasi Prestasi
               </h3>
-              <p className="text-xs text-emerald-100/80 leading-relaxed">
-                100+ Trofi olimpiade & akses lulusan ke Perguruan Tinggi Negeri.
+              <p className="text-[10px] sm:text-xs text-emerald-100/80 leading-relaxed">
+                100+ Trofi olimpiade & akses PTN unggulan.
               </p>
             </div>
           </div>

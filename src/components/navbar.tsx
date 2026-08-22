@@ -232,15 +232,8 @@ export const Navbar: React.FC = () => {
           {/* Mobile Actions & Hamburger */}
           <div className="flex items-center gap-2 lg:hidden">
             <button
-              onClick={() => setDarkMode(!darkMode)}
-              className="p-2 rounded-lg text-slate-600 dark:text-amber-400 hover:bg-slate-100 dark:hover:bg-emerald-950"
-            >
-              {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-            </button>
-
-            <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-lg text-slate-800 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-emerald-900/50"
+              className="p-2 rounded-xl text-[#064E3B] hover:bg-emerald-50 active:scale-95 transition-all"
               aria-label="Open Menu"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}

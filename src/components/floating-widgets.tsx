@@ -37,10 +37,10 @@ export const FloatingWidgets: React.FC = () => {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3 pointer-events-none">
+    <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 flex flex-col items-end gap-3 pointer-events-none">
       {/* WhatsApp Quick Chat Popover */}
       {waOpen && (
-        <div className="pointer-events-auto w-80 bg-white dark:bg-[#0E241E] rounded-3xl shadow-2xl border border-emerald-500/30 overflow-hidden animate-fade-in text-slate-800 dark:text-white">
+        <div className="pointer-events-auto w-[calc(100vw-2rem)] sm:w-80 bg-white rounded-3xl shadow-2xl border border-emerald-500/30 overflow-hidden animate-fade-in text-slate-800">
           <div className="bg-gradient-to-r from-[#064E3B] to-[#047857] p-4 text-white flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-emerald-800 flex items-center justify-center font-bold text-amber-300 border border-amber-400/40">

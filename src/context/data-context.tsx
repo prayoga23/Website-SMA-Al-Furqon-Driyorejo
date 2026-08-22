@@ -89,8 +89,9 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Load saved state from LocalStorage on mount
   useEffect(() => {
     try {
-      const savedDark = localStorage.getItem(STORAGE_KEY_PREFIX + "dark_mode");
-      if (savedDark !== null) setDarkModeState(JSON.parse(savedDark));
+      // Force default Light Mode across the website
+      document.documentElement.classList.remove("dark");
+      localStorage.removeItem(STORAGE_KEY_PREFIX + "dark_mode");
 
       const savedInfo = localStorage.getItem(STORAGE_KEY_PREFIX + "school_info");
       if (savedInfo) {
@@ -148,14 +149,10 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, []);
 
-  const setDarkMode = (val: boolean) => {
-    setDarkModeState(val);
-    localStorage.setItem(STORAGE_KEY_PREFIX + "dark_mode", JSON.stringify(val));
-    if (val) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
+  const setDarkMode = (_val: boolean) => {
+    setDarkModeState(false);
+    document.documentElement.classList.remove("dark");
+    localStorage.removeItem(STORAGE_KEY_PREFIX + "dark_mode");
   };
 
   const updateSchoolInfo = (info: Partial<SchoolInfo>) => {
