@@ -82,18 +82,18 @@ export const Navbar: React.FC = () => {
 
   return (
     <>
-      {/* Top Banner Contact Strip (Clean White) */}
-      <div className="bg-white text-slate-700 text-xs py-2 border-b border-slate-200">
+      {/* Top Banner Contact Strip (Green Theme) */}
+      <div className="bg-[#064E3B] text-white text-xs py-2 border-b border-emerald-800/60 shadow-inner">
         <div className="max-w-[92rem] mx-auto px-4 sm:px-8 lg:px-12">
           {/* Desktop & Tablet Layout (sm and up) */}
           <div className="hidden sm:flex justify-between items-center gap-4">
             <div className="flex items-center gap-3.5 flex-wrap">
-              <span className="flex items-center gap-1.5 font-medium shrink-0 text-slate-700">
-                <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span className="flex items-center gap-1.5 font-semibold shrink-0 text-emerald-50">
+                <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                 NPSN: {schoolInfo.npsn} | Akreditasi: {schoolInfo.accreditation}
               </span>
-              <span className="hidden md:inline text-slate-300">|</span>
-              <span className="hidden md:inline truncate max-w-md text-slate-500">{schoolInfo.address}</span>
+              <span className="hidden md:inline text-emerald-600/70">|</span>
+              <span className="hidden md:inline truncate max-w-md text-emerald-200/90 font-medium">{schoolInfo.address}</span>
             </div>
 
             <div className="flex items-center gap-4 shrink-2">
@@ -101,9 +101,9 @@ export const Navbar: React.FC = () => {
                 href={`https://wa.me/${schoolInfo.whatsapp}?text=Halo%20Admin%20SMA%20Al-Furqon,%20saya%20ingin%20bertanya%20informasi%20PPDB`}
                 target="_blank"
                 rel="noreferrer"
-                className="text-[#064E3B] hover:text-emerald-700 transition-colors flex items-center gap-1.5 font-bold bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200"
+                className="text-[#064E3B] hover:bg-amber-200 transition-colors flex items-center gap-1.5 font-bold bg-amber-300 px-2.5 py-1 rounded-lg border border-amber-400/60 shadow-xs"
               >
-                <PhoneCall className="w-3.5 h-3.5 text-emerald-600" />
+                <PhoneCall className="w-3.5 h-3.5 text-[#064E3B]" />
                 <span>WA Admin: +{schoolInfo.whatsapp}</span>
               </a>
             </div>
@@ -111,17 +111,17 @@ export const Navbar: React.FC = () => {
 
           {/* Mobile Phone Layout (< sm) */}
           <div className="flex sm:hidden justify-between items-center gap-2 text-[11px]">
-            <span className="flex items-center gap-1.5 font-semibold text-slate-700 truncate">
-              <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
+            <span className="flex items-center gap-1.5 font-semibold text-emerald-50 truncate">
+              <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0"></span>
               <span className="truncate">NPSN: {schoolInfo.npsn} | Akreditasi: {schoolInfo.accreditation}</span>
             </span>
             <a
               href={`https://wa.me/${schoolInfo.whatsapp}?text=Halo%20Admin%20SMA%20Al-Furqon,%20saya%20ingin%20bertanya%20informasi%20PPDB`}
               target="_blank"
               rel="noreferrer"
-              className="flex items-center gap-1 font-bold shrink-0 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200 text-[#064E3B] hover:bg-emerald-100 transition-colors"
+              className="flex items-center gap-1 font-bold shrink-0 bg-amber-300 px-2.5 py-1 rounded-lg border border-amber-400/60 text-[#064E3B] hover:bg-amber-200 transition-colors shadow-xs"
             >
-              <PhoneCall className="w-3 h-3 text-emerald-600" />
+              <PhoneCall className="w-3 h-3 text-[#064E3B]" />
               <span>WA Admin</span>
             </a>
           </div>
