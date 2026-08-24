@@ -6,11 +6,14 @@ import { useData } from "@/context/data-context";
 import { Plus, Trash2, Edit3, Trophy, X } from "lucide-react";
 import { AchievementItem } from "@/lib/types";
 import { ImageUploadInput } from "@/components/image-upload-input";
+import { Pagination } from "@/components/pagination";
 
 export default function AdminPrestasiPage() {
   const { achievements, addAchievement, updateAchievement, deleteAchievement } = useData();
   const [modalOpen, setModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<AchievementItem | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
 
   const [title, setTitle] = useState("");
   const [event, setEvent] = useState("");
@@ -85,6 +88,11 @@ export default function AdminPrestasiPage() {
     setModalOpen(false);
   };
 
+  const paginatedAchievements = achievements.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
   return (
     <div className="min-h-screen flex bg-[#FDFBF7] dark:bg-[#081612] text-slate-800 dark:text-slate-100">
       <AdminSidebar />
@@ -95,7 +103,7 @@ export default function AdminPrestasiPage() {
             <h1 className="text-xl font-bold font-heading text-slate-900 dark:text-white">
               Manajemen Prestasi Santri
             </h1>
-            <p className="text-xs text-slate-500">Kelola kejuaraan dan capaian trofi santri.</p>
+            <p className="text-xs text-slate-500">Kelola kejuaraan dan capaian trofi santri ({achievements.length} trofi).</p>
           </div>
 
           <button
@@ -255,7 +263,7 @@ export default function AdminPrestasiPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-emerald-900/30">
-              {achievements.map((item) => (
+              {paginatedAchievements.map((item) => (
                 <tr key={item.id} className="hover:bg-slate-50/50 dark:hover:bg-emerald-950/30">
                   <td className="p-3 font-bold text-slate-900 dark:text-white max-w-xs truncate flex items-center gap-2">
                     {item.image && (
@@ -293,7 +301,21 @@ export default function AdminPrestasiPage() {
               ))}
             </tbody>
           </table>
+          {achievements.length === 0 && (
+            <div className="p-8 text-center text-xs text-slate-400">
+              Belum ada data prestasi yang ditambahkan.
+            </div>
+          )}
         </div>
+
+        {/* Pagination */}
+        <Pagination
+          currentPage={currentPage}
+          totalPages={Math.ceil(achievements.length / itemsPerPage)}
+          totalItems={achievements.length}
+          itemsPerPage={itemsPerPage}
+          onPageChange={(page) => setCurrentPage(page)}
+        />
       </main>
     </div>
   );

@@ -5,11 +5,14 @@ import { AdminSidebar } from "@/components/admin-sidebar";
 import { useData } from "@/context/data-context";
 import { Plus, Trash2, Edit3, Calendar, X } from "lucide-react";
 import { AgendaItem } from "@/lib/types";
+import { Pagination } from "@/components/pagination";
 
 export default function AdminAgendaPage() {
   const { agendas, addAgenda, updateAgenda, deleteAgenda } = useData();
   const [modalOpen, setModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<AgendaItem | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
 
   const [title, setTitle] = useState("");
   const [date, setDate] = useState("");
@@ -66,6 +69,11 @@ export default function AdminAgendaPage() {
     setModalOpen(false);
   };
 
+  const paginatedAgendas = agendas.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
   return (
     <div className="min-h-screen flex bg-[#FDFBF7] dark:bg-[#081612] text-slate-800 dark:text-slate-100">
       <AdminSidebar />
@@ -76,7 +84,7 @@ export default function AdminAgendaPage() {
             <h1 className="text-xl font-bold font-heading text-slate-900 dark:text-white">
               Manajemen Agenda Sekolah
             </h1>
-            <p className="text-xs text-slate-500">Kelola jadwal ujian, rapat, dan acara sekolah.</p>
+            <p className="text-xs text-slate-500">Kelola jadwal ujian, rapat, dan acara sekolah ({agendas.length} agenda).</p>
           </div>
 
           <button
@@ -207,7 +215,7 @@ export default function AdminAgendaPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-emerald-900/30">
-              {agendas.map((item) => (
+              {paginatedAgendas.map((item) => (
                 <tr key={item.id} className="hover:bg-slate-50/50 dark:hover:bg-emerald-950/30">
                   <td className="p-3 font-bold text-slate-900 dark:text-white max-w-xs truncate">
                     {item.title}
@@ -242,7 +250,21 @@ export default function AdminAgendaPage() {
               ))}
             </tbody>
           </table>
+          {agendas.length === 0 && (
+            <div className="p-8 text-center text-xs text-slate-400">
+              Belum ada agenda kegiatan yang ditambahkan.
+            </div>
+          )}
         </div>
+
+        {/* Pagination */}
+        <Pagination
+          currentPage={currentPage}
+          totalPages={Math.ceil(agendas.length / itemsPerPage)}
+          totalItems={agendas.length}
+          itemsPerPage={itemsPerPage}
+          onPageChange={(page) => setCurrentPage(page)}
+        />
       </main>
     </div>
   );

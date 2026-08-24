@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { AdminSidebar } from "@/components/admin-sidebar";
 import { useData } from "@/context/data-context";
 import {
@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { TeacherItem } from "@/lib/types";
 import { ImageUploadInput } from "@/components/image-upload-input";
+import { Pagination } from "@/components/pagination";
 import * as XLSX from "xlsx";
 
 function mapExcelRowToTeacher(row: Record<string, any>, index: number): TeacherItem | null {
@@ -72,6 +73,8 @@ export default function AdminGuruPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<TeacherItem | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
 
   // Excel Import states
   const [excelModalOpen, setExcelModalOpen] = useState(false);
@@ -88,6 +91,10 @@ export default function AdminGuruPage() {
   const [bio, setBio] = useState("");
 
   const excelFileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm]);
 
   const openAddModal = () => {
     setEditingItem(null);
@@ -264,6 +271,11 @@ export default function AdminGuruPage() {
       t.subject.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const paginatedTeachers = filteredTeachers.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
   return (
     <div className="min-h-screen flex bg-[#FDFBF7] dark:bg-[#081612] text-slate-800 dark:text-slate-100">
       <AdminSidebar />
@@ -282,7 +294,6 @@ export default function AdminGuruPage() {
 
           {/* Action Buttons */}
           <div className="flex items-center gap-2 flex-wrap">
-            {/* Hidden Input File for Excel */}
             <input
               type="file"
               ref={excelFileInputRef}
@@ -291,7 +302,6 @@ export default function AdminGuruPage() {
               className="hidden"
             />
 
-            {/* Impor Excel */}
             <button
               onClick={() => excelFileInputRef.current?.click()}
               className="px-3.5 py-2 rounded-xl bg-emerald-600 text-white text-xs font-bold flex items-center gap-1.5 hover:bg-emerald-500 transition-colors shadow-sm"
@@ -301,7 +311,6 @@ export default function AdminGuruPage() {
               <span>Impor Excel</span>
             </button>
 
-            {/* Template Excel */}
             <button
               onClick={handleDownloadExcelTemplate}
               className="px-3 py-2 rounded-xl bg-slate-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 text-xs font-bold flex items-center gap-1.5 hover:bg-slate-200 dark:hover:bg-emerald-900 transition-colors border border-emerald-500/30"
@@ -311,7 +320,6 @@ export default function AdminGuruPage() {
               <span>Template Excel</span>
             </button>
 
-            {/* Ekspor Excel */}
             <button
               onClick={handleExportExcel}
               className="px-3 py-2 rounded-xl bg-slate-100 dark:bg-emerald-950 text-slate-700 dark:text-slate-200 text-xs font-bold flex items-center gap-1.5 hover:bg-slate-200 dark:hover:bg-emerald-900 transition-colors border border-slate-200 dark:border-emerald-800/50"
@@ -321,7 +329,6 @@ export default function AdminGuruPage() {
               <span>Ekspor Excel</span>
             </button>
 
-            {/* Tambah Guru Baru */}
             <button
               onClick={openAddModal}
               className="px-4 py-2 rounded-xl bg-emerald-700 text-white font-bold text-xs flex items-center gap-1.5 hover:bg-emerald-600 shadow transition-colors"
@@ -511,7 +518,7 @@ export default function AdminGuruPage() {
                   <AlertCircle className="w-6 h-6 text-amber-600 dark:text-amber-400 shrink-0" />
                   <div>
                     <div className="text-xs font-bold text-amber-900 dark:text-amber-200">Pencocokan Kolom Otomatis</div>
-                    <div className="text-[11px] text-amber-700 dark:text-amber-400">
+                    <div className="text-[11px] text-amber-400">
                       Nama, NIP, Jabatan, Mapel, Pendidikan, Foto & Bio.
                     </div>
                   </div>
@@ -577,77 +584,100 @@ export default function AdminGuruPage() {
           </div>
         )}
 
-        {/* Teachers Table */}
-        <div className="bg-white dark:bg-[#0E241E] rounded-2xl border border-slate-200 dark:border-emerald-900/40 overflow-hidden shadow-sm">
-          <table className="w-full text-xs text-left">
-            <thead className="bg-slate-50 dark:bg-emerald-950/60 text-slate-500 font-bold uppercase">
-              <tr>
-                <th className="p-3.5">Nama Guru</th>
-                <th className="p-3.5">Jabatan</th>
-                <th className="p-3.5">Mata Pelajaran</th>
-                <th className="p-3.5">Pendidikan</th>
-                <th className="p-3.5 text-right">Aksi</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-emerald-900/30">
-              {filteredTeachers.map((item) => (
-                <tr key={item.id} className="hover:bg-slate-50/50 dark:hover:bg-emerald-950/30 transition-colors">
-                  <td className="p-3.5 font-bold text-slate-900 dark:text-white flex items-center gap-3">
+        {/* Responsive Teacher Cards Grid */}
+        {paginatedTeachers.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {paginatedTeachers.map((item) => (
+              <div
+                key={item.id}
+                className="bg-white dark:bg-[#0E241E] rounded-2xl border border-slate-200 dark:border-emerald-900/40 p-4 shadow-sm hover:shadow-md transition-all duration-200 flex flex-col justify-between h-full group"
+              >
+                <div className="space-y-3">
+                  {/* Card Header: Avatar & Main info */}
+                  <div className="flex items-center gap-3">
                     {item.photo ? (
                       <img
                         src={item.photo}
                         alt={item.name}
-                        className="w-10 h-10 rounded-full object-cover border-2 border-emerald-500/40 shadow-sm shrink-0"
+                        className="w-12 h-12 rounded-full object-cover border-2 border-emerald-500/40 shadow-sm shrink-0 group-hover:scale-105 transition-transform"
                         onError={(e) => {
                           e.currentTarget.onerror = null;
                           e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(item.name)}&background=064E3B&color=fff`;
                         }}
                       />
                     ) : (
-                      <div className="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 font-bold text-xs flex items-center justify-center border border-emerald-400/40 shrink-0">
+                      <div className="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 font-bold text-base flex items-center justify-center border border-emerald-400/40 shrink-0">
                         {item.name.charAt(0)}
                       </div>
                     )}
-                    <div>
-                      <span className="block font-bold">{item.name}</span>
-                      {item.bio && <span className="text-[10px] text-slate-400 font-normal line-clamp-1">{item.bio}</span>}
+                    <div className="min-w-0 flex-1">
+                      <h3 className="font-bold text-xs sm:text-sm text-slate-900 dark:text-white line-clamp-1 group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors">
+                        {item.name}
+                      </h3>
+                      <span className="inline-block mt-0.5 px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-300/40">
+                        {item.position}
+                      </span>
                     </div>
-                  </td>
-                  <td className="p-3.5 font-semibold text-emerald-700 dark:text-emerald-400">{item.position}</td>
-                  <td className="p-3.5 text-slate-600 dark:text-slate-300">{item.subject}</td>
-                  <td className="p-3.5 text-slate-500">{item.education}</td>
-                  <td className="p-3.5 text-right">
-                    <div className="flex items-center justify-end gap-1.5">
-                      <button
-                        onClick={() => openEditModal(item)}
-                        className="p-1.5 rounded-lg bg-blue-100 dark:bg-blue-950 text-blue-600 dark:text-blue-400 hover:bg-blue-200 transition-colors"
-                        title="Edit Data Guru"
-                      >
-                        <Edit3 className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={() => {
-                          if (confirm(`Hapus data guru ${item.name}?`)) {
-                            deleteTeacher(item.id);
-                          }
-                        }}
-                        className="p-1.5 rounded-lg bg-red-100 dark:bg-red-950 text-red-600 dark:text-red-400 hover:bg-red-200 transition-colors"
-                        title="Hapus Data Guru"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
+                  </div>
+
+                  {/* Card Details */}
+                  <div className="space-y-1.5 text-xs border-t border-slate-100 dark:border-emerald-900/30 pt-3">
+                    <div className="flex items-center justify-between gap-2 text-[11px]">
+                      <span className="text-slate-400 font-medium">Mapel:</span>
+                      <span className="font-semibold text-slate-700 dark:text-slate-200 truncate">{item.subject}</span>
                     </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          {filteredTeachers.length === 0 && (
-            <div className="p-8 text-center text-xs text-slate-400">
-              Tidak ada data guru yang ditemukan.
-            </div>
-          )}
-        </div>
+                    <div className="flex items-center justify-between gap-2 text-[11px]">
+                      <span className="text-slate-400 font-medium">Pendidikan:</span>
+                      <span className="font-semibold text-slate-500 dark:text-slate-400 truncate">{item.education}</span>
+                    </div>
+                    {item.bio && (
+                      <p className="text-[10px] text-slate-400 dark:text-slate-400 italic line-clamp-2 pt-1 border-t border-slate-50 dark:border-emerald-950">
+                        "{item.bio}"
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Card Action Buttons */}
+                <div className="pt-3 mt-3 border-t border-slate-100 dark:border-emerald-900/30 flex items-center justify-end gap-2">
+                  <button
+                    onClick={() => openEditModal(item)}
+                    className="px-3 py-1.5 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 hover:bg-blue-100 font-bold text-[11px] flex items-center gap-1 transition-colors border border-blue-200 dark:border-blue-900/40"
+                    title="Edit Data Guru"
+                  >
+                    <Edit3 className="w-3.5 h-3.5" />
+                    <span>Edit</span>
+                  </button>
+                  <button
+                    onClick={() => {
+                      if (confirm(`Hapus data guru ${item.name}?`)) {
+                        deleteTeacher(item.id);
+                      }
+                    }}
+                    className="px-3 py-1.5 rounded-xl bg-red-50 dark:bg-red-950/60 text-red-600 dark:text-red-400 hover:bg-red-100 font-bold text-[11px] flex items-center gap-1 transition-colors border border-red-200 dark:border-red-900/40"
+                    title="Hapus Data Guru"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                    <span>Hapus</span>
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="bg-white dark:bg-[#0E241E] rounded-2xl border border-slate-200 dark:border-emerald-900/40 p-8 text-center text-xs text-slate-400 shadow-sm">
+            Tidak ada data guru yang ditemukan.
+          </div>
+        )}
+
+        {/* Pagination */}
+        <Pagination
+          currentPage={currentPage}
+          totalPages={Math.ceil(filteredTeachers.length / itemsPerPage)}
+          totalItems={filteredTeachers.length}
+          itemsPerPage={itemsPerPage}
+          onPageChange={(page) => setCurrentPage(page)}
+        />
       </main>
     </div>
   );

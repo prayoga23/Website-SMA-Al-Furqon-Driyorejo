@@ -6,11 +6,14 @@ import { useData } from "@/context/data-context";
 import { Plus, Trash2, Edit3, Newspaper, X } from "lucide-react";
 import { NewsItem } from "@/lib/types";
 import { ImageUploadInput } from "@/components/image-upload-input";
+import { Pagination } from "@/components/pagination";
 
 export default function AdminBeritaPage() {
   const { news, addNews, updateNews, deleteNews } = useData();
   const [modalOpen, setModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<NewsItem | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
 
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState<NewsItem["category"]>("Berita");
@@ -70,6 +73,11 @@ export default function AdminBeritaPage() {
     setModalOpen(false);
   };
 
+  const paginatedNews = news.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
   return (
     <div className="min-h-screen flex bg-[#FDFBF7] dark:bg-[#081612] text-slate-800 dark:text-slate-100">
       <AdminSidebar />
@@ -80,7 +88,7 @@ export default function AdminBeritaPage() {
             <h1 className="text-xl font-bold font-heading text-slate-900 dark:text-white">
               Manajemen Berita & Artikel
             </h1>
-            <p className="text-xs text-slate-500">Kelola artikel dan pengumuman resmi sekolah.</p>
+            <p className="text-xs text-slate-500">Kelola artikel dan pengumuman resmi sekolah ({news.length} total).</p>
           </div>
 
           <button
@@ -194,7 +202,7 @@ export default function AdminBeritaPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-emerald-900/30">
-              {news.map((item) => (
+              {paginatedNews.map((item) => (
                 <tr key={item.id} className="hover:bg-slate-50/50 dark:hover:bg-emerald-950/30">
                   <td className="p-3 font-bold text-slate-900 dark:text-white max-w-xs truncate flex items-center gap-2">
                     {item.image && (
@@ -231,7 +239,21 @@ export default function AdminBeritaPage() {
               ))}
             </tbody>
           </table>
+          {news.length === 0 && (
+            <div className="p-8 text-center text-xs text-slate-400">
+              Belum ada berita atau artikel yang ditambahkan.
+            </div>
+          )}
         </div>
+
+        {/* Pagination */}
+        <Pagination
+          currentPage={currentPage}
+          totalPages={Math.ceil(news.length / itemsPerPage)}
+          totalItems={news.length}
+          itemsPerPage={itemsPerPage}
+          onPageChange={(page) => setCurrentPage(page)}
+        />
       </main>
     </div>
   );

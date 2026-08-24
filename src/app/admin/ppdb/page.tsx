@@ -5,10 +5,18 @@ import { AdminSidebar } from "@/components/admin-sidebar";
 import { useData } from "@/context/data-context";
 import { PPDBApplicant } from "@/lib/types";
 import { Users, PhoneCall, CheckCircle, Eye, X, User, School, ShieldCheck } from "lucide-react";
+import { Pagination } from "@/components/pagination";
 
 export default function AdminPPDBPage() {
   const { applicants, updateApplicantStatus } = useData();
   const [selectedApplicant, setSelectedApplicant] = useState<PPDBApplicant | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
+
+  const paginatedApplicants = applicants.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   return (
     <div className="min-h-screen flex bg-[#FDFBF7] dark:bg-[#081612] text-slate-800 dark:text-slate-100">
@@ -45,7 +53,7 @@ export default function AdminPPDBPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-emerald-900/30">
-              {applicants.map((app) => (
+              {paginatedApplicants.map((app) => (
                 <tr key={app.id} className="hover:bg-slate-50/50 dark:hover:bg-emerald-950/30">
                   <td className="p-3 font-mono font-bold text-slate-900 dark:text-white">
                     {app.registrationNumber}
@@ -118,7 +126,21 @@ export default function AdminPPDBPage() {
               ))}
             </tbody>
           </table>
+          {applicants.length === 0 && (
+            <div className="p-8 text-center text-xs text-slate-400">
+              Belum ada data pendaftar PPDB yang masuk.
+            </div>
+          )}
         </div>
+
+        {/* Pagination */}
+        <Pagination
+          currentPage={currentPage}
+          totalPages={Math.ceil(applicants.length / itemsPerPage)}
+          totalItems={applicants.length}
+          itemsPerPage={itemsPerPage}
+          onPageChange={(page) => setCurrentPage(page)}
+        />
       </main>
 
       {/* DETAIL MODAL */}
