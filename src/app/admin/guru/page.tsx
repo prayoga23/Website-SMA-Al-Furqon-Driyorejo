@@ -8,21 +8,14 @@ import {
   Trash2,
   Edit3,
   X,
-  Download,
-  Upload,
-  Code,
   RotateCcw,
   Search,
-  Copy,
-  Check,
-  FileJson,
-  UserCheck,
-  FileSpreadsheet,
-  FileDown,
-  FileUp,
   CheckCircle2,
   AlertCircle,
   Layers,
+  FileSpreadsheet,
+  FileDown,
+  FileUp,
 } from "lucide-react";
 import { TeacherItem } from "@/lib/types";
 import { ImageUploadInput } from "@/components/image-upload-input";
@@ -51,7 +44,7 @@ function mapExcelRowToTeacher(row: Record<string, any>, index: number): TeacherI
   const education = getValue(["pendidikan terakhir", "pendidikan", "education", "gelar"]) || "S1 Pendidikan";
   const photo =
     getValue(["foto url", "url foto", "foto", "photo", "image"]) ||
-    "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=800&q=80";
+    "";
   const bio = getValue(["biografi", "bio", "keterangan", "deskripsi"]);
 
   return {
@@ -77,10 +70,8 @@ export default function AdminGuruPage() {
   } = useData();
 
   const [modalOpen, setModalOpen] = useState(false);
-  const [codeModalOpen, setCodeModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<TeacherItem | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [copied, setCopied] = useState(false);
 
   // Excel Import states
   const [excelModalOpen, setExcelModalOpen] = useState(false);
@@ -96,7 +87,6 @@ export default function AdminGuruPage() {
   const [photo, setPhoto] = useState("");
   const [bio, setBio] = useState("");
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const excelFileInputRef = useRef<HTMLInputElement>(null);
 
   const openAddModal = () => {
@@ -123,18 +113,17 @@ export default function AdminGuruPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const photoValue =
-      photo ||
-      "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=800&q=80";
+    if (!name.trim() || !position.trim()) return;
 
     if (editingItem) {
       updateTeacher(editingItem.id, {
+        ...editingItem,
         name,
         position,
         subject,
         education,
-        photo: photoValue,
-        bio: bio || undefined,
+        photo,
+        bio,
       });
     } else {
       addTeacher({
@@ -142,44 +131,11 @@ export default function AdminGuruPage() {
         position,
         subject,
         education,
-        photo: photoValue,
-        bio: bio || undefined,
+        photo,
+        bio,
       });
     }
-
     setModalOpen(false);
-  };
-
-  // Export JSON
-  const handleExportJSON = () => {
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(teachers, null, 2));
-    const downloadAnchor = document.createElement("a");
-    downloadAnchor.setAttribute("href", dataStr);
-    downloadAnchor.setAttribute("download", `data-guru-al-furqon-${new Date().toISOString().split("T")[0]}.json`);
-    document.body.appendChild(downloadAnchor);
-    downloadAnchor.click();
-    downloadAnchor.remove();
-  };
-
-  // Import JSON
-  const handleImportJSON = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      try {
-        const parsed = JSON.parse(event.target?.result as string);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          setTeachersData(parsed);
-          alert(`Berhasil mengimpor ${parsed.length} data guru!`);
-        } else {
-          alert("Format file JSON tidak valid. Harus berupa array data guru.");
-        }
-      } catch (err) {
-        alert("Gagal membaca file JSON.");
-      }
-    };
-    reader.readAsText(file);
   };
 
   // Download Excel Template
@@ -187,88 +143,56 @@ export default function AdminGuruPage() {
     const templateData = [
       {
         "Nama Lengkap": "Dr. H. Abdul Muid, M.Pd.I.",
-        "NIP": "197501012000121001",
-        "Jabatan": "Guru Aswaja",
+        "NIP": "197501012000011001",
+        "Jabatan": "Kadep Pendidikan",
         "Mata Pelajaran": "Guru Aswaja",
-        "Pendidikan": "S3 Pendidikan Islam",
-        "Foto URL": "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=800&q=80",
-        "Biografi": "Tenaga Pendidik Aswaja SMA Al-Furqon.",
+        "Pendidikan Terakhir": "S3 / Doktor Pendidikan Agama Islam",
+        "URL Foto": "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=800&q=80",
+        "Biografi": "Kepala Departemen Pendidikan Yayasan PP. Al-Furqon.",
       },
       {
-        "Nama Lengkap": "Triana Dewitasari, S.Pd.",
-        "NIP": "",
-        "Jabatan": "Guru",
-        "Mata Pelajaran": "Guru Geografi",
-        "Pendidikan": "S1 Pendidikan Geografi",
-        "Foto URL": "",
-        "Biografi": "Guru Pengampu Geografi.",
+        "Nama Lengkap": "Suryanto, S.Pd., M.Pd.",
+        "NIP": "198002022005011002",
+        "Jabatan": "Kepala Sekolah",
+        "Mata Pelajaran": "Manajemen Sekolah",
+        "Pendidikan Terakhir": "S2 Magister Pendidikan",
+        "URL Foto": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80",
+        "Biografi": "Kepala Sekolah SMA Al-Furqon Driyorejo.",
       },
     ];
 
     const worksheet = XLSX.utils.json_to_sheet(templateData);
-
-    // Set column widths for readability
-    worksheet["!cols"] = [
-      { wch: 30 }, // Nama Lengkap
-      { wch: 20 }, // NIP
-      { wch: 20 }, // Jabatan
-      { wch: 25 }, // Mata Pelajaran
-      { wch: 25 }, // Pendidikan
-      { wch: 45 }, // Foto URL
-      { wch: 35 }, // Biografi
-    ];
-
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Template Data Guru");
-    XLSX.writeFile(workbook, "Template_Import_Guru_Al_Furqon.xlsx");
+    XLSX.writeFile(workbook, "Template_Impor_Guru_SMA_Al_Furqon.xlsx");
   };
 
   // Export Excel
   const handleExportExcel = () => {
-    if (teachers.length === 0) {
-      alert("Tidak ada data guru untuk diekspor.");
-      return;
-    }
-
-    const exportRows = teachers.map((item, index) => ({
-      No: index + 1,
-      "Nama Lengkap": item.name,
-      NIP: item.nip || "-",
-      Jabatan: item.position,
-      "Mata Pelajaran": item.subject,
-      Pendidikan: item.education,
-      "Foto URL": item.photo || "-",
-      Biografi: item.bio || "-",
+    const exportRows = teachers.map((t, idx) => ({
+      No: idx + 1,
+      "ID Guru": t.id,
+      "Nama Lengkap": t.name,
+      NIP: t.nip || "-",
+      Jabatan: t.position,
+      "Mata Pelajaran": t.subject,
+      "Pendidikan Terakhir": t.education,
+      "URL Foto": t.photo || "-",
+      Biografi: t.bio || "-",
     }));
 
     const worksheet = XLSX.utils.json_to_sheet(exportRows);
-
-    worksheet["!cols"] = [
-      { wch: 6 },
-      { wch: 32 },
-      { wch: 22 },
-      { wch: 22 },
-      { wch: 25 },
-      { wch: 25 },
-      { wch: 45 },
-      { wch: 35 },
-    ];
-
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Data Guru");
-    XLSX.writeFile(
-      workbook,
-      `Data_Guru_SMA_Al_Furqon_${new Date().toISOString().split("T")[0]}.xlsx`
-    );
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Data Guru & Staf");
+    XLSX.writeFile(workbook, `Data_Guru_SMA_Al_Furqon_${new Date().toISOString().split("T")[0]}.xlsx`);
   };
 
-  // Import Excel Handler
-  const handleImportExcel = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Handle Select Excel File
+  const handleExcelFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     setExcelFileName(file.name);
-
     const reader = new FileReader();
     reader.onload = (evt) => {
       try {
@@ -280,56 +204,57 @@ export default function AdminGuruPage() {
 
         setExcelRawRowCount(rawRows.length);
 
-        const parsedItems: TeacherItem[] = [];
-        rawRows.forEach((row, index) => {
-          const item = mapExcelRowToTeacher(row, index);
-          if (item) {
-            parsedItems.push(item);
-          }
+        const parsedList: TeacherItem[] = [];
+        rawRows.forEach((row, idx) => {
+          const item = mapExcelRowToTeacher(row, idx);
+          if (item) parsedList.push(item);
         });
 
-        if (parsedItems.length === 0) {
-          alert(
-            "Tidak ada data guru valid yang terdeteksi dari file Excel. Pastikan file memiliki kolom 'Nama' atau 'Nama Lengkap'."
-          );
+        if (parsedList.length === 0) {
+          alert("Tidak ditemukan baris data guru yang valid di file Excel tersebut.");
           return;
         }
 
-        setParsedExcelTeachers(parsedItems);
+        setParsedExcelTeachers(parsedList);
         setExcelModalOpen(true);
-      } catch (err) {
-        alert("Gagal membaca file Excel. Pastikan file dalam format .xlsx, .xls, atau .csv.");
-      } finally {
-        if (excelFileInputRef.current) {
-          excelFileInputRef.current.value = "";
-        }
+      } catch (error) {
+        alert("Gagal membaca file Excel. Pastikan format file ber-ekstensi .xlsx atau .xls");
       }
     };
     reader.readAsBinaryString(file);
+    e.target.value = "";
   };
 
+  // Confirm Excel Import
   const handleConfirmExcelImport = () => {
     if (parsedExcelTeachers.length === 0) return;
 
     if (excelImportMode === "replace") {
       setTeachersData(parsedExcelTeachers);
     } else {
-      setTeachersData([...teachers, ...parsedExcelTeachers]);
+      const merged = [...teachers];
+      parsedExcelTeachers.forEach((newItem) => {
+        const existingIdx = merged.findIndex(
+          (m) =>
+            m.name.trim().toLowerCase() === newItem.name.trim().toLowerCase() ||
+            (m.nip && newItem.nip && m.nip.trim() === newItem.nip.trim())
+        );
+
+        if (existingIdx !== -1) {
+          merged[existingIdx] = {
+            ...merged[existingIdx],
+            ...newItem,
+            id: merged[existingIdx].id,
+          };
+        } else {
+          merged.push(newItem);
+        }
+      });
+      setTeachersData(merged);
     }
 
     setExcelModalOpen(false);
     alert(`Berhasil mengimpor ${parsedExcelTeachers.length} data guru dari Excel!`);
-  };
-
-  // Generate TS Code string for initialTeachers in data-store.ts
-  const generateTSCode = () => {
-    return `export const initialTeachers: TeacherItem[] = ${JSON.stringify(teachers, null, 2)};`;
-  };
-
-  const handleCopyTSCode = () => {
-    navigator.clipboard.writeText(generateTSCode());
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
   };
 
   const filteredTeachers = teachers.filter(
@@ -343,12 +268,11 @@ export default function AdminGuruPage() {
     <div className="min-h-screen flex bg-[#FDFBF7] dark:bg-[#081612] text-slate-800 dark:text-slate-100">
       <AdminSidebar />
 
-      <main className="flex-1 p-6 sm:p-8 space-y-6 overflow-y-auto">
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between pb-4 border-b border-slate-200 dark:border-emerald-900/40 gap-4">
+      <main className="flex-1 p-6 md:p-10 space-y-6 max-w-7xl">
+        {/* Header Toolbar */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-xl font-bold font-heading text-slate-900 dark:text-white flex items-center gap-2">
-              <UserCheck className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+            <h1 className="text-xl font-bold font-heading flex items-center gap-2 text-slate-900 dark:text-white">
               <span>Manajemen Guru & Staf</span>
             </h1>
             <p className="text-xs text-slate-500">
@@ -356,26 +280,28 @@ export default function AdminGuruPage() {
             </p>
           </div>
 
-          {/* Action Bar */}
-          <div className="flex flex-wrap items-center gap-2">
-            {/* Import Excel */}
-            <button
-              onClick={() => excelFileInputRef.current?.click()}
-              className="px-3.5 py-2 rounded-xl bg-emerald-600 text-white font-bold text-xs flex items-center gap-1.5 hover:bg-emerald-500 shadow transition-colors"
-              title="Impor file Excel (.xlsx, .xls, .csv) data guru"
-            >
-              <FileSpreadsheet className="w-4 h-4" />
-              <span>Impor Excel</span>
-            </button>
+          {/* Action Buttons */}
+          <div className="flex items-center gap-2 flex-wrap">
+            {/* Hidden Input File for Excel */}
             <input
               type="file"
               ref={excelFileInputRef}
-              onChange={handleImportExcel}
-              accept=".xlsx, .xls, .csv"
+              onChange={handleExcelFileSelect}
+              accept=".xlsx, .xls"
               className="hidden"
             />
 
-            {/* Download Template Excel */}
+            {/* Impor Excel */}
+            <button
+              onClick={() => excelFileInputRef.current?.click()}
+              className="px-3.5 py-2 rounded-xl bg-emerald-600 text-white text-xs font-bold flex items-center gap-1.5 hover:bg-emerald-500 transition-colors shadow-sm"
+              title="Unggah file Excel data guru (.xlsx)"
+            >
+              <FileUp className="w-4 h-4" />
+              <span>Impor Excel</span>
+            </button>
+
+            {/* Template Excel */}
             <button
               onClick={handleDownloadExcelTemplate}
               className="px-3 py-2 rounded-xl bg-slate-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 text-xs font-bold flex items-center gap-1.5 hover:bg-slate-200 dark:hover:bg-emerald-900 transition-colors border border-emerald-500/30"
@@ -393,43 +319,6 @@ export default function AdminGuruPage() {
             >
               <FileSpreadsheet className="w-3.5 h-3.5" />
               <span>Ekspor Excel</span>
-            </button>
-
-            {/* Impor JSON */}
-            <button
-              onClick={() => fileInputRef.current?.click()}
-              className="px-3 py-2 rounded-xl bg-slate-100 dark:bg-emerald-950 text-slate-700 dark:text-slate-200 text-xs font-bold flex items-center gap-1.5 hover:bg-slate-200 dark:hover:bg-emerald-900 transition-colors border border-slate-200 dark:border-emerald-800/50"
-              title="Impor file JSON data guru"
-            >
-              <Upload className="w-3.5 h-3.5" />
-              <span>Impor JSON</span>
-            </button>
-            <input
-              type="file"
-              ref={fileInputRef}
-              onChange={handleImportJSON}
-              accept=".json"
-              className="hidden"
-            />
-
-            {/* Ekspor JSON */}
-            <button
-              onClick={handleExportJSON}
-              className="px-3 py-2 rounded-xl bg-slate-100 dark:bg-emerald-950 text-slate-700 dark:text-slate-200 text-xs font-bold flex items-center gap-1.5 hover:bg-slate-200 dark:hover:bg-emerald-900 transition-colors border border-slate-200 dark:border-emerald-800/50"
-              title="Unduh backup data guru dalam format JSON"
-            >
-              <Download className="w-3.5 h-3.5" />
-              <span>Ekspor JSON</span>
-            </button>
-
-            {/* Salin Kode TS */}
-            <button
-              onClick={() => setCodeModalOpen(true)}
-              className="px-3 py-2 rounded-xl bg-amber-500/10 text-amber-700 dark:text-amber-300 text-xs font-bold flex items-center gap-1.5 hover:bg-amber-500/20 transition-colors border border-amber-400/40"
-              title="Salin Kode TypeScript untuk data-store.ts Netlify"
-            >
-              <Code className="w-3.5 h-3.5" />
-              <span>Salin Kode TS</span>
             </button>
 
             {/* Tambah Guru Baru */}
@@ -518,12 +407,11 @@ export default function AdminGuruPage() {
 
                 <div>
                   <label className="block font-bold mb-1 text-slate-700 dark:text-slate-200">
-                    Mata Pelajaran / Pengampuan *
+                    Mata Pelajaran Ampuan
                   </label>
                   <input
                     type="text"
-                    required
-                    placeholder="Contoh: Guru Matematika / Guru UMMI"
+                    placeholder="Contoh: Biologi / PAI / Manajemen Sekolah"
                     value={subject}
                     onChange={(e) => setSubject(e.target.value)}
                     className="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-[#081612] border border-slate-200 dark:border-emerald-900/50"
@@ -532,12 +420,11 @@ export default function AdminGuruPage() {
 
                 <div>
                   <label className="block font-bold mb-1 text-slate-700 dark:text-slate-200">
-                    Riwayat Pendidikan *
+                    Pendidikan Terakhir
                   </label>
                   <input
                     type="text"
-                    required
-                    placeholder="Contoh: S2 Magister Pendidikan"
+                    placeholder="Contoh: S1 Pendidikan Biologi Unesa"
                     value={education}
                     onChange={(e) => setEducation(e.target.value)}
                     className="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-[#081612] border border-slate-200 dark:border-emerald-900/50"
@@ -546,7 +433,7 @@ export default function AdminGuruPage() {
 
                 <div>
                   <label className="block font-bold mb-1 text-slate-700 dark:text-slate-200">
-                    Kutipan / Biografi Singkat (Opsional)
+                    Biografi / Keterangan Singkat
                   </label>
                   <input
                     type="text"
@@ -557,11 +444,10 @@ export default function AdminGuruPage() {
                   />
                 </div>
 
-                {/* Local File Upload Component */}
                 <ImageUploadInput
                   value={photo}
                   onChange={(imgData) => setPhoto(imgData)}
-                  label="Upload Pasfoto / Foto Guru *"
+                  label="Upload Pasfoto / Foto Guru"
                 />
 
                 <div className="pt-2 flex justify-end gap-2">
@@ -588,7 +474,6 @@ export default function AdminGuruPage() {
         {excelModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
             <div className="bg-white dark:bg-[#0E241E] max-w-3xl w-full rounded-3xl p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto border border-slate-200 dark:border-emerald-900/60">
-              {/* Header Modal */}
               <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-emerald-900/40">
                 <div className="flex items-center gap-2">
                   <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
@@ -609,7 +494,6 @@ export default function AdminGuruPage() {
                 </button>
               </div>
 
-              {/* Status summary */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="p-3 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/40 flex items-center gap-3">
                   <CheckCircle2 className="w-6 h-6 text-emerald-600 dark:text-emerald-400 shrink-0" />
@@ -634,7 +518,6 @@ export default function AdminGuruPage() {
                 </div>
               </div>
 
-              {/* Import Options */}
               <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-[#081612] border border-slate-200 dark:border-emerald-900/50 space-y-2">
                 <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 flex items-center gap-1.5">
                   <Layers className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
@@ -651,12 +534,8 @@ export default function AdminGuruPage() {
                       className="accent-emerald-600"
                     />
                     <div>
-                      <span className="font-bold block text-slate-800 dark:text-white">
-                        Tambahkan ke Data Saat Ini (Append)
-                      </span>
-                      <span className="text-[10px] text-slate-500 block">
-                        Menambahkan {parsedExcelTeachers.length} guru baru tanpa menghapus data yang ada.
-                      </span>
+                      <div className="font-bold text-slate-900 dark:text-white">Gabungkan Data (Append)</div>
+                      <div className="text-[10px] text-slate-500">Perbarui data guru yang ada, tambah guru baru.</div>
                     </div>
                   </label>
 
@@ -670,60 +549,13 @@ export default function AdminGuruPage() {
                       className="accent-emerald-600"
                     />
                     <div>
-                      <span className="font-bold block text-red-600 dark:text-red-400">
-                        Ganti Semua Data (Overwrite)
-                      </span>
-                      <span className="text-[10px] text-slate-500 block">
-                        Menghapus data guru lama dan menggantinya dengan isi file Excel ini.
-                      </span>
+                      <div className="font-bold text-slate-900 dark:text-white">Ganti Semua Data (Replace)</div>
+                      <div className="text-[10px] text-slate-500">Hapus data guru lama, ganti murni dari Excel.</div>
                     </div>
                   </label>
                 </div>
               </div>
 
-              {/* Data Table Preview */}
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-bold text-slate-700 dark:text-slate-300">
-                    Pratinjau Baris Data ({parsedExcelTeachers.length} guru)
-                  </span>
-                  <span className="text-[10px] text-slate-400">Menampilkan maksimal 10 baris pertama</span>
-                </div>
-                <div className="border border-slate-200 dark:border-emerald-900/50 rounded-2xl overflow-hidden max-h-60 overflow-y-auto">
-                  <table className="w-full text-xs text-left">
-                    <thead className="bg-slate-100 dark:bg-emerald-950/80 text-slate-600 dark:text-slate-300 font-bold">
-                      <tr>
-                        <th className="p-2.5">No</th>
-                        <th className="p-2.5">Nama Guru</th>
-                        <th className="p-2.5">Jabatan</th>
-                        <th className="p-2.5">Mata Pelajaran</th>
-                        <th className="p-2.5">Pendidikan</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-100 dark:divide-emerald-900/30 text-slate-700 dark:text-slate-300">
-                      {parsedExcelTeachers.slice(0, 10).map((t, idx) => (
-                        <tr key={t.id} className="hover:bg-slate-50 dark:hover:bg-emerald-950/30">
-                          <td className="p-2.5 font-mono text-[11px] text-slate-400">{idx + 1}</td>
-                          <td className="p-2.5 font-bold text-slate-900 dark:text-white">
-                            <div>{t.name}</div>
-                            {t.nip && <div className="text-[10px] text-slate-400 font-normal">NIP: {t.nip}</div>}
-                          </td>
-                          <td className="p-2.5 text-emerald-700 dark:text-emerald-400 font-medium">{t.position}</td>
-                          <td className="p-2.5">{t.subject}</td>
-                          <td className="p-2.5 text-slate-500">{t.education}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                  {parsedExcelTeachers.length > 10 && (
-                    <div className="p-2.5 bg-slate-50 dark:bg-emerald-950/40 text-center text-[11px] text-slate-500 font-medium border-t border-slate-100 dark:border-emerald-900/30">
-                      ...dan {parsedExcelTeachers.length - 10} data guru lainnya.
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Action Modal Footer */}
               <div className="pt-3 flex items-center justify-end gap-2 border-t border-slate-100 dark:border-emerald-900/40">
                 <button
                   type="button"
@@ -739,53 +571,6 @@ export default function AdminGuruPage() {
                 >
                   <FileUp className="w-4 h-4" />
                   <span>Proses Impor ({parsedExcelTeachers.length} Guru)</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Code TS Export Modal */}
-        {codeModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-            <div className="bg-white dark:bg-[#0E241E] max-w-2xl w-full rounded-3xl p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto border border-slate-200 dark:border-emerald-900/60">
-              <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-emerald-900/40">
-                <div className="flex items-center gap-2">
-                  <Code className="w-5 h-5 text-amber-500" />
-                  <h3 className="font-bold text-sm font-heading">
-                    Kode TypeScript untuk data-store.ts (Sync Build Netlify)
-                  </h3>
-                </div>
-                <button onClick={() => setCodeModalOpen(false)} className="text-slate-400 hover:text-slate-700">
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-
-              <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                Salin kode array ini dan ganti nilai <code>initialTeachers</code> di file{" "}
-                <code className="text-emerald-600 font-bold">src/lib/data-store.ts</code>. Ketika di-push ke GitHub,
-                build Netlify akan langsung menampilkan data guru dan foto terbaru Anda untuk semua pengunjung!
-              </p>
-
-              <div className="relative">
-                <pre className="p-4 rounded-2xl bg-slate-900 text-emerald-400 font-mono text-[11px] overflow-x-auto max-h-72 border border-slate-800 select-all">
-                  {generateTSCode()}
-                </pre>
-                <button
-                  onClick={handleCopyTSCode}
-                  className="absolute top-3 right-3 px-3 py-1.5 rounded-lg bg-emerald-600 text-white font-bold text-xs flex items-center gap-1.5 hover:bg-emerald-500 transition-colors shadow"
-                >
-                  {copied ? <Check className="w-4 h-4 text-amber-300" /> : <Copy className="w-4 h-4" />}
-                  <span>{copied ? "Tersalin!" : "Salin Kode"}</span>
-                </button>
-              </div>
-
-              <div className="pt-2 flex justify-end">
-                <button
-                  onClick={() => setCodeModalOpen(false)}
-                  className="px-4 py-2 rounded-xl bg-emerald-700 text-white font-bold text-xs hover:bg-emerald-600"
-                >
-                  Tutup
                 </button>
               </div>
             </div>
@@ -814,8 +599,8 @@ export default function AdminGuruPage() {
                         alt={item.name}
                         className="w-10 h-10 rounded-full object-cover border-2 border-emerald-500/40 shadow-sm shrink-0"
                         onError={(e) => {
-                          // Image load fallback
-                          (e.target as HTMLElement).style.display = "none";
+                          e.currentTarget.onerror = null;
+                          e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(item.name)}&background=064E3B&color=fff`;
                         }}
                       />
                     ) : (

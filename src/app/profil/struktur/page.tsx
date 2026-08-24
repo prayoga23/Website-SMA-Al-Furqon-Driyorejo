@@ -45,7 +45,7 @@ export default function StrukturPage() {
       level: 1,
       desc: "Pendiri dan Pengasuh Utama Pondok Pesantren Al-Furqon Driyorejo.",
       badgeColor: "bg-amber-500 text-white dark:bg-amber-600",
-      photo: "/foto-guru/Dr. H. Abdul Muid, M.Pd.I..jpg",
+      photo: "/foto-guru/abdul-muid.jpg",
     },
     {
       role: "Wakil Pengasuh PP. Al-Furqon",
@@ -74,7 +74,7 @@ export default function StrukturPage() {
       isMain: true,
       desc: "Penanggung Jawab Utama Manajemen & Pembelajaran SMA Al-Furqon Driyorejo.",
       badgeColor: "bg-emerald-700 text-white dark:bg-emerald-600",
-      photo: "/foto-guru/Suryanto, S.Pd., M.Pd..png",
+      photo: "/foto-guru/suryanto.png",
     },
     {
       role: "Kepala TU / Bendahara SMA Al-Furqon",
@@ -84,7 +84,7 @@ export default function StrukturPage() {
       isStaff: true,
       desc: "Penanggung Jawab Tata Usaha, Administrasi Keuangan, & Layanan Sekolah.",
       badgeColor: "bg-teal-700 text-white dark:bg-teal-600",
-      photo: "/foto-guru/Siti Alfiyatus Sa'diyah, S.Pd.jpg",
+      photo: "/foto-guru/siti-alfiyatus.jpg",
     },
   ];
 
@@ -96,7 +96,7 @@ export default function StrukturPage() {
       level: 5,
       desc: "Penanggung Jawab Karakter Santri, Kedisiplinan, OSIS, & Kedinasan Kesiswaan.",
       badgeColor: "bg-blue-600 text-white dark:bg-blue-700",
-      photo: "/foto-guru/Suherman, M.Pd. I..jpg",
+      photo: "/foto-guru/suherman.jpg",
     },
     {
       role: "Waka Kurikulum SMA Al-Furqon",
@@ -105,7 +105,7 @@ export default function StrukturPage() {
       level: 5,
       desc: "Penanggung Jawab Implementasi Kurikulum Merdeka, Jadwal KBM, & Asesmen Pembelajaran.",
       badgeColor: "bg-indigo-600 text-white dark:bg-indigo-700",
-      photo: "/foto-guru/Triana Dewitasari, S.Pd..jpg",
+      photo: "/foto-guru/triana-dewitasari.jpg",
     },
     {
       role: "Waka Bina Prestasi SMA Al-Furqon",
