@@ -14,7 +14,7 @@ export default function KesiswaanPage() {
 
       <PageHeader
         title="Kesiswaan & Kehidupan Santri"
-        subtitle="Mewadahi tumbuh kembang siswa melalui organisasi OSIS, kegiatan keagamaan, dan beragam klub ekstrakurikuler."
+        subtitle="Mewadahi tumbuh kembang siswa melalui organisasi OSIS, kegiatan keagamaan, dan beragam Ekstrakurikuler."
         breadcrumb={[{ name: "Kesiswaan" }]}
       />
 

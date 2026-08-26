@@ -17,6 +17,7 @@ import {
   ChevronLeft,
   ChevronRight,
   UserCheck,
+  Trophy,
 } from "lucide-react";
 import { useData } from "@/context/data-context";
 
@@ -93,7 +94,7 @@ export const AboutSection: React.FC = () => {
     {
       title: "Prestasi Terukir",
       value: `-`,
-      icon: Sparkles,
+      icon: Trophy,
       desc: "Tingkat Kabupaten - Nasional",
     },
     {

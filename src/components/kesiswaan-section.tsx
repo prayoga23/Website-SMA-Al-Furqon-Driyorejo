@@ -3,8 +3,34 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Users, Sparkles, Heart, Shield, ArrowRight, Check } from "lucide-react";
+import {
+  Users,
+  Sparkles,
+  Heart,
+  Shield,
+  ArrowRight,
+  Check,
+  Palette,
+  ChefHat,
+  Scissors,
+  Shirt,
+  Trophy,
+  Music,
+  ShieldCheck,
+} from "lucide-react";
 import { useData } from "@/context/data-context";
+
+export const getExtraIcon = (iconName?: string, name?: string) => {
+  const key = (iconName || name || "").toLowerCase();
+  if (key.includes("palette") || key.includes("desain")) return Palette;
+  if (key.includes("chef") || key.includes("boga")) return ChefHat;
+  if (key.includes("scissors") || key.includes("craft")) return Scissors;
+  if (key.includes("shirt") || key.includes("menjahit") || key.includes("jahit")) return Shirt;
+  if (key.includes("trophy") || key.includes("futsal") || key.includes("bola")) return Trophy;
+  if (key.includes("music") || key.includes("banjari") || key.includes("hadrah")) return Music;
+  if (key.includes("shield") || key.includes("silat") || key.includes("pencak")) return ShieldCheck;
+  return Sparkles;
+};
 
 export const KesiswaanSection: React.FC = () => {
   const pathname = usePathname();
@@ -134,7 +160,7 @@ export const KesiswaanSection: React.FC = () => {
                 EKSPLORASI BAKAT & MINAT
               </span>
               <h3 className="text-2xl font-bold font-heading text-white">
-                10+ Pilihan Ekstrakurikuler Terpadu
+                Pilihan Ekstrakurikuler Terpadu
               </h3>
             </div>
             {isHomePage && (
@@ -147,19 +173,29 @@ export const KesiswaanSection: React.FC = () => {
             )}
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-            {extracurriculars.map((extra) => (
-              <div
-                key={extra.id}
-                className="bg-white/10 backdrop-blur-md p-3.5 rounded-xl border border-white/10 hover:bg-white/20 transition-all text-center"
-              >
-                <div className="w-8 h-8 rounded-lg bg-amber-400/20 text-amber-300 mx-auto mb-2 flex items-center justify-center font-bold text-xs">
-                  <Sparkles className="w-4 h-4" />
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
+            {extracurriculars.map((extra) => {
+              const IconComp = getExtraIcon(extra.icon, extra.name);
+              const imgIcon = extra.iconImage || (extra.name.toLowerCase().includes("silat") ? "/pencak-silat2 (1).png" : undefined);
+              return (
+                <div
+                  key={extra.id}
+                  className="bg-white/10 backdrop-blur-md p-3.5 rounded-2xl border border-white/10 hover:bg-white/20 transition-all text-center flex flex-col items-center justify-between group cursor-pointer"
+                >
+                  <div className="w-10 h-10 rounded-xl bg-amber-400/20 text-amber-300 mb-2 flex items-center justify-center font-bold text-xs shadow-inner group-hover:scale-110 transition-transform overflow-hidden p-1.5">
+                    {imgIcon ? (
+                      <img src={imgIcon} alt={extra.name} className="w-full h-full object-contain mix-blend-multiply" />
+                    ) : (
+                      <IconComp className="w-5 h-5 text-amber-300" />
+                    )}
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-bold text-white line-clamp-1">{extra.name}</h4>
+                    <span className="text-[9px] text-emerald-200 mt-1 block">{extra.category}</span>
+                  </div>
                 </div>
-                <h4 className="text-xs font-bold text-white line-clamp-1">{extra.name}</h4>
-                <span className="text-[9px] text-emerald-200 mt-1 block">{extra.category}</span>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>

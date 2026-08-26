@@ -64,6 +64,9 @@ interface DataContextType {
   addFacility: (item: Omit<FacilityItem, "id">) => void;
   updateFacility: (id: string, item: Partial<FacilityItem>) => void;
   deleteFacility: (id: string) => void;
+  addExtracurricular: (item: Omit<ExtracurricularItem, "id">) => void;
+  updateExtracurricular: (id: string, item: Partial<ExtracurricularItem>) => void;
+  deleteExtracurricular: (id: string) => void;
   submitPPDB: (applicant: Omit<PPDBApplicant, "id" | "registrationNumber" | "registrationDate" | "status">) => PPDBApplicant;
   updateApplicantStatus: (id: string, status: PPDBApplicant["status"]) => void;
 }
@@ -79,7 +82,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [agendas, setAgendas] = useState<AgendaItem[]>(initialAgenda);
   const [achievements, setAchievements] = useState<AchievementItem[]>(initialAchievements);
   const [teachers, setTeachers] = useState<TeacherItem[]>(initialTeachers);
-  const [extracurriculars] = useState<ExtracurricularItem[]>(initialExtracurriculars);
+  const [extracurriculars, setExtracurriculars] = useState<ExtracurricularItem[]>(initialExtracurriculars);
   const [gallery, setGallery] = useState<GalleryItem[]>(initialGallery);
   const [applicants, setApplicants] = useState<PPDBApplicant[]>(initialApplicants);
   const [faqs] = useState<FAQItem[]>(initialFAQs);
@@ -144,6 +147,9 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       const savedFacilities = localStorage.getItem(STORAGE_KEY_PREFIX + "facilities");
       if (savedFacilities) setFacilities(JSON.parse(savedFacilities));
+
+      const savedExtras = localStorage.getItem(STORAGE_KEY_PREFIX + "extracurriculars");
+      if (savedExtras) setExtracurriculars(JSON.parse(savedExtras));
     } catch (e) {
       console.error("Error loading local storage:", e);
     }
@@ -303,6 +309,28 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.setItem(STORAGE_KEY_PREFIX + "facilities", JSON.stringify(updated));
   };
 
+  const addExtracurricular = (item: Omit<ExtracurricularItem, "id">) => {
+    const newItem: ExtracurricularItem = {
+      ...item,
+      id: "extra-" + Date.now(),
+    };
+    const updated = [...extracurriculars, newItem];
+    setExtracurriculars(updated);
+    localStorage.setItem(STORAGE_KEY_PREFIX + "extracurriculars", JSON.stringify(updated));
+  };
+
+  const updateExtracurricular = (id: string, item: Partial<ExtracurricularItem>) => {
+    const updated = extracurriculars.map((e) => (e.id === id ? { ...e, ...item } : e));
+    setExtracurriculars(updated);
+    localStorage.setItem(STORAGE_KEY_PREFIX + "extracurriculars", JSON.stringify(updated));
+  };
+
+  const deleteExtracurricular = (id: string) => {
+    const updated = extracurriculars.filter((e) => e.id !== id);
+    setExtracurriculars(updated);
+    localStorage.setItem(STORAGE_KEY_PREFIX + "extracurriculars", JSON.stringify(updated));
+  };
+
   const submitPPDB = (
     data: Omit<PPDBApplicant, "id" | "registrationNumber" | "registrationDate" | "status">
   ): PPDBApplicant => {
@@ -364,6 +392,9 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
         addFacility,
         updateFacility,
         deleteFacility,
+        addExtracurricular,
+        updateExtracurricular,
+        deleteExtracurricular,
         submitPPDB,
         updateApplicantStatus,
       }}

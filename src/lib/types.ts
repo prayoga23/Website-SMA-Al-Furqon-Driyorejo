@@ -79,11 +79,13 @@ export interface TeacherItem {
 export interface ExtracurricularItem {
   id: string;
   name: string;
-  category: "Keagamaan" | "Olahraga" | "Seni & Budaya" | "Sains & Teknologi" | "Kepemimpinan";
+  category: "Keagamaan" | "Olahraga" | "Seni & Budaya" | "Sains & Teknologi" | "Kepemimpinan" | "Keterampilan";
   description: string;
   schedule: string;
   instructor: string;
   image: string;
+  icon?: string;
+  iconImage?: string;
   achievements?: string[];
 }
 

@@ -26,6 +26,7 @@ export const AdminSidebar: React.FC = () => {
 
   const menu = [
     { name: "Dashboard Overview", href: "/admin/dashboard", icon: LayoutDashboard },
+    { name: "Kelola Ekstrakurikuler", href: "/admin/ekstrakurikuler", icon: Sparkles },
     { name: "Kelola Fasilitas", href: "/admin/fasilitas", icon: Building2 },
     { name: "Kelola Berita", href: "/admin/berita", icon: Newspaper },
     { name: "Kelola Agenda", href: "/admin/agenda", icon: Calendar },

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Sparkles, HeartHandshake, Zap, Users, Brain, BookOpen, ShieldCheck, CheckCircle2 } from "lucide-react";
+import { Sparkles, HeartHandshake, Zap, Users, Brain, BookOpen, ShieldCheck, CheckCircle2, GraduationCap } from "lucide-react";
 import { useData } from "@/context/data-context";
 
 export const VisiMisiSection: React.FC = () => {
@@ -44,7 +44,7 @@ export const VisiMisiSection: React.FC = () => {
 
             <div>
               <div className="w-12 h-12 rounded-2xl bg-amber-400/20 border border-amber-400/40 flex items-center justify-center text-amber-300 mb-6 shadow-inner">
-                <Sparkles className="w-6 h-6" />
+                <GraduationCap className="w-6 h-6" />
               </div>
               <span className="text-xs font-bold text-amber-300 uppercase tracking-widest mb-2 block">
                 VISI UTAMA SEKOLAH
