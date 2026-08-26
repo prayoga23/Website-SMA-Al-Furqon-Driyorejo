@@ -13,6 +13,7 @@ import {
   FAQItem,
   TestimonialItem,
   FacilityItem,
+  UserItem,
 } from "@/lib/types";
 import {
   initialSchoolInfo,
@@ -26,6 +27,7 @@ import {
   initialFAQs,
   initialTestimonials,
   initialFacilities,
+  initialUsers,
 } from "@/lib/data-store";
 
 interface DataContextType {
@@ -40,6 +42,8 @@ interface DataContextType {
   faqs: FAQItem[];
   testimonials: TestimonialItem[];
   facilities: FacilityItem[];
+  users: UserItem[];
+  currentUser: UserItem | null;
   darkMode: boolean;
   setDarkMode: (val: boolean) => void;
   // State Mutations (Admin CMS Actions)
@@ -67,6 +71,11 @@ interface DataContextType {
   addExtracurricular: (item: Omit<ExtracurricularItem, "id">) => void;
   updateExtracurricular: (id: string, item: Partial<ExtracurricularItem>) => void;
   deleteExtracurricular: (id: string) => void;
+  addUser: (item: Omit<UserItem, "id">) => void;
+  updateUser: (id: string, item: Partial<UserItem>) => void;
+  deleteUser: (id: string) => void;
+  loginUser: (username: string, password: string) => { success: boolean; message?: string; user?: UserItem };
+  logoutUser: () => void;
   submitPPDB: (applicant: Omit<PPDBApplicant, "id" | "registrationNumber" | "registrationDate" | "status">) => PPDBApplicant;
   updateApplicantStatus: (id: string, status: PPDBApplicant["status"]) => void;
 }
@@ -88,6 +97,8 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [faqs] = useState<FAQItem[]>(initialFAQs);
   const [testimonials] = useState<TestimonialItem[]>(initialTestimonials);
   const [facilities, setFacilities] = useState<FacilityItem[]>(initialFacilities);
+  const [users, setUsers] = useState<UserItem[]>(initialUsers);
+  const [currentUser, setCurrentUser] = useState<UserItem | null>(null);
 
   // Load saved state from LocalStorage on mount
   useEffect(() => {
@@ -150,6 +161,12 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       const savedExtras = localStorage.getItem(STORAGE_KEY_PREFIX + "extracurriculars");
       if (savedExtras) setExtracurriculars(JSON.parse(savedExtras));
+
+      const savedUsersList = localStorage.getItem(STORAGE_KEY_PREFIX + "users");
+      if (savedUsersList) setUsers(JSON.parse(savedUsersList));
+
+      const savedActiveUser = localStorage.getItem(STORAGE_KEY_PREFIX + "admin_user");
+      if (savedActiveUser) setCurrentUser(JSON.parse(savedActiveUser));
     } catch (e) {
       console.error("Error loading local storage:", e);
     }
@@ -331,6 +348,63 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.setItem(STORAGE_KEY_PREFIX + "extracurriculars", JSON.stringify(updated));
   };
 
+  const addUser = (item: Omit<UserItem, "id">) => {
+    const newUser: UserItem = {
+      ...item,
+      id: "user-" + Date.now(),
+    };
+    const updated = [...users, newUser];
+    setUsers(updated);
+    localStorage.setItem(STORAGE_KEY_PREFIX + "users", JSON.stringify(updated));
+  };
+
+  const updateUser = (id: string, item: Partial<UserItem>) => {
+    const updated = users.map((u) => (u.id === id ? { ...u, ...item } : u));
+    setUsers(updated);
+    localStorage.setItem(STORAGE_KEY_PREFIX + "users", JSON.stringify(updated));
+    if (currentUser?.id === id) {
+      const updatedUser = { ...currentUser, ...item };
+      setCurrentUser(updatedUser);
+      localStorage.setItem(STORAGE_KEY_PREFIX + "admin_user", JSON.stringify(updatedUser));
+    }
+  };
+
+  const deleteUser = (id: string) => {
+    const updated = users.filter((u) => u.id !== id);
+    setUsers(updated);
+    localStorage.setItem(STORAGE_KEY_PREFIX + "users", JSON.stringify(updated));
+  };
+
+  const loginUser = (usernameInput: string, passwordInput: string) => {
+    const found = users.find(
+      (u) => u.username.toLowerCase() === usernameInput.toLowerCase() && u.password === passwordInput
+    );
+    if (!found) {
+      return { success: false, message: "Username atau Password salah!" };
+    }
+    if (found.status !== "Aktif") {
+      return { success: false, message: "Akun Anda saat ini dinonaktifkan. Hubungi Super Admin." };
+    }
+    const updatedUser = {
+      ...found,
+      lastLogin: new Date().toLocaleString("id-ID") + " WIB",
+    };
+    const updatedUsersList = users.map((u) => (u.id === found.id ? updatedUser : u));
+    setUsers(updatedUsersList);
+    localStorage.setItem(STORAGE_KEY_PREFIX + "users", JSON.stringify(updatedUsersList));
+
+    setCurrentUser(updatedUser);
+    localStorage.setItem(STORAGE_KEY_PREFIX + "admin_user", JSON.stringify(updatedUser));
+    localStorage.setItem("sma_admin_token", `token-${updatedUser.id}-${Date.now()}`);
+    return { success: true, user: updatedUser };
+  };
+
+  const logoutUser = () => {
+    setCurrentUser(null);
+    localStorage.removeItem(STORAGE_KEY_PREFIX + "admin_user");
+    localStorage.removeItem("sma_admin_token");
+  };
+
   const submitPPDB = (
     data: Omit<PPDBApplicant, "id" | "registrationNumber" | "registrationDate" | "status">
   ): PPDBApplicant => {
@@ -369,6 +443,8 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
         faqs,
         testimonials,
         facilities,
+        users,
+        currentUser,
         darkMode,
         setDarkMode,
         updateSchoolInfo,
@@ -395,6 +471,11 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
         addExtracurricular,
         updateExtracurricular,
         deleteExtracurricular,
+        addUser,
+        updateUser,
+        deleteUser,
+        loginUser,
+        logoutUser,
         submitPPDB,
         updateApplicantStatus,
       }}

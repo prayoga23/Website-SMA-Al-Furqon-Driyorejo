@@ -16,16 +16,18 @@ import {
   LogOut,
   ArrowLeft,
   Sparkles,
+  UserCheck,
 } from "lucide-react";
 import { useData } from "@/context/data-context";
 
 export const AdminSidebar: React.FC = () => {
   const pathname = usePathname();
   const router = useRouter();
-  const { schoolInfo } = useData();
+  const { schoolInfo, currentUser, logoutUser } = useData();
 
   const menu = [
     { name: "Dashboard Overview", href: "/admin/dashboard", icon: LayoutDashboard },
+    { name: "Kelola Pengguna (Users)", href: "/admin/users", icon: UserCheck },
     { name: "Kelola Profil & Visi Misi", href: "/admin/settings", icon: Settings },
     { name: "Kelola Ekstrakurikuler", href: "/admin/ekstrakurikuler", icon: Sparkles },
     { name: "Kelola Fasilitas Sekolah", href: "/admin/fasilitas", icon: Building2 },
@@ -38,7 +40,7 @@ export const AdminSidebar: React.FC = () => {
   ];
 
   const handleLogout = () => {
-    localStorage.removeItem("sma_admin_token");
+    logoutUser();
     router.push("/admin/login");
   };
 
@@ -46,7 +48,7 @@ export const AdminSidebar: React.FC = () => {
     <aside className="w-64 bg-[#032B21] text-slate-200 min-h-screen p-6 flex flex-col justify-between border-r border-emerald-900/60 shrink-0">
       <div>
         {/* Brand Header */}
-        <div className="pb-6 mb-6 border-b border-emerald-800/60">
+        <div className="pb-4 mb-4 border-b border-emerald-800/60">
           <div className="flex items-center gap-3">
             <img src="/logo.png" alt="Logo" className="w-9 h-9 object-contain" />
             <div>
@@ -60,8 +62,23 @@ export const AdminSidebar: React.FC = () => {
           </div>
         </div>
 
+        {/* User Logged-in Profile Tag */}
+        <div className="mb-4 p-2.5 rounded-xl bg-emerald-950/80 border border-emerald-800/60 flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-full bg-amber-400 text-slate-950 font-bold flex items-center justify-center text-xs overflow-hidden shrink-0">
+            {currentUser?.avatar ? (
+              <img src={currentUser.avatar} alt={currentUser.name} className="w-full h-full object-cover" />
+            ) : (
+              (currentUser?.name || "A").substring(0, 1)
+            )}
+          </div>
+          <div className="overflow-hidden">
+            <div className="font-bold text-xs text-white truncate">{currentUser?.name || "Super Admin"}</div>
+            <div className="text-[10px] text-amber-300 font-semibold truncate">{currentUser?.role || "Administrator"}</div>
+          </div>
+        </div>
+
         {/* Menu Links */}
-        <nav className="space-y-1">
+        <nav className="space-y-1 max-h-[calc(100vh-250px)] overflow-y-auto pr-1">
           {menu.map((item) => {
             const Icon = item.icon;
             const isActive = pathname === item.href;
@@ -84,7 +101,7 @@ export const AdminSidebar: React.FC = () => {
       </div>
 
       {/* Footer Controls */}
-      <div className="pt-6 border-t border-emerald-800/60 space-y-2">
+      <div className="pt-4 border-t border-emerald-800/60 space-y-2">
         <Link
           href="/"
           className="flex items-center gap-2 text-xs text-emerald-300 hover:text-white font-medium transition-colors px-2 py-1"
@@ -95,10 +112,10 @@ export const AdminSidebar: React.FC = () => {
 
         <button
           onClick={handleLogout}
-          className="w-full flex items-center gap-2 px-3.5 py-2.5 rounded-xl text-xs font-bold text-red-300 hover:bg-red-950/60 transition-colors"
+          className="w-full flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold text-red-300 hover:bg-red-950/60 transition-colors"
         >
           <LogOut className="w-4 h-4 text-red-400" />
-          <span>Keluar Admin</span>
+          <span>Keluar (Logout)</span>
         </button>
       </div>
     </aside>

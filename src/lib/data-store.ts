@@ -899,3 +899,39 @@ export const initialFacilities: FacilityItem[] = [
   },
 ];
 
+export const initialUsers: UserItem[] = [
+  {
+    id: "user-1",
+    name: "Administrator Utama",
+    username: "admin",
+    password: "admin123",
+    role: "Super Admin",
+    status: "Aktif",
+    email: "admin@smaalfurqon.sch.id",
+    lastLogin: "2026-08-26 11:30 WIB",
+    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
+  },
+  {
+    id: "user-2",
+    name: "Humas & Publikasi",
+    username: "smalfurqon",
+    password: "admin123",
+    role: "Administrator",
+    status: "Aktif",
+    email: "humas@smaalfurqon.sch.id",
+    lastLogin: "2026-08-25 15:45 WIB",
+    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80",
+  },
+  {
+    id: "user-3",
+    name: "Panitia PPDB 2026",
+    username: "ppdb2026",
+    password: "ppdb123",
+    role: "Petugas PPDB",
+    status: "Aktif",
+    email: "ppdb@smaalfurqon.sch.id",
+    lastLogin: "2026-08-24 09:15 WIB",
+    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=400&q=80",
+  },
+];
+

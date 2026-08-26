@@ -181,3 +181,15 @@ export interface FacilityItem {
   standard?: string;
 }
 
+export interface UserItem {
+  id: string;
+  name: string;
+  username: string;
+  password: string;
+  role: "Super Admin" | "Administrator" | "Editor Berita" | "Petugas PPDB";
+  status: "Aktif" | "Nonaktif";
+  email: string;
+  lastLogin?: string;
+  avatar?: string;
+}
+

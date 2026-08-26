@@ -16,12 +16,13 @@ import {
   ExternalLink,
   Plus,
   Sparkles,
+  UserCheck,
 } from "lucide-react";
 import Link from "next/link";
 
 export default function AdminDashboardPage() {
   const router = useRouter();
-  const { news, achievements, teachers, gallery, applicants, facilities, extracurriculars, updateApplicantStatus } = useData();
+  const { news, achievements, teachers, gallery, applicants, facilities, extracurriculars, users, updateApplicantStatus } = useData();
 
   useEffect(() => {
     const token = localStorage.getItem("sma_admin_token");
@@ -31,12 +32,13 @@ export default function AdminDashboardPage() {
   }, [router]);
 
   const stats = [
+    { title: "Pengguna Admin", count: users.length, icon: UserCheck, color: "bg-blue-600" },
     { title: "Ekstrakurikuler", count: extracurriculars.length, icon: Sparkles, color: "bg-emerald-600" },
     { title: "Fasilitas Modern", count: facilities.length, icon: Building2, color: "bg-indigo-600" },
-    { title: "Berita & Pengumuman", count: news.length, icon: Newspaper, color: "bg-blue-500" },
+    { title: "Berita & Pengumuman", count: news.length, icon: Newspaper, color: "bg-teal-600" },
     { title: "Prestasi Terdaftar", count: achievements.length, icon: Trophy, color: "bg-amber-500" },
     { title: "Guru & Staf", count: teachers.length, icon: GraduationCap, color: "bg-emerald-700" },
-    { title: "Dokumentasi Galeri", count: gallery.length, icon: ImageIcon, color: "bg-teal-600" },
+    { title: "Dokumentasi Galeri", count: gallery.length, icon: ImageIcon, color: "bg-sky-600" },
     { title: "Pendaftar PPDB", count: applicants.length, icon: Users, color: "bg-purple-600" },
   ];
 
