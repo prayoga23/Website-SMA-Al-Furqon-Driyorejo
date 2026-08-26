@@ -96,7 +96,7 @@ export const Navbar: React.FC = () => {
               <span className="hidden md:inline truncate max-w-md text-emerald-200/90 font-medium">{schoolInfo.address}</span>
             </div>
 
-            <div className="flex items-center gap-4 shrink-2">
+            <div className="flex items-center gap-2.5 shrink-2">
               <a
                 href={`https://wa.me/${schoolInfo.whatsapp}?text=Halo%20Admin%20SMA%20Al-Furqon,%20saya%20ingin%20bertanya%20informasi%20PPDB`}
                 target="_blank"

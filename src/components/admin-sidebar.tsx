@@ -26,15 +26,15 @@ export const AdminSidebar: React.FC = () => {
 
   const menu = [
     { name: "Dashboard Overview", href: "/admin/dashboard", icon: LayoutDashboard },
+    { name: "Kelola Profil & Visi Misi", href: "/admin/settings", icon: Settings },
     { name: "Kelola Ekstrakurikuler", href: "/admin/ekstrakurikuler", icon: Sparkles },
-    { name: "Kelola Fasilitas", href: "/admin/fasilitas", icon: Building2 },
-    { name: "Kelola Berita", href: "/admin/berita", icon: Newspaper },
-    { name: "Kelola Agenda", href: "/admin/agenda", icon: Calendar },
-    { name: "Kelola Prestasi", href: "/admin/prestasi", icon: Trophy },
+    { name: "Kelola Fasilitas Sekolah", href: "/admin/fasilitas", icon: Building2 },
+    { name: "Kelola Berita & Informasi", href: "/admin/berita", icon: Newspaper },
+    { name: "Kelola Agenda & Kalender", href: "/admin/agenda", icon: Calendar },
+    { name: "Kelola Prestasi Siswa", href: "/admin/prestasi", icon: Trophy },
     { name: "Kelola Guru & Staf", href: "/admin/guru", icon: GraduationCap },
-    { name: "Kelola Galeri", href: "/admin/galeri", icon: ImageIcon },
-    { name: "Pendaftar PPDB", href: "/admin/ppdb", icon: Users },
-    { name: "Pengaturan Profil", href: "/admin/settings", icon: Settings },
+    { name: "Kelola Galeri Dokumentasi", href: "/admin/galeri", icon: ImageIcon },
+    { name: "Kelola Pendaftar PPDB", href: "/admin/ppdb", icon: Users },
   ];
 
   const handleLogout = () => {

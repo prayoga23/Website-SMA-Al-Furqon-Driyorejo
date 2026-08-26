@@ -19,6 +19,8 @@ export default function AdminSettingsPage() {
     email: schoolInfo.email,
     whatsapp: schoolInfo.whatsapp,
     vision: schoolInfo.vision,
+    missionsText: schoolInfo.missions ? schoolInfo.missions.join("\n") : "",
+    goalsText: schoolInfo.goals ? schoolInfo.goals.join("\n") : "",
     headmasterName: schoolInfo.headmasterName,
     headmasterPhoto: schoolInfo.headmasterPhoto || "",
     headmasterWelcome: schoolInfo.headmasterWelcome,
@@ -28,7 +30,31 @@ export default function AdminSettingsPage() {
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
-    updateSchoolInfo(form);
+    const missions = form.missionsText
+      .split("\n")
+      .map((s) => s.trim())
+      .filter((s) => s.length > 0);
+    const goals = form.goalsText
+      .split("\n")
+      .map((s) => s.trim())
+      .filter((s) => s.length > 0);
+
+    updateSchoolInfo({
+      name: form.name,
+      tagline: form.tagline,
+      accreditation: form.accreditation,
+      npsn: form.npsn,
+      foundation: form.foundation,
+      address: form.address,
+      email: form.email,
+      whatsapp: form.whatsapp,
+      vision: form.vision,
+      missions: missions.length > 0 ? missions : schoolInfo.missions,
+      goals: goals.length > 0 ? goals : schoolInfo.goals,
+      headmasterName: form.headmasterName,
+      headmasterPhoto: form.headmasterPhoto,
+      headmasterWelcome: form.headmasterWelcome,
+    });
     setSaved(true);
     setTimeout(() => setSaved(false), 3000);
   };
@@ -43,7 +69,7 @@ export default function AdminSettingsPage() {
             <h1 className="text-xl font-bold font-heading text-slate-900 dark:text-white">
               Pengaturan Identitas & Profil Sekolah
             </h1>
-            <p className="text-xs text-slate-500">Edit informasi kontak, visi, dan sambutan di website utama.</p>
+            <p className="text-xs text-slate-500">Edit informasi kontak, visi, misi, dan sambutan di website utama.</p>
           </div>
         </div>
 
@@ -171,6 +197,30 @@ export default function AdminSettingsPage() {
               value={form.vision}
               onChange={(e) => setForm({ ...form, vision: e.target.value })}
               className="w-full p-3 rounded-xl bg-slate-50 dark:bg-[#081612] border border-slate-200 dark:border-emerald-900/60 font-semibold"
+            />
+          </div>
+
+          <div>
+            <label className="block font-bold text-slate-700 dark:text-slate-200 mb-1">Daftar Misi Sekolah (1 per baris) *</label>
+            <textarea
+              rows={5}
+              required
+              placeholder="Tuliskan tiap poin misi pada baris baru..."
+              value={form.missionsText}
+              onChange={(e) => setForm({ ...form, missionsText: e.target.value })}
+              className="w-full p-3 rounded-xl bg-slate-50 dark:bg-[#081612] border border-slate-200 dark:border-emerald-900/60 leading-relaxed font-medium"
+            />
+          </div>
+
+          <div>
+            <label className="block font-bold text-slate-700 dark:text-slate-200 mb-1">Daftar Tujuan Utama Sekolah (1 per baris) *</label>
+            <textarea
+              rows={4}
+              required
+              placeholder="Tuliskan tiap poin tujuan pada baris baru..."
+              value={form.goalsText}
+              onChange={(e) => setForm({ ...form, goalsText: e.target.value })}
+              className="w-full p-3 rounded-xl bg-slate-50 dark:bg-[#081612] border border-slate-200 dark:border-emerald-900/60 leading-relaxed font-medium"
             />
           </div>
 

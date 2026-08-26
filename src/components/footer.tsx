@@ -215,7 +215,7 @@ export const Footer: React.FC = () => {
                 allowFullScreen={true}
                 loading="lazy"
                 referrerPolicy="strict-origin-when-cross-origin"
-                className="grayscale opacity-75 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-300"
+                className="w-full h-full opacity-100 transition-all duration-300"
               ></iframe>
               <a
                 href="https://maps.app.goo.gl/smaalfurqondriyorejo"
