@@ -91,54 +91,6 @@ export default function AdminDashboardPage() {
           })}
         </div>
 
-        {/* Quick Actions */}
-        <div className="bg-white dark:bg-[#0E241E] p-6 rounded-2xl border border-slate-200 dark:border-emerald-900/40 shadow-sm">
-          <h3 className="text-sm font-bold font-heading text-slate-900 dark:text-white mb-4">
-            Aksi Cepat Manajemen
-          </h3>
-          <div className="flex items-center gap-3 flex-wrap">
-            <Link
-              href="/admin/fasilitas"
-              className="px-4 py-2.5 rounded-xl bg-indigo-600 text-white font-bold text-xs flex items-center gap-1.5 hover:bg-indigo-500 transition-colors shadow"
-            >
-              <Plus className="w-4 h-4" />
-              <span>Kelola Fasilitas</span>
-            </Link>
-
-            <Link
-              href="/admin/berita"
-              className="px-4 py-2.5 rounded-xl bg-[#064E3B] text-amber-300 font-bold text-xs flex items-center gap-1.5 hover:bg-[#047857] transition-colors"
-            >
-              <Plus className="w-4 h-4" />
-              <span>Tambah Berita Baru</span>
-            </Link>
-
-            <Link
-              href="/admin/prestasi"
-              className="px-4 py-2.5 rounded-xl bg-amber-500 text-slate-950 font-bold text-xs flex items-center gap-1.5 hover:bg-amber-400 transition-colors"
-            >
-              <Plus className="w-4 h-4" />
-              <span>Tambah Prestasi Santri</span>
-            </Link>
-
-            <Link
-              href="/admin/galeri"
-              className="px-4 py-2.5 rounded-xl bg-teal-600 text-white font-bold text-xs flex items-center gap-1.5 hover:bg-teal-500 transition-colors"
-            >
-              <Plus className="w-4 h-4" />
-              <span>Upload Foto Galeri</span>
-            </Link>
-
-            <Link
-              href="/admin/guru"
-              className="px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-emerald-950 text-slate-800 dark:text-slate-200 font-bold text-xs flex items-center gap-1.5"
-            >
-              <Plus className="w-4 h-4 text-emerald-500" />
-              <span>Tambah Guru / Staf</span>
-            </Link>
-          </div>
-        </div>
-
         {/* PPDB Submissions Recent Table */}
         <div className="bg-white dark:bg-[#0E241E] p-6 rounded-2xl border border-slate-200 dark:border-emerald-900/40 shadow-sm space-y-4">
           <div className="flex items-center justify-between">
