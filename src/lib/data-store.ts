@@ -10,6 +10,7 @@ import {
   FAQItem,
   TestimonialItem,
   FacilityItem,
+  UserItem,
 } from "./types";
 
 export const initialSchoolInfo: SchoolInfo = {
