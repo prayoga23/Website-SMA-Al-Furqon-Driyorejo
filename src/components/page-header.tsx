@@ -2,8 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { ChevronRight, Edit3 } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 
 interface PageHeaderProps {
   title: string;
@@ -12,27 +11,7 @@ interface PageHeaderProps {
   adminHref?: string;
 }
 
-export const PageHeader: React.FC<PageHeaderProps> = ({ title, subtitle, breadcrumb = [], adminHref }) => {
-  const pathname = usePathname();
-
-  const getAdminLink = () => {
-    if (adminHref) return adminHref;
-    if (pathname.startsWith("/profil/fasilitas")) return "/admin/fasilitas";
-    if (pathname.startsWith("/profil/guru-staf") || pathname.startsWith("/profil/struktur")) return "/admin/guru";
-    if (pathname.startsWith("/profil")) return "/admin/settings";
-    if (pathname.startsWith("/akademik/kalender") || pathname.startsWith("/agenda")) return "/admin/agenda";
-    if (pathname.startsWith("/akademik")) return "/admin/settings";
-    if (pathname.startsWith("/kesiswaan/ekstrakurikuler")) return "/admin/ekstrakurikuler";
-    if (pathname.startsWith("/kesiswaan") || pathname.startsWith("/prestasi")) return "/admin/prestasi";
-    if (pathname.startsWith("/berita")) return "/admin/berita";
-    if (pathname.startsWith("/galeri")) return "/admin/galeri";
-    if (pathname.startsWith("/ppdb")) return "/admin/ppdb";
-    if (pathname.startsWith("/kontak")) return "/admin/settings";
-    return null;
-  };
-
-  const targetAdminHref = getAdminLink();
-
+export const PageHeader: React.FC<PageHeaderProps> = ({ title, subtitle, breadcrumb = [] }) => {
   return (
     <div className="bg-gradient-to-r from-[#032B21] via-[#064E3B] to-[#047857] text-white py-14 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       {/* Glow Ornaments */}
@@ -58,17 +37,6 @@ export const PageHeader: React.FC<PageHeaderProps> = ({ title, subtitle, breadcr
               </React.Fragment>
             ))}
           </div>
-
-          {/* Quick Admin Management Link */}
-          {targetAdminHref && (
-            <Link
-              href={targetAdminHref}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-amber-400/90 hover:bg-amber-300 text-slate-950 font-bold text-xs shadow transition-all border border-amber-300/50 shrink-0 self-start sm:self-auto"
-            >
-              <Edit3 className="w-3.5 h-3.5" />
-              <span>Kelola Data Halaman Ini</span>
-            </Link>
-          )}
         </div>
 
         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-heading text-white">
