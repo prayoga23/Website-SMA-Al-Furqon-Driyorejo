@@ -11,8 +11,8 @@ async function seedData() {
 
   // Seed Admin User
   await sql`
-    INSERT INTO users (id, username, password, name, role, email)
-    VALUES ('user-admin', 'admin', 'admin123', 'Administrator Sekolah', 'Admin', 'admin@smaalfurqondriyorejo.sch.id')
+    INSERT INTO users (id, username, password, name, role, status, email)
+    VALUES ('user-admin', 'admin', 'admin123', 'Administrator Sekolah', 'Admin', 'Aktif', 'admin@smaalfurqondriyorejo.sch.id')
     ON CONFLICT (id) DO NOTHING;
   `;
 

@@ -163,6 +163,7 @@ async function initSchema() {
       password VARCHAR(255) NOT NULL,
       name VARCHAR(255) NOT NULL,
       role VARCHAR(50) NOT NULL,
+      status VARCHAR(50) DEFAULT 'Aktif',
       email VARCHAR(255),
       avatar TEXT,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP

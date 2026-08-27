@@ -339,16 +339,20 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const newUser: UserItem = {
       ...item,
       id: "user-" + Date.now(),
+      status: item.status || "Aktif",
     };
     const updated = [...users, newUser];
     setUsers(updated);
     localStorage.setItem(STORAGE_KEY_PREFIX + "users", JSON.stringify(updated));
+    syncToApi("users", "save", newUser);
   };
 
   const updateUser = (id: string, item: Partial<UserItem>) => {
     const updated = users.map((u) => (u.id === id ? { ...u, ...item } : u));
     setUsers(updated);
     localStorage.setItem(STORAGE_KEY_PREFIX + "users", JSON.stringify(updated));
+    const target = updated.find((u) => u.id === id);
+    if (target) syncToApi("users", "save", target);
     if (currentUser?.id === id) {
       const updatedUser = { ...currentUser, ...item };
       setCurrentUser(updatedUser);
@@ -360,6 +364,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const updated = users.filter((u) => u.id !== id);
     setUsers(updated);
     localStorage.setItem(STORAGE_KEY_PREFIX + "users", JSON.stringify(updated));
+    syncToApi("users", "delete", undefined, id);
   };
 
   const loginUser = (usernameInput: string, passwordInput: string) => {
@@ -369,16 +374,19 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (!found) {
       return { success: false, message: "Username atau Password salah!" };
     }
-    if (found.status !== "Aktif") {
+    const userStatus = found.status || "Aktif";
+    if (userStatus === "Nonaktif") {
       return { success: false, message: "Akun Anda saat ini dinonaktifkan. Hubungi Super Admin." };
     }
     const updatedUser = {
       ...found,
+      status: userStatus as "Aktif" | "Nonaktif",
       lastLogin: new Date().toLocaleString("id-ID") + " WIB",
     };
     const updatedUsersList = users.map((u) => (u.id === found.id ? updatedUser : u));
     setUsers(updatedUsersList);
     localStorage.setItem(STORAGE_KEY_PREFIX + "users", JSON.stringify(updatedUsersList));
+    syncToApi("users", "save", updatedUser);
 
     setCurrentUser(updatedUser);
     localStorage.setItem(STORAGE_KEY_PREFIX + "admin_user", JSON.stringify(updatedUser));

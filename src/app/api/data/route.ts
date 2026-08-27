@@ -57,7 +57,7 @@ export async function GET() {
       faqs: faqsRes.length > 0 ? faqsRes : initialFAQs,
       testimonials: testimonialsRes.length > 0 ? testimonialsRes : initialTestimonials,
       facilities: facilitiesRes.length > 0 ? facilitiesRes : initialFacilities,
-      users: usersRes.length > 0 ? usersRes : initialUsers,
+      users: usersRes.length > 0 ? usersRes.map((u: any) => ({ ...u, status: u.status || "Aktif" })) : initialUsers,
     });
   } catch (error) {
     console.error("Error fetching data from Neon DB:", error);
@@ -170,6 +170,18 @@ export async function POST(request: Request) {
             status = ${item.status || 'Pending'},
             notes = ${item.notes || ''};
         `;
+      } else if (table === "users") {
+        await sql`
+          INSERT INTO users (id, username, password, name, role, status, email)
+          VALUES (${item.id}, ${item.username}, ${item.password}, ${item.name}, ${item.role}, ${item.status || 'Aktif'}, ${item.email || ''})
+          ON CONFLICT (id) DO UPDATE SET
+            username = ${item.username},
+            password = ${item.password},
+            name = ${item.name},
+            role = ${item.role},
+            status = ${item.status || 'Aktif'},
+            email = ${item.email || ''};
+        `;
       }
       return NextResponse.json({ success: true });
     }
@@ -183,6 +195,7 @@ export async function POST(request: Request) {
       else if (table === "ppdb_applicants") await sql`DELETE FROM ppdb_applicants WHERE id = ${id}`;
       else if (table === "achievements") await sql`DELETE FROM achievements WHERE id = ${id}`;
       else if (table === "extracurriculars") await sql`DELETE FROM extracurriculars WHERE id = ${id}`;
+      else if (table === "users") await sql`DELETE FROM users WHERE id = ${id}`;
 
       return NextResponse.json({ success: true });
     }
