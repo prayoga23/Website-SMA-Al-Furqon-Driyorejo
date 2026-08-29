@@ -69,13 +69,13 @@ export const AboutSection: React.FC = () => {
   const statCards = [
     {
       title: "Akreditasi",
-      value: schoolInfo.accreditation,
+      value: schoolInfo?.accreditation || "A (Unggulan)",
       icon: Award,
       desc: "Status Unggulan BAN-SM",
     },
     {
       title: "Tahun Berdiri",
-      value: schoolInfo.stats.establishedYear.toString(),
+      value: (schoolInfo?.stats?.establishedYear ?? 1995).toString(),
       icon: Calendar,
       desc: "20+ Tahun Mengabdi",
     },
@@ -87,7 +87,7 @@ export const AboutSection: React.FC = () => {
     },
     {
       title: "Guru & Staf",
-      value: `${schoolInfo.stats.teachers}`,
+      value: `${schoolInfo?.stats?.teachers ?? 21}`,
       icon: GraduationCap,
       desc: "Tenaga Pendidik S1/S2/S3",
     },

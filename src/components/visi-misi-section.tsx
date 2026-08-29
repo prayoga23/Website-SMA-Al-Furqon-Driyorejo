@@ -64,7 +64,7 @@ export const VisiMisiSection: React.FC = () => {
 
           {/* Right: Numbered Mission Cards Grid */}
           <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {schoolInfo.missions.map((mission, idx) => {
+            {(schoolInfo?.missions || []).map((mission, idx) => {
               const Icon = missionIcons[idx % missionIcons.length];
               const numStr = (idx + 1).toString().padStart(2, "0");
               return (

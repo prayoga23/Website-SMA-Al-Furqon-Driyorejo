@@ -122,7 +122,16 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       fetch("/api/data")
         .then((res) => res.json())
         .then((data) => {
-          if (data.schoolInfo) setSchoolInfo(data.schoolInfo);
+          if (data.schoolInfo) {
+            setSchoolInfo({
+              ...initialSchoolInfo,
+              ...data.schoolInfo,
+              stats: {
+                ...initialSchoolInfo.stats,
+                ...(data.schoolInfo.stats || {}),
+              },
+            });
+          }
           if (data.news && Array.isArray(data.news)) setNews(data.news);
           if (data.agendas && Array.isArray(data.agendas)) setAgendas(data.agendas);
           if (data.achievements && Array.isArray(data.achievements)) setAchievements(data.achievements);
@@ -149,7 +158,15 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const updateSchoolInfo = (info: Partial<SchoolInfo>) => {
-    const updated = { ...schoolInfo, ...info };
+    const updated = {
+      ...schoolInfo,
+      ...info,
+      stats: {
+        ...initialSchoolInfo.stats,
+        ...(schoolInfo?.stats || {}),
+        ...(info.stats || {}),
+      },
+    };
     setSchoolInfo(updated);
     localStorage.setItem(STORAGE_KEY_PREFIX + "school_info", JSON.stringify(updated));
     syncToApi("school_info", "save", updated);
