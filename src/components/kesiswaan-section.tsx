@@ -19,6 +19,7 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import { useData } from "@/context/data-context";
+import { kesiswaanActivities } from "@/lib/kesiswaan-data";
 
 export const getExtraIcon = (iconName?: string, name?: string) => {
   const key = (iconName || name || "").toLowerCase();
@@ -35,7 +36,8 @@ export const getExtraIcon = (iconName?: string, name?: string) => {
 export const KesiswaanSection: React.FC = () => {
   const pathname = usePathname();
   const isHomePage = pathname === "/";
-  const { extracurriculars } = useData();
+  const { extracurriculars, kesiswaanActivities: dynamicActivities } = useData();
+  const activitiesList = dynamicActivities && dynamicActivities.length > 0 ? dynamicActivities : kesiswaanActivities;
 
   return (
     <section id="kesiswaan-overview" className="py-20 bg-[#FDFBF7] dark:bg-[#081612] transition-colors relative overflow-hidden">
@@ -61,95 +63,39 @@ export const KesiswaanSection: React.FC = () => {
 
         {/* Editorial Feature Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-          {/* Editorial Card 1 */}
-          <div className="group rounded-3xl overflow-hidden bg-white dark:bg-[#0E241E] border border-slate-200 dark:border-emerald-900/40 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
-            <div className="h-56 relative overflow-hidden">
-              <img
-                src="/bg-al-furqon2.jpg"
-                alt="Organisasi Siswa OSIS & Pramuka"
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
-              <span className="absolute top-4 left-4 bg-amber-400 text-slate-950 text-[10px] font-bold px-2.5 py-1 rounded-md uppercase">
-                Kepemimpinan
-              </span>
-            </div>
-            <div className="p-6">
-              <h3 className="text-lg font-bold text-slate-900 dark:text-white font-heading mb-2">
-                Organisasi OSIS & Pramuka Ambalan
-              </h3>
-              <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
-                Melatih kemandirian, manajerial kegiatan, kepekaan sosial, serta kepemimpinan kepramukaan berbasis karakter Islami.
-              </p>
-              <Link
-                href="/kesiswaan"
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-[#047857] dark:text-emerald-400 hover:underline"
-              >
-                <span>Lihat Kegiatan OSIS</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
-            </div>
-          </div>
-
-          {/* Editorial Card 2 */}
-          <div className="group rounded-3xl overflow-hidden bg-white dark:bg-[#0E241E] border border-slate-200 dark:border-emerald-900/40 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
-            <div className="h-56 relative overflow-hidden">
-              <img
-                src="/bg-al-furqon3.jpg"
-                alt="Kegiatan Keagamaan & Tahfidz"
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
-              <span className="absolute top-4 left-4 bg-[#064E3B] text-amber-300 text-[10px] font-bold px-2.5 py-1 rounded-md uppercase border border-amber-400/30">
-                Spiritual
-              </span>
-            </div>
-            <div className="p-6">
-              <h3 className="text-lg font-bold text-slate-900 dark:text-white font-heading mb-2">
-                Pembiasaan Keagamaan & Tahfidz UMMI
-              </h3>
-              <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
-                Shalat dhuha berjamaah, tahajud, munaqosyah Al-Qur'an harian, hingga kajian rutin penanaman akhlak mulia.
-              </p>
-              <Link
-                href="/kesiswaan"
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-[#047857] dark:text-emerald-400 hover:underline"
-              >
-                <span>Program Tahfidz Santri</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
-            </div>
-          </div>
-
-          {/* Editorial Card 3 */}
-          <div className="group rounded-3xl overflow-hidden bg-white dark:bg-[#0E241E] border border-slate-200 dark:border-emerald-900/40 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
-            <div className="h-56 relative overflow-hidden">
-              <img
-                src="/bg-al-furqon4.jpg"
-                alt="Gerakan Adiwiyata Peduli Lingkungan"
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
-              <span className="absolute top-4 left-4 bg-teal-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-md uppercase">
-                Adiwiyata
-              </span>
-            </div>
-            <div className="p-6">
-              <h3 className="text-lg font-bold text-slate-900 dark:text-white font-heading mb-2">
-                Gerakan Sekolah Hijau & Zero Waste
-              </h3>
-              <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
-                Keterlibatan aktif siswa dalam pengelolaan komposting, hidroponik, eco-brick, dan pelestarian lingkungan hidup.
-              </p>
-              <Link
-                href="/kesiswaan"
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-[#047857] dark:text-emerald-400 hover:underline"
-              >
-                <span>Aksi Adiwiyata</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
-            </div>
-          </div>
+          {activitiesList.map((feature) => (
+            <Link
+              key={feature.id}
+              href={`/kesiswaan/${feature.slug}`}
+              className="group rounded-3xl overflow-hidden bg-white dark:bg-[#0E241E] border border-slate-200 dark:border-emerald-900/40 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between cursor-pointer"
+            >
+              <div className="h-56 relative overflow-hidden">
+                <img
+                  src={feature.image}
+                  alt={feature.title}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
+                <span className={`absolute top-4 left-4 text-[10px] font-bold px-2.5 py-1 rounded-md uppercase ${feature.categoryBadgeBg}`}>
+                  {feature.category}
+                </span>
+              </div>
+              <div className="p-6 flex flex-col justify-between flex-1">
+                <div>
+                  <h3 className="text-lg font-bold text-slate-900 dark:text-white font-heading mb-2 group-hover:text-[#047857] dark:group-hover:text-emerald-400 transition-colors">
+                    {feature.title}
+                  </h3>
+                  <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
+                    {feature.shortDesc}
+                  </p>
+                </div>
+                <div className="inline-flex items-center gap-1.5 text-xs font-bold text-[#047857] dark:text-emerald-400 group-hover:underline">
+                  <span>{feature.buttonText}</span>
+                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                </div>
+              </div>
+            </Link>
+          ))}
         </div>
 
         {/* Extracurricular Clubs Strip */}
@@ -178,8 +124,9 @@ export const KesiswaanSection: React.FC = () => {
               const IconComp = getExtraIcon(extra.icon, extra.name);
               const imgIcon = extra.iconImage || (extra.name.toLowerCase().includes("silat") ? "/pencak-silat2 (1).png" : undefined);
               return (
-                <div
+                <Link
                   key={extra.id}
+                  href="/kesiswaan/ekstrakurikuler"
                   className="bg-white/10 backdrop-blur-md p-3.5 rounded-2xl border border-white/10 hover:bg-white/20 transition-all text-center flex flex-col items-center justify-between group cursor-pointer"
                 >
                   <div className="w-10 h-10 rounded-xl bg-amber-400/20 text-amber-300 mb-2 flex items-center justify-center font-bold text-xs shadow-inner group-hover:scale-110 transition-transform overflow-hidden p-1.5">
@@ -193,7 +140,7 @@ export const KesiswaanSection: React.FC = () => {
                     <h4 className="text-xs font-bold text-white line-clamp-1">{extra.name}</h4>
                     <span className="text-[9px] text-emerald-200 mt-1 block">{extra.category}</span>
                   </div>
-                </div>
+                </Link>
               );
             })}
           </div>

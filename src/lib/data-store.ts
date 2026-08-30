@@ -43,9 +43,8 @@ export const initialSchoolInfo: SchoolInfo = {
     "Meraih prestasi dalam olimpiade sains, olahraga, seni, dan keagamaan tingkat kabupaten, provinsi, hingga nasional.",
     "Mewujudkan ekosistem pendidikan berwawasan teknologi digital yang aman, nyaman, dan peduli lingkungan sosial.",
   ],
-  headmasterName: "Suryanto, S.Pd., M.Pd.",
-  headmasterPhoto:
-    "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=800&q=80",
+  headmasterName: "Dr. Suryanto, S.Pd., M.Pd.",
+  headmasterPhoto: "/foto-kepala-sekolah.png",
   headmasterWelcome:
     "Assalamu'alaikum Warahmatullahi Wabarakatuh. Puji syukur kepada Allah SWT, Tuhan Yang Maha Esa yang telah memberikan rahmat dan anugerah-Nya. SMA AL-FURQON merupakan salah satu unit pendidikan dengan penyelenggara Pondok Pesantren AL-FURQON. Kami berharap masyarakat bisa mengakses website ini sebagai sarana informasi dan komunikasi terutama yang berhubungan dengan pendidikan, ilmu pengetahuan dan informasi seputar SMA AL-FURQON Driyorejo.",
   stats: {
@@ -283,7 +282,7 @@ export const initialTeachers: TeacherItem[] = [
   },
   {
     id: "t-2",
-    name: "Suryanto, S.Pd., M.Pd.",
+    name: "Dr. Suryanto, S.Pd., M.Pd.",
     position: "Kepala Sekolah",
     subject: "Manajemen Sekolah",
     photo: "/foto-guru/suryanto.png",

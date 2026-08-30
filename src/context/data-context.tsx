@@ -29,6 +29,7 @@ import {
   initialFacilities,
   initialUsers,
 } from "@/lib/data-store";
+import { KesiswaanActivity, initialKesiswaanActivities } from "@/lib/kesiswaan-data";
 
 interface DataContextType {
   schoolInfo: SchoolInfo;
@@ -43,6 +44,7 @@ interface DataContextType {
   testimonials: TestimonialItem[];
   facilities: FacilityItem[];
   users: UserItem[];
+  kesiswaanActivities: KesiswaanActivity[];
   currentUser: UserItem | null;
   darkMode: boolean;
   setDarkMode: (val: boolean) => void;
@@ -71,6 +73,12 @@ interface DataContextType {
   addExtracurricular: (item: Omit<ExtracurricularItem, "id">) => void;
   updateExtracurricular: (id: string, item: Partial<ExtracurricularItem>) => void;
   deleteExtracurricular: (id: string) => void;
+  addKesiswaanActivity: (item: Omit<KesiswaanActivity, "id">) => void;
+  updateKesiswaanActivity: (id: string, item: Partial<KesiswaanActivity>) => void;
+  deleteKesiswaanActivity: (id: string) => void;
+  addTestimonial: (item: Omit<TestimonialItem, "id">) => void;
+  updateTestimonial: (id: string, item: Partial<TestimonialItem>) => void;
+  deleteTestimonial: (id: string) => void;
   addUser: (item: Omit<UserItem, "id">) => void;
   updateUser: (id: string, item: Partial<UserItem>) => void;
   deleteUser: (id: string) => void;
@@ -95,9 +103,10 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [gallery, setGallery] = useState<GalleryItem[]>(initialGallery);
   const [applicants, setApplicants] = useState<PPDBApplicant[]>(initialApplicants);
   const [faqs] = useState<FAQItem[]>(initialFAQs);
-  const [testimonials] = useState<TestimonialItem[]>(initialTestimonials);
+  const [testimonials, setTestimonials] = useState<TestimonialItem[]>(initialTestimonials);
   const [facilities, setFacilities] = useState<FacilityItem[]>(initialFacilities);
   const [users, setUsers] = useState<UserItem[]>(initialUsers);
+  const [kesiswaanActivities, setKesiswaanActivities] = useState<KesiswaanActivity[]>(initialKesiswaanActivities);
   const [currentUser, setCurrentUser] = useState<UserItem | null>(null);
 
   // Helper to sync mutations with Neon PostgreSQL DB
@@ -126,6 +135,14 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
             setSchoolInfo({
               ...initialSchoolInfo,
               ...data.schoolInfo,
+              headmasterName:
+                data.schoolInfo.headmasterName && data.schoolInfo.headmasterName !== "Suryanto, S.Pd., M.Pd."
+                  ? data.schoolInfo.headmasterName
+                  : "Dr. Suryanto, S.Pd., M.Pd.",
+              headmasterPhoto:
+                data.schoolInfo.headmasterPhoto && !data.schoolInfo.headmasterPhoto.includes("unsplash.com")
+                  ? data.schoolInfo.headmasterPhoto
+                  : "/foto-kepala-sekolah.png",
               stats: {
                 ...initialSchoolInfo.stats,
                 ...(data.schoolInfo.stats || {}),
@@ -140,7 +157,9 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
           if (data.gallery && Array.isArray(data.gallery)) setGallery(data.gallery);
           if (data.applicants && Array.isArray(data.applicants)) setApplicants(data.applicants);
           if (data.facilities && Array.isArray(data.facilities)) setFacilities(data.facilities);
+          if (data.testimonials && Array.isArray(data.testimonials)) setTestimonials(data.testimonials);
           if (data.users && Array.isArray(data.users)) setUsers(data.users);
+          if (data.kesiswaanActivities && Array.isArray(data.kesiswaanActivities)) setKesiswaanActivities(data.kesiswaanActivities);
         })
         .catch((err) => console.error("Error loading Neon DB data:", err));
 
@@ -276,6 +295,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const resetTeachersToDefault = () => {
     setTeachers(initialTeachers);
     localStorage.setItem(STORAGE_KEY_PREFIX + "teachers", JSON.stringify(initialTeachers));
+    initialTeachers.forEach((t) => syncToApi("teachers", "save", t));
   };
 
   const addGalleryItem = (item: Omit<GalleryItem, "id">) => {
@@ -350,6 +370,58 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const updated = extracurriculars.filter((e) => e.id !== id);
     setExtracurriculars(updated);
     localStorage.setItem(STORAGE_KEY_PREFIX + "extracurriculars", JSON.stringify(updated));
+  };
+
+  const addKesiswaanActivity = (item: Omit<KesiswaanActivity, "id">) => {
+    const newItem: KesiswaanActivity = {
+      ...item,
+      id: "kesiswaan-" + Date.now(),
+    };
+    const updated = [newItem, ...kesiswaanActivities];
+    setKesiswaanActivities(updated);
+    localStorage.setItem(STORAGE_KEY_PREFIX + "kesiswaan_activities", JSON.stringify(updated));
+    syncToApi("kesiswaan_activities", "save", newItem);
+  };
+
+  const updateKesiswaanActivity = (id: string, item: Partial<KesiswaanActivity>) => {
+    const updated = kesiswaanActivities.map((k) => (k.id === id ? { ...k, ...item } : k));
+    setKesiswaanActivities(updated);
+    localStorage.setItem(STORAGE_KEY_PREFIX + "kesiswaan_activities", JSON.stringify(updated));
+    const target = updated.find((k) => k.id === id);
+    if (target) syncToApi("kesiswaan_activities", "save", target);
+  };
+
+  const deleteKesiswaanActivity = (id: string) => {
+    const updated = kesiswaanActivities.filter((k) => k.id !== id);
+    setKesiswaanActivities(updated);
+    localStorage.setItem(STORAGE_KEY_PREFIX + "kesiswaan_activities", JSON.stringify(updated));
+    syncToApi("kesiswaan_activities", "delete", undefined, id);
+  };
+
+  const addTestimonial = (item: Omit<TestimonialItem, "id">) => {
+    const newItem: TestimonialItem = {
+      ...item,
+      id: "testi-" + Date.now(),
+    };
+    const updated = [newItem, ...testimonials];
+    setTestimonials(updated);
+    localStorage.setItem(STORAGE_KEY_PREFIX + "testimonials", JSON.stringify(updated));
+    syncToApi("testimonials", "save", newItem);
+  };
+
+  const updateTestimonial = (id: string, item: Partial<TestimonialItem>) => {
+    const updated = testimonials.map((t) => (t.id === id ? { ...t, ...item } : t));
+    setTestimonials(updated);
+    localStorage.setItem(STORAGE_KEY_PREFIX + "testimonials", JSON.stringify(updated));
+    const target = updated.find((t) => t.id === id);
+    if (target) syncToApi("testimonials", "save", target);
+  };
+
+  const deleteTestimonial = (id: string) => {
+    const updated = testimonials.filter((t) => t.id !== id);
+    setTestimonials(updated);
+    localStorage.setItem(STORAGE_KEY_PREFIX + "testimonials", JSON.stringify(updated));
+    syncToApi("testimonials", "delete", undefined, id);
   };
 
   const addUser = (item: Omit<UserItem, "id">) => {
@@ -483,6 +555,13 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
         addExtracurricular,
         updateExtracurricular,
         deleteExtracurricular,
+        kesiswaanActivities,
+        addKesiswaanActivity,
+        updateKesiswaanActivity,
+        deleteKesiswaanActivity,
+        addTestimonial,
+        updateTestimonial,
+        deleteTestimonial,
         addUser,
         updateUser,
         deleteUser,

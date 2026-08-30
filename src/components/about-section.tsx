@@ -43,11 +43,11 @@ export const AboutSection: React.FC = () => {
     {
       id: "kepala-sekolah",
       leaderTitle: "Kepala Sekolah",
-      name: "Ust. Suryanto, S.Pd., M.Pd.",
+      name: "Dr. Suryanto, S.Pd., M.Pd.",
       role: "Kepala Sekolah SMA Al-Furqon Driyorejo",
       image: "/foto-kepala-sekolah.png",
-      fitStyle: "object-contain bg-[#033aa7] dark:bg-[#022873] p-1.5",
-      photoTag: "Ust. Suryanto, S.Pd., M.Pd. (Kepala Sekolah SMA Al-Furqon Driyorejo)",
+      fitStyle: "object-contain bg-[#0331c6] p-1",
+      photoTag: "Dr. Suryanto, S.Pd., M.Pd. (Kepala Sekolah SMA Al-Furqon Driyorejo)",
       headingText: "Kata Pengantar Kepala Sekolah",
       quoteText:
         "Puji syukur kepada Allah SWT, Tuhan Yang Maha Esa yang telah memberikan rahmat dan anugerah-Nya. Salah satu tujuan dari sarana ini adalah sebagai sarana informasi bagi masyarakat tentang seluruh program dan kegiatan yang ada di SMA Al Furqon Pondok Pesantren Al Furqon Driyorejo Gresik. Semoga dengan adanya sarana ini dapat membantu dan memberi manfaat, terutama informasi yang berhubungan dengan pendidikan, ilmu pengetahuan dan informasi seputar sekolah. Besar harapan kami, sarana ini dapat memberi manfaat bagi semua pihak yang ada di lingkup pendidikan dan pemerhati pendidikan.",
@@ -218,7 +218,7 @@ export const AboutSection: React.FC = () => {
                       }`}
                   >
                     <span className="text-slate-600 dark:text-slate-400 font-medium">Kepala Sekolah :</span>
-                    <span className="font-bold text-slate-900 dark:text-emerald-400">Suryanto, S.Pd., M.Pd.</span>
+                    <span className="font-bold text-slate-900 dark:text-emerald-400">Dr. Suryanto, S.Pd., M.Pd.</span>
                   </div>
                 </div>
               </div>

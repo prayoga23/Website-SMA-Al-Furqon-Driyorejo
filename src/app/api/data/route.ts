@@ -50,7 +50,15 @@ export async function GET() {
       news: newsRes.length > 0 ? newsRes : initialNews,
       agendas: agendasRes.length > 0 ? agendasRes : initialAgenda,
       achievements: achievementsRes.length > 0 ? achievementsRes : initialAchievements,
-      teachers: teachersRes.length > 0 ? teachersRes : initialTeachers,
+      teachers:
+        teachersRes.length > 0
+          ? teachersRes.map((t: any) => ({
+              ...t,
+              position: t.position || t.role || "Guru",
+              subject: t.subject || "Guru Pengampu",
+              education: t.education || "S1 Pendidikan",
+            }))
+          : initialTeachers,
       extracurriculars: extracurricularsRes.length > 0 ? extracurricularsRes : initialExtracurriculars,
       gallery: galleryRes.length > 0 ? galleryRes : initialGallery,
       applicants: applicantsRes.length > 0 ? applicantsRes : initialApplicants,

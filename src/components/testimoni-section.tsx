@@ -53,11 +53,15 @@ export const TestimoniSection: React.FC = () => {
 
             {/* Author Profile */}
             <div className="flex flex-col items-center">
-              <img
-                src={current.avatar}
-                alt={current.name}
-                className="w-16 h-16 rounded-full object-cover border-2 border-[#047857] mb-3 shadow"
-              />
+              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#064E3B] to-[#0D9488] text-amber-300 font-extrabold text-xl flex items-center justify-center mb-3 shadow-lg border-2 border-amber-400 font-heading">
+                {(current.name || "")
+                  .trim()
+                  .split(/\s+/)
+                  .slice(0, 2)
+                  .map((n) => n[0])
+                  .join("")
+                  .toUpperCase()}
+              </div>
               <h4 className="font-bold text-base text-slate-900 dark:text-white font-heading">
                 {current.name}
               </h4>

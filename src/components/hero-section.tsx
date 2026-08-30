@@ -18,15 +18,21 @@ export const HeroSection: React.FC = () => {
 
   return (
     <section className="relative min-h-[90vh] lg:min-h-screen flex items-center justify-center overflow-hidden pt-8 pb-16">
-      {/* Background Image with Cinematic Overlay */}
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-700 scale-105"
-        style={{
-          backgroundImage: "url('/bg-sma-al-furqon.webp')",
-        }}
-      >
+      {/* Background Video with Cinematic Overlay */}
+      <div className="absolute inset-0 overflow-hidden">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          poster="/bg-sma-al-furqon.webp"
+          className="w-full h-full object-cover scale-105 transition-all duration-700"
+        >
+          <source src="/video-sma-al-furqon.mp4" type="video/mp4" />
+        </video>
+
         {/* Dark & Emerald Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#032B21]/95 via-[#064E3B]/85 to-[#047857]/70 dark:from-[#021813]/98 dark:via-[#064E3B]/90 dark:to-[#082C23]/80"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-[#032B21]/90 via-[#064E3B]/80 to-[#047857]/65 dark:from-[#021813]/95 dark:via-[#064E3B]/85 dark:to-[#082C23]/75 backdrop-blur-[1px]"></div>
 
         {/* Pattern & Mesh Gradients */}
         <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#10B981_1px,transparent_1px)] [background-size:24px_24px]"></div>
@@ -115,7 +121,7 @@ export const HeroSection: React.FC = () => {
                 Berorientasi Prestasi
               </h3>
               <p className="text-[10px] sm:text-xs text-emerald-100/80 leading-relaxed">
-                100+ Trofi olimpiade & akses PTN unggulan.
+                10+ Trofi olimpiade & akses PTN unggulan.
               </p>
             </div>
           </div>

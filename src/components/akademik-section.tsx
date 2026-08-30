@@ -148,12 +148,18 @@ export const AkademikSection: React.FC = () => {
                     key={teacher.id}
                     className="bg-slate-50 dark:bg-[#081612] p-3.5 rounded-2xl border border-slate-100 dark:border-emerald-900/30 text-center group hover:border-emerald-400/50 transition-colors"
                   >
-                    <div className="w-16 h-16 rounded-full overflow-hidden mx-auto mb-2 border-2 border-emerald-500/40 group-hover:scale-105 transition-transform">
-                      <img
-                        src={teacher.photo}
-                        alt={teacher.name}
-                        className="w-full h-full object-cover"
-                      />
+                    <div className="w-16 h-16 rounded-full overflow-hidden mx-auto mb-2 border-2 border-emerald-500/40 group-hover:scale-105 transition-transform flex items-center justify-center bg-emerald-900 text-white">
+                      {teacher.photo ? (
+                        <img
+                          src={teacher.photo}
+                          alt={teacher.name}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-gradient-to-br from-emerald-800 to-emerald-950 text-white font-extrabold text-lg flex items-center justify-center font-heading">
+                          {teacher.name ? teacher.name.split(" ").slice(0, 2).map((n) => n[0]).join("") : "G"}
+                        </div>
+                      )}
                     </div>
                     <h4 className="text-xs font-bold text-slate-900 dark:text-white line-clamp-1">
                       {teacher.name}

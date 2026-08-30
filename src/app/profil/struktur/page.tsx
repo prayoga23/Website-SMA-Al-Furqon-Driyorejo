@@ -68,7 +68,7 @@ export default function StrukturPage() {
   const schoolPrincipals = [
     {
       role: "Kepala Sekolah SMA Al-Furqon",
-      name: "Suryanto, S.Pd., M.Pd.",
+      name: "Dr. Suryanto, S.Pd., M.Pd.",
       category: "Pimpinan Sekolah",
       level: 4,
       isMain: true,

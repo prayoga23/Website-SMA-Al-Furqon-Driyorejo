@@ -158,7 +158,7 @@ export default function AdminGuruPage() {
         "Biografi": "Kepala Departemen Pendidikan Yayasan PP. Al-Furqon.",
       },
       {
-        "Nama Lengkap": "Suryanto, S.Pd., M.Pd.",
+        "Nama Lengkap": "Dr. Suryanto, S.Pd., M.Pd.",
         "NIP": "198002022005011002",
         "Jabatan": "Kepala Sekolah",
         "Mata Pelajaran": "Manajemen Sekolah",
@@ -266,9 +266,9 @@ export default function AdminGuruPage() {
 
   const filteredTeachers = teachers.filter(
     (t) =>
-      t.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      t.position.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      t.subject.toLowerCase().includes(searchTerm.toLowerCase())
+      (t.name || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (t.position || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (t.subject || "").toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const paginatedTeachers = filteredTeachers.slice(
@@ -277,10 +277,10 @@ export default function AdminGuruPage() {
   );
 
   return (
-    <div className="min-h-screen flex bg-[#FDFBF7] dark:bg-[#081612] text-slate-800 dark:text-slate-100">
+    <div className="min-h-screen flex flex-col lg:flex-row bg-[#FDFBF7] dark:bg-[#081612] text-slate-800 dark:text-slate-100">
       <AdminSidebar />
 
-      <main className="flex-1 p-6 md:p-10 space-y-6 max-w-7xl">
+      <main className="flex-1 p-4 sm:p-8 space-y-6 max-w-7xl w-full min-w-0">
         {/* Header Toolbar */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
@@ -393,7 +393,7 @@ export default function AdminGuruPage() {
                     required
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    placeholder="Contoh: Suryanto, S.Pd., M.Pd."
+                    placeholder="Contoh: Dr. Suryanto, S.Pd., M.Pd."
                     className="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-[#081612] border border-slate-200 dark:border-emerald-900/50"
                   />
                 </div>

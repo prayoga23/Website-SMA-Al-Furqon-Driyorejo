@@ -37,43 +37,62 @@ export default function GuruStafPage() {
   ];
 
   const filtered = teachers.filter((t) => {
+    const name = (t.name || "").toLowerCase();
+    const subject = (t.subject || "").toLowerCase();
+    const position = (t.position || "").toLowerCase();
+    const query = (searchTerm || "").toLowerCase();
+
     const matchesSearch =
-      t.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      t.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      t.position.toLowerCase().includes(searchTerm.toLowerCase());
+      name.includes(query) ||
+      subject.includes(query) ||
+      position.includes(query);
 
     if (!matchesSearch) return false;
 
     if (activeCategory === "pimpinan") {
       return (
-        t.position.toLowerCase().includes("kepala") ||
-        t.position.toLowerCase().includes("kadep") ||
-        t.position.toLowerCase().includes("wk.") ||
-        t.position.toLowerCase().includes("tata usaha") ||
-        t.position.toLowerCase().includes("tu")
+        position.includes("kepala") ||
+        position.includes("kadep") ||
+        position.includes("wk.") ||
+        position.includes("tata usaha") ||
+        position.includes("tu")
       );
     }
     if (activeCategory === "ummi") {
       return (
-        t.position.toLowerCase().includes("ummi") ||
-        t.subject.toLowerCase().includes("ummi") ||
-        t.subject.toLowerCase().includes("aswaja") ||
-        t.subject.toLowerCase().includes("fiqih") ||
-        t.subject.toLowerCase().includes("pai") ||
-        t.subject.toLowerCase().includes("arab")
+        position.includes("ummi") ||
+        subject.includes("ummi") ||
+        subject.includes("aswaja") ||
+        subject.includes("fiqih") ||
+        subject.includes("pai") ||
+        subject.includes("arab")
       );
     }
     if (activeCategory === "matpel") {
       return (
-        !t.position.toLowerCase().includes("kepala") &&
-        !t.position.toLowerCase().includes("kadep") &&
-        !t.position.toLowerCase().includes("tata usaha") &&
-        !t.subject.toLowerCase().includes("ummi")
+        !position.includes("kepala") &&
+        !position.includes("kadep") &&
+        !position.includes("tata usaha") &&
+        !subject.includes("ummi")
       );
     }
 
     return true;
   });
+
+  const getTeacherPriority = (t: TeacherItem): number => {
+    const name = (t.name || "").toLowerCase();
+    const position = (t.position || (t as any).role || "").toLowerCase();
+
+    if (t.id === "t-1" || name.includes("abdul muid") || position.includes("kadep")) return 1;
+    if (t.id === "t-2" || name.includes("suryanto") || position.includes("kepala sekolah")) return 2;
+    if (t.id === "t-3" || name.includes("triana") || position.includes("kurikulum")) return 3;
+    if (t.id === "t-4" || name.includes("suherman") || position.includes("kesiswaan")) return 4;
+    if (t.id === "t-5" || name.includes("alfiyatus") || position.includes("tata usaha") || position.includes("tu")) return 5;
+    return 10;
+  };
+
+  const sortedTeachers = [...filtered].sort((a, b) => getTeacherPriority(a) - getTeacherPriority(b));
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FDFBF7] dark:bg-[#091512] text-slate-800 dark:text-slate-100">
@@ -159,7 +178,7 @@ export default function GuruStafPage() {
 
         {/* Teachers Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filtered.map((t) => {
+          {sortedTeachers.map((t) => {
             const hasError = imgErrors[t.id];
             const showFallback = !t.photo || hasError;
 
@@ -172,7 +191,7 @@ export default function GuruStafPage() {
                 <div>
                   {/* Photo Container with Fallback Badge */}
                   <div className="w-24 h-24 rounded-full overflow-hidden mx-auto mb-4 border-4 border-[#064E3B] dark:border-emerald-500 shadow-md group-hover:scale-105 transition-transform duration-300 relative bg-emerald-900 flex items-center justify-center">
-                    {!showFallback ? (
+                    {t.photo && !showFallback ? (
                       <img
                         src={t.photo}
                         alt={t.name}

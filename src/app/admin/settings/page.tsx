@@ -21,8 +21,14 @@ export default function AdminSettingsPage() {
     vision: schoolInfo.vision,
     missionsText: schoolInfo.missions ? schoolInfo.missions.join("\n") : "",
     goalsText: schoolInfo.goals ? schoolInfo.goals.join("\n") : "",
-    headmasterName: schoolInfo.headmasterName,
-    headmasterPhoto: schoolInfo.headmasterPhoto || "",
+    headmasterName:
+      schoolInfo.headmasterName && schoolInfo.headmasterName !== "Suryanto, S.Pd., M.Pd."
+        ? schoolInfo.headmasterName
+        : "Dr. Suryanto, S.Pd., M.Pd.",
+    headmasterPhoto:
+      schoolInfo.headmasterPhoto && !schoolInfo.headmasterPhoto.includes("unsplash.com")
+        ? schoolInfo.headmasterPhoto
+        : "/foto-kepala-sekolah.png",
     headmasterWelcome: schoolInfo.headmasterWelcome,
   });
 
@@ -60,10 +66,10 @@ export default function AdminSettingsPage() {
   };
 
   return (
-    <div className="min-h-screen flex bg-[#FDFBF7] dark:bg-[#081612] text-slate-800 dark:text-slate-100">
+    <div className="min-h-screen flex flex-col lg:flex-row bg-[#FDFBF7] dark:bg-[#081612] text-slate-800 dark:text-slate-100">
       <AdminSidebar />
 
-      <main className="flex-1 p-8 space-y-6 overflow-y-auto max-w-4xl">
+      <main className="flex-1 p-4 sm:p-8 space-y-6 overflow-y-auto max-w-4xl w-full min-w-0">
         <div className="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-emerald-900/40">
           <div>
             <h1 className="text-xl font-bold font-heading text-slate-900 dark:text-white">
