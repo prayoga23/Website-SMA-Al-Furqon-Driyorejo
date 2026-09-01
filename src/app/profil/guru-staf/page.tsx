@@ -17,6 +17,7 @@ import {
   X,
 } from "lucide-react";
 import { TeacherItem } from "@/lib/types";
+import { sortTeachersByPriority } from "@/lib/data-store";
 
 export default function GuruStafPage() {
   const { teachers } = useData();
@@ -80,19 +81,7 @@ export default function GuruStafPage() {
     return true;
   });
 
-  const getTeacherPriority = (t: TeacherItem): number => {
-    const name = (t.name || "").toLowerCase();
-    const position = (t.position || (t as any).role || "").toLowerCase();
-
-    if (t.id === "t-1" || name.includes("abdul muid") || position.includes("kadep")) return 1;
-    if (t.id === "t-2" || name.includes("suryanto") || position.includes("kepala sekolah")) return 2;
-    if (t.id === "t-3" || name.includes("triana") || position.includes("kurikulum")) return 3;
-    if (t.id === "t-4" || name.includes("suherman") || position.includes("kesiswaan")) return 4;
-    if (t.id === "t-5" || name.includes("alfiyatus") || position.includes("tata usaha") || position.includes("tu")) return 5;
-    return 10;
-  };
-
-  const sortedTeachers = [...filtered].sort((a, b) => getTeacherPriority(a) - getTeacherPriority(b));
+  const sortedTeachers = sortTeachersByPriority(filtered);
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FDFBF7] dark:bg-[#091512] text-slate-800 dark:text-slate-100">

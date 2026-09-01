@@ -13,6 +13,7 @@ import {
   initialTestimonials,
   initialFacilities,
   initialUsers,
+  sortTeachersByPriority,
 } from "@/lib/data-store";
 
 // Helper to auto-migrate database columns if missing in Neon DB
@@ -67,13 +68,15 @@ export async function GET() {
       achievements: achievementsRes.length > 0 ? achievementsRes : initialAchievements,
       teachers:
         teachersRes.length > 0
-          ? teachersRes.map((t: any) => ({
-              ...t,
-              position: t.position || t.role || "Guru",
-              subject: t.subject || "Guru Pengampu",
-              education: t.education || "S1 Pendidikan",
-            }))
-          : initialTeachers,
+          ? sortTeachersByPriority(
+              teachersRes.map((t: any) => ({
+                ...t,
+                position: t.position || t.role || "Guru",
+                subject: t.subject || "Guru Pengampu",
+                education: t.education || "S1 Pendidikan",
+              }))
+            )
+          : sortTeachersByPriority(initialTeachers),
       extracurriculars: extracurricularsRes.length > 0 ? extracurricularsRes : initialExtracurriculars,
       gallery: galleryRes.length > 0 ? galleryRes : initialGallery,
       applicants: applicantsRes.length > 0 ? applicantsRes : initialApplicants,

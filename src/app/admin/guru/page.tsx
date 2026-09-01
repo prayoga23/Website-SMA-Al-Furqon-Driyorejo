@@ -18,6 +18,7 @@ import {
   FileUp,
 } from "lucide-react";
 import { TeacherItem } from "@/lib/types";
+import { sortTeachersByPriority } from "@/lib/data-store";
 import { ImageUploadInput } from "@/components/image-upload-input";
 import { Pagination } from "@/components/pagination";
 import * as XLSX from "xlsx";
@@ -264,11 +265,13 @@ export default function AdminGuruPage() {
     alert(`Berhasil mengimpor ${parsedExcelTeachers.length} data guru dari Excel!`);
   };
 
-  const filteredTeachers = teachers.filter(
-    (t) =>
-      (t.name || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (t.position || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (t.subject || "").toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredTeachers = sortTeachersByPriority(
+    teachers.filter(
+      (t) =>
+        (t.name || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (t.position || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (t.subject || "").toLowerCase().includes(searchTerm.toLowerCase())
+    )
   );
 
   const paginatedTeachers = filteredTeachers.slice(

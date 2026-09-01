@@ -935,3 +935,23 @@ export const initialUsers: UserItem[] = [
   },
 ];
 
+export function getTeacherPriority(t: TeacherItem): number {
+  const name = (t.name || "").toLowerCase();
+  const position = (t.position || (t as any).role || "").toLowerCase();
+
+  if (t.id === "t-1" || name.includes("abdul muid") || position.includes("kadep") || position.includes("departemen")) return 1;
+  if (t.id === "t-2" || name.includes("suryanto") || position.includes("kepala sekolah") || position.includes("kepsek")) return 2;
+  if (t.id === "t-3" || name.includes("triana") || position.includes("kurikulum")) return 3;
+  if (t.id === "t-4" || name.includes("suherman") || position.includes("kesiswaan")) return 4;
+  if (position.includes("humas")) return 5;
+  if (position.includes("sarpras")) return 6;
+  if (position.includes("wakil") || position.includes("waka") || position.includes("wk.")) return 7;
+  if (t.id === "t-5" || name.includes("alfiyatus") || position.includes("tata usaha") || position.includes("tu")) return 8;
+  return 20;
+}
+
+export function sortTeachersByPriority(teachers: TeacherItem[]): TeacherItem[] {
+  return [...teachers].sort((a, b) => getTeacherPriority(a) - getTeacherPriority(b));
+}
+
+

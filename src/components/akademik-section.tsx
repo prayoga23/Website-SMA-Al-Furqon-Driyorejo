@@ -5,11 +5,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { BookOpen, Calendar, GraduationCap, ChevronRight, CheckCircle2 } from "lucide-react";
 import { useData } from "@/context/data-context";
+import { sortTeachersByPriority } from "@/lib/data-store";
 
 export const AkademikSection: React.FC = () => {
   const pathname = usePathname();
   const isHomePage = pathname === "/";
   const { teachers, agendas } = useData();
+  const sortedTeachers = sortTeachersByPriority(teachers);
 
   return (
     <section id="akademik-overview" className="py-20 bg-slate-50 dark:bg-[#071310] transition-colors relative">
@@ -143,7 +145,7 @@ export const AkademikSection: React.FC = () => {
               </div>
 
               <div className="grid grid-cols-2 gap-4 mb-6">
-                {teachers.slice(0, 4).map((teacher) => (
+                {sortedTeachers.slice(0, 4).map((teacher) => (
                   <div
                     key={teacher.id}
                     className="bg-slate-50 dark:bg-[#081612] p-3.5 rounded-2xl border border-slate-100 dark:border-emerald-900/30 text-center group hover:border-emerald-400/50 transition-colors"
