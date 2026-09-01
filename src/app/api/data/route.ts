@@ -15,8 +15,23 @@ import {
   initialUsers,
 } from "@/lib/data-store";
 
+// Helper to auto-migrate database columns if missing in Neon DB
+async function ensureDbSchema() {
+  try {
+    await sql`ALTER TABLE teachers ADD COLUMN IF NOT EXISTS position TEXT;`;
+    await sql`ALTER TABLE teachers ADD COLUMN IF NOT EXISTS education TEXT;`;
+    await sql`ALTER TABLE teachers ADD COLUMN IF NOT EXISTS bio TEXT;`;
+    await sql`ALTER TABLE teachers ADD COLUMN IF NOT EXISTS photo TEXT;`;
+    await sql`ALTER TABLE teachers ADD COLUMN IF NOT EXISTS subject TEXT;`;
+  } catch (e) {
+    console.error("Error migrating teachers table schema:", e);
+  }
+}
+
 export async function GET() {
   try {
+    await ensureDbSchema();
+
     const [
       schoolInfoRes,
       newsRes,
@@ -96,6 +111,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Missing table or action" }, { status: 400 });
     }
 
+    await ensureDbSchema();
+
     if (table === "school_info") {
       await sql`
         INSERT INTO school_info (id, data)
@@ -135,14 +152,31 @@ export async function POST(request: Request) {
             category = ${item.category || ''};
         `;
       } else if (table === "teachers") {
+        const teacherPos = item.position || item.role || "Guru";
+        const teacherEdu = item.education || "S1 Pendidikan";
         await sql`
-          INSERT INTO teachers (id, name, nip, subject, role, photo, bio, email, phone, is_active)
-          VALUES (${item.id}, ${item.name}, ${item.nip || ''}, ${item.subject || ''}, ${item.role || ''}, ${item.photo || ''}, ${item.bio || ''}, ${item.email || ''}, ${item.phone || ''}, ${item.isActive !== false})
+          INSERT INTO teachers (id, name, nip, position, subject, role, education, photo, bio, email, phone, is_active)
+          VALUES (
+            ${item.id},
+            ${item.name},
+            ${item.nip || ''},
+            ${teacherPos},
+            ${item.subject || ''},
+            ${teacherPos},
+            ${teacherEdu},
+            ${item.photo || ''},
+            ${item.bio || ''},
+            ${item.email || ''},
+            ${item.phone || ''},
+            ${item.isActive !== false}
+          )
           ON CONFLICT (id) DO UPDATE SET
             name = ${item.name},
             nip = ${item.nip || ''},
+            position = ${teacherPos},
             subject = ${item.subject || ''},
-            role = ${item.role || ''},
+            role = ${teacherPos},
+            education = ${teacherEdu},
             photo = ${item.photo || ''},
             bio = ${item.bio || ''},
             email = ${item.email || ''},
@@ -152,11 +186,11 @@ export async function POST(request: Request) {
       } else if (table === "facilities") {
         await sql`
           INSERT INTO facilities (id, name, category, description, image)
-          VALUES (${item.id}, ${item.name}, ${item.category || ''}, ${item.description || ''}, ${item.image || ''})
+          VALUES (${item.id}, ${item.name || item.title}, ${item.category || item.tag || ''}, ${item.description || item.desc || ''}, ${item.image || ''})
           ON CONFLICT (id) DO UPDATE SET
-            name = ${item.name},
-            category = ${item.category || ''},
-            description = ${item.description || ''},
+            name = ${item.name || item.title},
+            category = ${item.category || item.tag || ''},
+            description = ${item.description || item.desc || ''},
             image = ${item.image || ''};
         `;
       } else if (table === "gallery") {
@@ -190,6 +224,45 @@ export async function POST(request: Request) {
             status = ${item.status || 'Aktif'},
             email = ${item.email || ''};
         `;
+      } else if (table === "achievements") {
+        await sql`
+          INSERT INTO achievements (id, title, event, level, rank, category, student_name, year, image, description)
+          VALUES (${item.id}, ${item.title}, ${item.event || ''}, ${item.level || ''}, ${item.rank || ''}, ${item.category || ''}, ${item.studentName || ''}, ${item.year || ''}, ${item.image || ''}, ${item.description || ''})
+          ON CONFLICT (id) DO UPDATE SET
+            title = ${item.title},
+            event = ${item.event || ''},
+            level = ${item.level || ''},
+            rank = ${item.rank || ''},
+            category = ${item.category || ''},
+            student_name = ${item.studentName || ''},
+            year = ${item.year || ''},
+            image = ${item.image || ''},
+            description = ${item.description || ''};
+        `;
+      } else if (table === "extracurriculars") {
+        await sql`
+          INSERT INTO extracurriculars (id, name, category, description, schedule, instructor, image)
+          VALUES (${item.id}, ${item.name}, ${item.category || ''}, ${item.description || ''}, ${item.schedule || ''}, ${item.instructor || ''}, ${item.image || ''})
+          ON CONFLICT (id) DO UPDATE SET
+            name = ${item.name},
+            category = ${item.category || ''},
+            description = ${item.description || ''},
+            schedule = ${item.schedule || ''},
+            instructor = ${item.instructor || ''},
+            image = ${item.image || ''};
+        `;
+      } else if (table === "testimonials") {
+        await sql`
+          INSERT INTO testimonials (id, name, role, graduation_year, avatar, content, rating)
+          VALUES (${item.id}, ${item.name}, ${item.role || ''}, ${item.graduationYear || ''}, ${item.avatar || ''}, ${item.content || ''}, ${item.rating || 5})
+          ON CONFLICT (id) DO UPDATE SET
+            name = ${item.name},
+            role = ${item.role || ''},
+            graduation_year = ${item.graduationYear || ''},
+            avatar = ${item.avatar || ''},
+            content = ${item.content || ''},
+            rating = ${item.rating || 5};
+        `;
       }
       return NextResponse.json({ success: true });
     }
@@ -203,6 +276,7 @@ export async function POST(request: Request) {
       else if (table === "ppdb_applicants") await sql`DELETE FROM ppdb_applicants WHERE id = ${id}`;
       else if (table === "achievements") await sql`DELETE FROM achievements WHERE id = ${id}`;
       else if (table === "extracurriculars") await sql`DELETE FROM extracurriculars WHERE id = ${id}`;
+      else if (table === "testimonials") await sql`DELETE FROM testimonials WHERE id = ${id}`;
       else if (table === "users") await sql`DELETE FROM users WHERE id = ${id}`;
 
       return NextResponse.json({ success: true });
@@ -214,3 +288,4 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: String(error) }, { status: 500 });
   }
 }
+

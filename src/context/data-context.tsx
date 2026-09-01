@@ -290,6 +290,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const setTeachersData = (items: TeacherItem[]) => {
     setTeachers(items);
     localStorage.setItem(STORAGE_KEY_PREFIX + "teachers", JSON.stringify(items));
+    items.forEach((t) => syncToApi("teachers", "save", t));
   };
 
   const resetTeachersToDefault = () => {
