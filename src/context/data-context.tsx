@@ -128,7 +128,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       document.documentElement.classList.remove("dark");
       localStorage.removeItem(STORAGE_KEY_PREFIX + "dark_mode");
 
-      fetch("/api/data")
+      fetch("/api/data", { cache: "no-store", headers: { "Cache-Control": "no-cache" } })
         .then((res) => res.json())
         .then((data) => {
           if (data.schoolInfo) {
