@@ -16,7 +16,7 @@ import {
   sortTeachersByPriority,
 } from "@/lib/data-store";
 
-// Helper to auto-migrate database columns if missing in Neon DB
+// Helper to auto-migrate database columns and seed initial data if missing in Neon DB
 async function ensureDbSchema() {
   try {
     await sql`ALTER TABLE teachers ADD COLUMN IF NOT EXISTS position TEXT;`;
@@ -24,8 +24,138 @@ async function ensureDbSchema() {
     await sql`ALTER TABLE teachers ADD COLUMN IF NOT EXISTS bio TEXT;`;
     await sql`ALTER TABLE teachers ADD COLUMN IF NOT EXISTS photo TEXT;`;
     await sql`ALTER TABLE teachers ADD COLUMN IF NOT EXISTS subject TEXT;`;
+
+    // Ensure system_config metadata table exists
+    await sql`
+      CREATE TABLE IF NOT EXISTS system_config (
+        key TEXT PRIMARY KEY,
+        value TEXT
+      );
+    `;
+
+    // Check if initial seeding has been executed
+    const seedCheck = await sql`SELECT value FROM system_config WHERE key = 'db_seeded' LIMIT 1`;
+    if (!seedCheck || seedCheck.length === 0 || seedCheck[0]?.value !== "true") {
+      console.log("Database not seeded yet. Seeding initial data...");
+
+      // Seed gallery if empty
+      const gCheck = await sql`SELECT count(*) FROM gallery`;
+      if (Number(gCheck[0]?.count) === 0) {
+        for (const item of initialGallery) {
+          await sql`
+            INSERT INTO gallery (id, title, category, imageUrl, date, description)
+            VALUES (${item.id}, ${item.title}, ${item.category || ''}, ${item.imageUrl || ''}, ${item.date || ''}, ${item.description || ''})
+            ON CONFLICT (id) DO NOTHING;
+          `;
+        }
+      }
+
+      // Seed teachers if empty
+      const tCheck = await sql`SELECT count(*) FROM teachers`;
+      if (Number(tCheck[0]?.count) === 0) {
+        for (const t of initialTeachers) {
+          await sql`
+            INSERT INTO teachers (id, name, nip, position, subject, role, education, photo, bio, email, phone, is_active)
+            VALUES (${t.id}, ${t.name}, ${t.nip || ''}, ${t.position || 'Guru'}, ${t.subject || ''}, ${t.position || 'Guru'}, ${t.education || ''}, ${t.photo || ''}, ${t.bio || ''}, '', '', true)
+            ON CONFLICT (id) DO NOTHING;
+          `;
+        }
+      }
+
+      // Seed news if empty
+      const nCheck = await sql`SELECT count(*) FROM news`;
+      if (Number(nCheck[0]?.count) === 0) {
+        for (const item of initialNews) {
+          await sql`
+            INSERT INTO news (id, title, slug, excerpt, content, category, date, author, image, is_featured, tags)
+            VALUES (${item.id}, ${item.title}, ${item.slug || item.id}, ${item.excerpt || ''}, ${item.content || ''}, ${item.category || ''}, ${item.date || ''}, ${item.author || ''}, ${item.image || ''}, ${Boolean(item.isFeatured)}, ${JSON.stringify(item.tags || [])}::jsonb)
+            ON CONFLICT (id) DO NOTHING;
+          `;
+        }
+      }
+
+      // Seed agendas if empty
+      const aCheck = await sql`SELECT count(*) FROM agendas`;
+      if (Number(aCheck[0]?.count) === 0) {
+        for (const item of initialAgenda) {
+          await sql`
+            INSERT INTO agendas (id, title, date, time, location, description, category)
+            VALUES (${item.id}, ${item.title}, ${item.date || ''}, ${item.time || ''}, ${item.location || ''}, ${item.description || ''}, ${item.category || ''})
+            ON CONFLICT (id) DO NOTHING;
+          `;
+        }
+      }
+
+      // Seed achievements if empty
+      const achCheck = await sql`SELECT count(*) FROM achievements`;
+      if (Number(achCheck[0]?.count) === 0) {
+        for (const item of initialAchievements) {
+          await sql`
+            INSERT INTO achievements (id, title, event, level, rank, category, student_name, year, image, description)
+            VALUES (${item.id}, ${item.title}, ${item.event || ''}, ${item.level || ''}, ${item.rank || ''}, ${item.category || ''}, ${item.studentName || ''}, ${item.year || ''}, ${item.image || ''}, ${item.description || ''})
+            ON CONFLICT (id) DO NOTHING;
+          `;
+        }
+      }
+
+      // Seed extracurriculars if empty
+      const exCheck = await sql`SELECT count(*) FROM extracurriculars`;
+      if (Number(exCheck[0]?.count) === 0) {
+        for (const item of initialExtracurriculars) {
+          await sql`
+            INSERT INTO extracurriculars (id, name, category, description, schedule, instructor, image)
+            VALUES (${item.id}, ${item.name}, ${item.category || ''}, ${item.description || ''}, ${item.schedule || ''}, ${item.instructor || ''}, ${item.image || ''})
+            ON CONFLICT (id) DO NOTHING;
+          `;
+        }
+      }
+
+      // Seed facilities if empty
+      const facCheck = await sql`SELECT count(*) FROM facilities`;
+      if (Number(facCheck[0]?.count) === 0) {
+        for (const item of initialFacilities) {
+          await sql`
+            INSERT INTO facilities (id, name, category, description, image)
+            VALUES (${item.id}, ${item.title}, ${item.tag || ''}, ${item.desc || ''}, ${item.image || ''})
+            ON CONFLICT (id) DO NOTHING;
+          `;
+        }
+      }
+
+      // Seed testimonials if empty
+      const testCheck = await sql`SELECT count(*) FROM testimonials`;
+      if (Number(testCheck[0]?.count) === 0) {
+        for (const item of initialTestimonials) {
+          await sql`
+            INSERT INTO testimonials (id, name, role, graduation_year, avatar, content, rating)
+            VALUES (${item.id}, ${item.name}, ${item.role || ''}, ${item.graduationYear || ''}, ${item.avatar || ''}, ${item.content || ''}, ${item.rating || 5})
+            ON CONFLICT (id) DO NOTHING;
+          `;
+        }
+      }
+
+      // Seed users if empty
+      const uCheck = await sql`SELECT count(*) FROM users`;
+      if (Number(uCheck[0]?.count) === 0) {
+        for (const item of initialUsers) {
+          await sql`
+            INSERT INTO users (id, username, password, name, role, status, email)
+            VALUES (${item.id}, ${item.username}, ${item.password}, ${item.name}, ${item.role}, ${item.status || 'Aktif'}, ${item.email || ''})
+            ON CONFLICT (id) DO NOTHING;
+          `;
+        }
+      }
+
+      // Mark seed as completed
+      await sql`
+        INSERT INTO system_config (key, value)
+        VALUES ('db_seeded', 'true')
+        ON CONFLICT (key) DO UPDATE SET value = 'true';
+      `;
+      console.log("Database initial seeding complete!");
+    }
   } catch (e) {
-    console.error("Error migrating teachers table schema:", e);
+    console.error("Error migrating or seeding database schema:", e);
   }
 }
 
@@ -61,29 +191,47 @@ export async function GET() {
       sql`SELECT * FROM users ORDER BY created_at ASC`,
     ]);
 
+    const formattedGallery = (galleryRes || []).map((g: any) => ({
+      ...g,
+      imageUrl: g.imageurl || g.imageUrl || "",
+    }));
+
     return NextResponse.json({
       schoolInfo: schoolInfoRes[0]?.data || initialSchoolInfo,
-      news: newsRes.length > 0 ? newsRes : initialNews,
-      agendas: agendasRes.length > 0 ? agendasRes : initialAgenda,
-      achievements: achievementsRes.length > 0 ? achievementsRes : initialAchievements,
-      teachers:
-        teachersRes.length > 0
-          ? sortTeachersByPriority(
-              teachersRes.map((t: any) => ({
-                ...t,
-                position: t.position || t.role || "Guru",
-                subject: t.subject || "Guru Pengampu",
-                education: t.education || "S1 Pendidikan",
-              }))
-            )
-          : sortTeachersByPriority(initialTeachers),
-      extracurriculars: extracurricularsRes.length > 0 ? extracurricularsRes : initialExtracurriculars,
-      gallery: galleryRes.length > 0 ? galleryRes : initialGallery,
-      applicants: applicantsRes.length > 0 ? applicantsRes : initialApplicants,
+      news: newsRes,
+      agendas: agendasRes,
+      achievements: achievementsRes,
+      teachers: sortTeachersByPriority(
+        (teachersRes || []).map((t: any) => ({
+          ...t,
+          position: t.position || t.role || "Guru",
+          subject: t.subject || "Guru Pengampu",
+          education: t.education || "S1 Pendidikan",
+        }))
+      ),
+      extracurriculars: extracurricularsRes,
+      gallery: formattedGallery,
+      applicants: (applicantsRes || []).map((a: any) => ({
+        ...a,
+        registrationNumber: a.registration_number || a.registrationNumber,
+        fullName: a.full_name || a.fullName,
+        birthPlace: a.birth_place || a.birthPlace,
+        birthDate: a.birth_date || a.birthDate,
+        previousSchool: a.previous_school || a.previousSchool,
+        parentName: a.parent_name || a.parentName,
+        parentPhone: a.parent_phone || a.parentPhone,
+        chosenMajor: a.chosen_major || a.chosenMajor,
+        registrationDate: a.registration_date || a.registrationDate,
+      })),
       faqs: faqsRes.length > 0 ? faqsRes : initialFAQs,
-      testimonials: testimonialsRes.length > 0 ? testimonialsRes : initialTestimonials,
-      facilities: facilitiesRes.length > 0 ? facilitiesRes : initialFacilities,
-      users: usersRes.length > 0 ? usersRes.map((u: any) => ({ ...u, status: u.status || "Aktif" })) : initialUsers,
+      testimonials: testimonialsRes,
+      facilities: (facilitiesRes || []).map((f: any) => ({
+        ...f,
+        name: f.name || f.title,
+        category: f.category || f.tag,
+        description: f.description || f.desc,
+      })),
+      users: (usersRes || []).map((u: any) => ({ ...u, status: u.status || "Aktif" })),
     });
   } catch (error) {
     console.error("Error fetching data from Neon DB:", error);
