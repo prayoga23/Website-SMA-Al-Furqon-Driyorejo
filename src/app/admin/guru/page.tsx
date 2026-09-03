@@ -598,7 +598,7 @@ export default function AdminGuruPage() {
                 <div className="space-y-3">
                   {/* Card Header: Avatar & Main info */}
                   <div className="flex items-center gap-3">
-                    {item.photo ? (
+                    {item.photo && !item.photo.includes("unsplash.com") ? (
                       <img
                         src={item.photo}
                         alt={item.name}

@@ -169,7 +169,8 @@ export default function GuruStafPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {sortedTeachers.map((t) => {
             const hasError = imgErrors[t.id];
-            const showFallback = !t.photo || hasError;
+            const isUnsplash = Boolean(t.photo && t.photo.includes("unsplash.com"));
+            const showFallback = !t.photo || isUnsplash || hasError;
 
             return (
               <div
@@ -246,7 +247,7 @@ export default function GuruStafPage() {
 
             <div className="text-center space-y-3 pt-2">
               <div className="w-28 h-28 rounded-full overflow-hidden mx-auto border-4 border-[#064E3B] shadow-lg bg-emerald-900 flex items-center justify-center">
-                {selectedTeacher.photo && !imgErrors[selectedTeacher.id] ? (
+                {selectedTeacher.photo && !selectedTeacher.photo.includes("unsplash.com") && !imgErrors[selectedTeacher.id] ? (
                   <img
                     src={selectedTeacher.photo}
                     alt={selectedTeacher.name}
