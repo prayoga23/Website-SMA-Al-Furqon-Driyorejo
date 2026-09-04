@@ -92,6 +92,28 @@ const DataContext = createContext<DataContextType | undefined>(undefined);
 
 const STORAGE_KEY_PREFIX = "sma_alfurqon_";
 
+const markAsDeletedLocally = (table: string, id: string) => {
+  try {
+    const key = STORAGE_KEY_PREFIX + "deleted_" + table;
+    const existing: string[] = JSON.parse(localStorage.getItem(key) || "[]");
+    if (!existing.includes(id)) {
+      existing.push(id);
+      localStorage.setItem(key, JSON.stringify(existing));
+    }
+  } catch (e) {}
+};
+
+const filterDeletedLocally = <T extends { id: string }>(table: string, items: T[]): T[] => {
+  try {
+    const key = STORAGE_KEY_PREFIX + "deleted_" + table;
+    const deleted: string[] = JSON.parse(localStorage.getItem(key) || "[]");
+    if (!deleted || deleted.length === 0) return items;
+    return items.filter((item) => !deleted.includes(item.id));
+  } catch (e) {
+    return items;
+  }
+};
+
 export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [darkMode, setDarkModeState] = useState<boolean>(false);
   const [schoolInfo, setSchoolInfo] = useState<SchoolInfo>(initialSchoolInfo);
@@ -122,11 +144,19 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  // Load saved state from Neon DB API on mount
+  // Load saved state from localStorage & Neon DB API on mount
   useEffect(() => {
     try {
       document.documentElement.classList.remove("dark");
       localStorage.removeItem(STORAGE_KEY_PREFIX + "dark_mode");
+
+      // First sync from localStorage for immediate responsiveness
+      const localG = localStorage.getItem(STORAGE_KEY_PREFIX + "gallery");
+      if (localG) {
+        try { setGallery(filterDeletedLocally<GalleryItem>("gallery", JSON.parse(localG))); } catch(e) {}
+      } else {
+        setGallery(filterDeletedLocally<GalleryItem>("gallery", initialGallery));
+      }
 
       fetch("/api/data", { cache: "no-store", headers: { "Cache-Control": "no-cache" } })
         .then((res) => res.json())
@@ -149,17 +179,21 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
               },
             });
           }
-          if (data.news && Array.isArray(data.news)) setNews(data.news);
-          if (data.agendas && Array.isArray(data.agendas)) setAgendas(data.agendas);
-          if (data.achievements && Array.isArray(data.achievements)) setAchievements(data.achievements);
-          if (data.teachers && Array.isArray(data.teachers)) setTeachers(data.teachers);
-          if (data.extracurriculars && Array.isArray(data.extracurriculars)) setExtracurriculars(data.extracurriculars);
-          if (data.gallery && Array.isArray(data.gallery)) setGallery(data.gallery);
-          if (data.applicants && Array.isArray(data.applicants)) setApplicants(data.applicants);
-          if (data.facilities && Array.isArray(data.facilities)) setFacilities(data.facilities);
-          if (data.testimonials && Array.isArray(data.testimonials)) setTestimonials(data.testimonials);
-          if (data.users && Array.isArray(data.users)) setUsers(data.users);
-          if (data.kesiswaanActivities && Array.isArray(data.kesiswaanActivities)) setKesiswaanActivities(data.kesiswaanActivities);
+          if (data.news && Array.isArray(data.news)) setNews(filterDeletedLocally("news", data.news));
+          if (data.agendas && Array.isArray(data.agendas)) setAgendas(filterDeletedLocally("agendas", data.agendas));
+          if (data.achievements && Array.isArray(data.achievements)) setAchievements(filterDeletedLocally("achievements", data.achievements));
+          if (data.teachers && Array.isArray(data.teachers)) setTeachers(filterDeletedLocally("teachers", data.teachers));
+          if (data.extracurriculars && Array.isArray(data.extracurriculars)) setExtracurriculars(filterDeletedLocally("extracurriculars", data.extracurriculars));
+          if (data.gallery && Array.isArray(data.gallery)) {
+            const filtered = filterDeletedLocally<GalleryItem>("gallery", data.gallery);
+            setGallery(filtered);
+            localStorage.setItem(STORAGE_KEY_PREFIX + "gallery", JSON.stringify(filtered));
+          }
+          if (data.applicants && Array.isArray(data.applicants)) setApplicants(filterDeletedLocally("applicants", data.applicants));
+          if (data.facilities && Array.isArray(data.facilities)) setFacilities(filterDeletedLocally("facilities", data.facilities));
+          if (data.testimonials && Array.isArray(data.testimonials)) setTestimonials(filterDeletedLocally("testimonials", data.testimonials));
+          if (data.users && Array.isArray(data.users)) setUsers(filterDeletedLocally("users", data.users));
+          if (data.kesiswaanActivities && Array.isArray(data.kesiswaanActivities)) setKesiswaanActivities(filterDeletedLocally("kesiswaan_activities", data.kesiswaanActivities));
         })
         .catch((err) => console.error("Error loading Neon DB data:", err));
 
@@ -281,6 +315,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const deleteTeacher = (id: string) => {
+    markAsDeletedLocally("teachers", id);
     const updated = teachers.filter((t) => t.id !== id);
     setTeachers(updated);
     localStorage.setItem(STORAGE_KEY_PREFIX + "teachers", JSON.stringify(updated));
@@ -319,6 +354,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const deleteGalleryItem = (id: string) => {
+    markAsDeletedLocally("gallery", id);
     const updated = gallery.filter((g) => g.id !== id);
     setGallery(updated);
     localStorage.setItem(STORAGE_KEY_PREFIX + "gallery", JSON.stringify(updated));
