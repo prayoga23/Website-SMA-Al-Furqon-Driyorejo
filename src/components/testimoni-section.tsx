@@ -16,7 +16,13 @@ export const TestimoniSection: React.FC = () => {
     setCurrentIndex((prevIdx) => (prevIdx === testimonials.length - 1 ? 0 : prevIdx + 1));
   };
 
-  const current = testimonials[currentIndex];
+  if (!testimonials || testimonials.length === 0) {
+    return null;
+  }
+
+  const safeIndex = Math.min(currentIndex, testimonials.length - 1);
+  const current = testimonials[safeIndex] || testimonials[0];
+  const starCount = Math.max(1, Math.min(5, Number(current?.rating) || 5));
 
   return (
     <section id="testimoni" className="py-20 bg-[#FDFBF7] dark:bg-[#081612] transition-colors relative">
@@ -41,32 +47,32 @@ export const TestimoniSection: React.FC = () => {
           <div className="relative z-10 space-y-6 text-center">
             {/* Rating Stars */}
             <div className="flex items-center justify-center gap-1 text-amber-400">
-              {[...Array(current.rating)].map((_, i) => (
+              {[...Array(starCount)].map((_, i) => (
                 <Star key={i} className="w-5 h-5 fill-current" />
               ))}
             </div>
 
             {/* Testimonial Content */}
             <blockquote className="text-base sm:text-xl font-medium text-slate-800 dark:text-slate-100 leading-relaxed italic max-w-2xl mx-auto">
-              &quot;{current.content}&quot;
+              &quot;{current?.content || ""}&quot;
             </blockquote>
 
             {/* Author Profile */}
             <div className="flex flex-col items-center">
               <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#064E3B] to-[#0D9488] text-amber-300 font-extrabold text-xl flex items-center justify-center mb-3 shadow-lg border-2 border-amber-400 font-heading">
-                {(current.name || "")
+                {(current?.name || "")
                   .trim()
                   .split(/\s+/)
                   .slice(0, 2)
                   .map((n) => n[0])
                   .join("")
-                  .toUpperCase()}
+                  .toUpperCase() || "AL"}
               </div>
               <h4 className="font-bold text-base text-slate-900 dark:text-white font-heading">
-                {current.name}
+                {current?.name || "Alumni Al-Furqon"}
               </h4>
               <p className="text-xs font-semibold text-[#047857] dark:text-emerald-400">
-                {current.role} {current.graduationYear ? `(${current.graduationYear})` : ""}
+                {current?.role || "Alumni"} {current?.graduationYear ? `(${current.graduationYear})` : ""}
               </p>
             </div>
           </div>
