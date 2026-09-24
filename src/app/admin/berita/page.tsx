@@ -6,6 +6,8 @@ import { useData } from "@/context/data-context";
 import { Plus, Trash2, Edit3, Newspaper, X } from "lucide-react";
 import { NewsItem } from "@/lib/types";
 import { ImageUploadInput } from "@/components/image-upload-input";
+import { YouTubeInput } from "@/components/youtube-input";
+import { YoutubeIcon } from "@/components/youtube-icon";
 import { Pagination } from "@/components/pagination";
 
 export default function AdminBeritaPage() {
@@ -20,6 +22,7 @@ export default function AdminBeritaPage() {
   const [excerpt, setExcerpt] = useState("");
   const [content, setContent] = useState("");
   const [image, setImage] = useState("");
+  const [youtubeUrl, setYoutubeUrl] = useState("");
 
   const openAddModal = () => {
     setEditingItem(null);
@@ -28,6 +31,7 @@ export default function AdminBeritaPage() {
     setExcerpt("");
     setContent("");
     setImage("");
+    setYoutubeUrl("");
     setModalOpen(true);
   };
 
@@ -38,6 +42,7 @@ export default function AdminBeritaPage() {
     setExcerpt(item.excerpt);
     setContent(item.content);
     setImage(item.image || "");
+    setYoutubeUrl(item.youtubeUrl || "");
     setModalOpen(true);
   };
 
@@ -56,6 +61,7 @@ export default function AdminBeritaPage() {
         content: content || excerpt,
         category,
         image: imageValue,
+        youtubeUrl: youtubeUrl.trim(),
       });
     } else {
       addNews({
@@ -67,6 +73,7 @@ export default function AdminBeritaPage() {
         date: new Date().toISOString().split("T")[0],
         author: "Admin SMA Al-Furqon",
         image: imageValue,
+        youtubeUrl: youtubeUrl.trim(),
       });
     }
 
@@ -148,6 +155,13 @@ export default function AdminBeritaPage() {
                   label="Upload Gambar Header Artikel *"
                 />
 
+                {/* YouTube Video URL Input */}
+                <YouTubeInput
+                  value={youtubeUrl}
+                  onChange={setYoutubeUrl}
+                  label="Link Video YouTube (Opsional)"
+                />
+
                 <div>
                   <label className="block font-bold mb-1 text-slate-700 dark:text-slate-200">Ringkasan (Excerpt) *</label>
                   <textarea
@@ -204,11 +218,21 @@ export default function AdminBeritaPage() {
             <tbody className="divide-y divide-slate-100 dark:divide-emerald-900/30">
               {paginatedNews.map((item) => (
                 <tr key={item.id} className="hover:bg-slate-50/50 dark:hover:bg-emerald-950/30">
-                  <td className="p-3 font-bold text-slate-900 dark:text-white max-w-xs truncate flex items-center gap-2">
-                    {item.image && (
-                      <img src={item.image} alt="" className="w-7 h-7 rounded object-cover shrink-0" />
-                    )}
-                    <span className="truncate">{item.title}</span>
+                  <td className="p-3 font-bold text-slate-900 dark:text-white max-w-xs truncate">
+                    <div className="flex items-center gap-2">
+                      {item.image && (
+                        <img src={item.image} alt="" className="w-7 h-7 rounded object-cover shrink-0" />
+                      )}
+                      <span className="truncate">{item.title}</span>
+                      {item.youtubeUrl && (
+                        <span
+                          className="shrink-0 p-1 rounded bg-red-100 dark:bg-red-950/70 text-red-600 dark:text-red-400"
+                          title="Ada Video YouTube"
+                        >
+                          <YoutubeIcon className="w-3 h-3 text-red-600 dark:text-red-400" />
+                        </span>
+                      )}
+                    </div>
                   </td>
                   <td className="p-3">
                     <span className="bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200 px-2 py-0.5 rounded text-[10px] font-bold">

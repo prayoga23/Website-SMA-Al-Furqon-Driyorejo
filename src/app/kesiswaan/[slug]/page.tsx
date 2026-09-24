@@ -10,6 +10,7 @@ import { FloatingWidgets } from "@/components/floating-widgets";
 import { useData } from "@/context/data-context";
 import { kesiswaanActivities as initialKesiswaanActivities } from "@/lib/kesiswaan-data";
 import { Calendar, User, Tag, ArrowLeft, Check, Sparkles, MessageCircle } from "lucide-react";
+import { YouTubePlayer } from "@/components/youtube-player";
 
 export default function KesiswaanActivityDetailPage() {
   const params = useParams();
@@ -98,6 +99,13 @@ export default function KesiswaanActivityDetailPage() {
           <div className="prose dark:prose-invert max-w-none text-sm leading-relaxed text-slate-700 dark:text-slate-200 whitespace-pre-line space-y-4">
             {activity.content}
           </div>
+
+          {/* Embedded YouTube Video */}
+          {activity.youtubeUrl && (
+            <div className="pt-6 border-t border-slate-100 dark:border-emerald-900/40">
+              <YouTubePlayer url={activity.youtubeUrl} title={activity.title} />
+            </div>
+          )}
 
           {/* Program Highlights Checklist */}
           <div className="pt-6 border-t border-slate-100 dark:border-emerald-900/40">

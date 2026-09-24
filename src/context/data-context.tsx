@@ -92,28 +92,6 @@ const DataContext = createContext<DataContextType | undefined>(undefined);
 
 const STORAGE_KEY_PREFIX = "sma_alfurqon_";
 
-const markAsDeletedLocally = (table: string, id: string) => {
-  try {
-    const key = STORAGE_KEY_PREFIX + "deleted_" + table;
-    const existing: string[] = JSON.parse(localStorage.getItem(key) || "[]");
-    if (!existing.includes(id)) {
-      existing.push(id);
-      localStorage.setItem(key, JSON.stringify(existing));
-    }
-  } catch (e) {}
-};
-
-const filterDeletedLocally = <T extends { id: string }>(table: string, items: T[]): T[] => {
-  try {
-    const key = STORAGE_KEY_PREFIX + "deleted_" + table;
-    const deleted: string[] = JSON.parse(localStorage.getItem(key) || "[]");
-    if (!deleted || deleted.length === 0) return items;
-    return items.filter((item) => !deleted.includes(item.id));
-  } catch (e) {
-    return items;
-  }
-};
-
 export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [darkMode, setDarkModeState] = useState<boolean>(false);
   const [schoolInfo, setSchoolInfo] = useState<SchoolInfo>(initialSchoolInfo);
@@ -131,33 +109,51 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [kesiswaanActivities, setKesiswaanActivities] = useState<KesiswaanActivity[]>(initialKesiswaanActivities);
   const [currentUser, setCurrentUser] = useState<UserItem | null>(null);
 
-  // Helper to sync mutations with Neon PostgreSQL DB
-  const syncToApi = async (table: string, action: "save" | "delete", item?: any, id?: string) => {
-    try {
-      await fetch("/api/data", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ table, action, item, id }),
-      });
-    } catch (e) {
-      console.error(`Error syncing ${table} to Neon DB:`, e);
-    }
+  // Fast background synchronization with Neon PostgreSQL DB
+  const syncToApi = (table: string, action: "save" | "delete", item?: any, id?: string) => {
+    fetch("/api/data", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ table, action, item, id }),
+    }).catch((e) => {
+      console.error(`Error syncing ${table} (${action}) to Neon DB:`, e);
+    });
   };
 
-  // Load saved state from localStorage & Neon DB API on mount
+  // Load authoritative state directly from Neon DB on mount
   useEffect(() => {
     try {
       document.documentElement.classList.remove("dark");
       localStorage.removeItem(STORAGE_KEY_PREFIX + "dark_mode");
 
-      // First sync from localStorage for immediate responsiveness
-      const localG = localStorage.getItem(STORAGE_KEY_PREFIX + "gallery");
-      if (localG) {
-        try { setGallery(filterDeletedLocally<GalleryItem>("gallery", JSON.parse(localG))); } catch(e) {}
-      } else {
-        setGallery(filterDeletedLocally<GalleryItem>("gallery", initialGallery));
-      }
+      // Purge any stale mock items or local deleted tombstones from previous sessions
+      const staleKeys = [
+        "sma_alfurqon_news",
+        "sma_alfurqon_agendas",
+        "sma_alfurqon_achievements",
+        "sma_alfurqon_extracurriculars",
+        "sma_alfurqon_facilities",
+        "sma_alfurqon_gallery",
+        "sma_alfurqon_testimonials",
+        "sma_alfurqon_users",
+        "sma_alfurqon_applicants",
+        "sma_alfurqon_kesiswaan_activities",
+        "sma_alfurqon_deleted_news",
+        "sma_alfurqon_deleted_agendas",
+        "sma_alfurqon_deleted_achievements",
+        "sma_alfurqon_deleted_teachers",
+        "sma_alfurqon_deleted_facilities",
+        "sma_alfurqon_deleted_gallery",
+        "sma_alfurqon_deleted_extracurriculars",
+        "sma_alfurqon_deleted_testimonials",
+        "sma_alfurqon_deleted_users",
+        "sma_alfurqon_deleted_kesiswaan_activities",
+      ];
+      staleKeys.forEach((key) => {
+        try { localStorage.removeItem(key); } catch (e) {}
+      });
 
+      // Fetch authentic data bundle from Neon DB API
       fetch("/api/data", { cache: "no-store", headers: { "Cache-Control": "no-cache" } })
         .then((res) => res.json())
         .then((data) => {
@@ -179,26 +175,24 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
               },
             });
           }
-          if (data.news && Array.isArray(data.news)) setNews(filterDeletedLocally("news", data.news));
-          if (data.agendas && Array.isArray(data.agendas)) setAgendas(filterDeletedLocally("agendas", data.agendas));
-          if (data.achievements && Array.isArray(data.achievements)) setAchievements(filterDeletedLocally("achievements", data.achievements));
-          if (data.teachers && Array.isArray(data.teachers)) setTeachers(filterDeletedLocally("teachers", data.teachers));
-          if (data.extracurriculars && Array.isArray(data.extracurriculars)) setExtracurriculars(filterDeletedLocally("extracurriculars", data.extracurriculars));
-          if (data.gallery && Array.isArray(data.gallery)) {
-            const filtered = filterDeletedLocally<GalleryItem>("gallery", data.gallery);
-            setGallery(filtered);
-            localStorage.setItem(STORAGE_KEY_PREFIX + "gallery", JSON.stringify(filtered));
-          }
-          if (data.applicants && Array.isArray(data.applicants)) setApplicants(filterDeletedLocally("applicants", data.applicants));
-          if (data.facilities && Array.isArray(data.facilities)) setFacilities(filterDeletedLocally("facilities", data.facilities));
-          if (data.testimonials && Array.isArray(data.testimonials)) setTestimonials(filterDeletedLocally("testimonials", data.testimonials));
-          if (data.users && Array.isArray(data.users)) setUsers(filterDeletedLocally("users", data.users));
-          if (data.kesiswaanActivities && Array.isArray(data.kesiswaanActivities)) setKesiswaanActivities(filterDeletedLocally("kesiswaan_activities", data.kesiswaanActivities));
+          if (Array.isArray(data.news)) setNews(data.news);
+          if (Array.isArray(data.agendas)) setAgendas(data.agendas);
+          if (Array.isArray(data.achievements)) setAchievements(data.achievements);
+          if (Array.isArray(data.teachers)) setTeachers(data.teachers);
+          if (Array.isArray(data.extracurriculars)) setExtracurriculars(data.extracurriculars);
+          if (Array.isArray(data.gallery)) setGallery(data.gallery);
+          if (Array.isArray(data.applicants)) setApplicants(data.applicants);
+          if (Array.isArray(data.facilities)) setFacilities(data.facilities);
+          if (Array.isArray(data.testimonials)) setTestimonials(data.testimonials);
+          if (Array.isArray(data.users)) setUsers(data.users);
+          if (Array.isArray(data.kesiswaanActivities)) setKesiswaanActivities(data.kesiswaanActivities);
         })
         .catch((err) => console.error("Error loading Neon DB data:", err));
 
       const savedActiveUser = localStorage.getItem(STORAGE_KEY_PREFIX + "admin_user");
-      if (savedActiveUser) setCurrentUser(JSON.parse(savedActiveUser));
+      if (savedActiveUser) {
+        try { setCurrentUser(JSON.parse(savedActiveUser)); } catch (e) {}
+      }
     } catch (e) {
       console.error("Error loading initial data:", e);
     }
@@ -210,6 +204,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.removeItem(STORAGE_KEY_PREFIX + "dark_mode");
   };
 
+  // --- SCHOOL INFO ---
   const updateSchoolInfo = (info: Partial<SchoolInfo>) => {
     const updated = {
       ...schoolInfo,
@@ -221,10 +216,10 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       },
     };
     setSchoolInfo(updated);
-    localStorage.setItem(STORAGE_KEY_PREFIX + "school_info", JSON.stringify(updated));
     syncToApi("school_info", "save", updated);
   };
 
+  // --- NEWS ---
   const addNews = (item: Omit<NewsItem, "id">) => {
     const newItem: NewsItem = {
       ...item,
@@ -232,14 +227,12 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
     const updated = [newItem, ...news];
     setNews(updated);
-    localStorage.setItem(STORAGE_KEY_PREFIX + "news", JSON.stringify(updated));
     syncToApi("news", "save", newItem);
   };
 
   const updateNews = (id: string, item: Partial<NewsItem>) => {
     const updated = news.map((n) => (n.id === id ? { ...n, ...item } : n));
     setNews(updated);
-    localStorage.setItem(STORAGE_KEY_PREFIX + "news", JSON.stringify(updated));
     const target = updated.find((n) => n.id === id);
     if (target) syncToApi("news", "save", target);
   };
@@ -247,10 +240,10 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const deleteNews = (id: string) => {
     const updated = news.filter((n) => n.id !== id);
     setNews(updated);
-    localStorage.setItem(STORAGE_KEY_PREFIX + "news", JSON.stringify(updated));
     syncToApi("news", "delete", undefined, id);
   };
 
+  // --- AGENDAS ---
   const addAgenda = (item: Omit<AgendaItem, "id">) => {
     const newItem: AgendaItem = {
       ...item,
@@ -258,43 +251,47 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
     const updated = [newItem, ...agendas];
     setAgendas(updated);
-    localStorage.setItem(STORAGE_KEY_PREFIX + "agendas", JSON.stringify(updated));
+    syncToApi("agendas", "save", newItem);
   };
 
   const updateAgenda = (id: string, item: Partial<AgendaItem>) => {
     const updated = agendas.map((a) => (a.id === id ? { ...a, ...item } : a));
     setAgendas(updated);
-    localStorage.setItem(STORAGE_KEY_PREFIX + "agendas", JSON.stringify(updated));
+    const target = updated.find((a) => a.id === id);
+    if (target) syncToApi("agendas", "save", target);
   };
 
   const deleteAgenda = (id: string) => {
     const updated = agendas.filter((a) => a.id !== id);
     setAgendas(updated);
-    localStorage.setItem(STORAGE_KEY_PREFIX + "agendas", JSON.stringify(updated));
+    syncToApi("agendas", "delete", undefined, id);
   };
 
+  // --- ACHIEVEMENTS ---
   const addAchievement = (item: Omit<AchievementItem, "id">) => {
     const newItem: AchievementItem = {
       ...item,
-      id: "achieve-" + Date.now(),
+      id: "ach-" + Date.now(),
     };
     const updated = [newItem, ...achievements];
     setAchievements(updated);
-    localStorage.setItem(STORAGE_KEY_PREFIX + "achievements", JSON.stringify(updated));
+    syncToApi("achievements", "save", newItem);
   };
 
   const updateAchievement = (id: string, item: Partial<AchievementItem>) => {
     const updated = achievements.map((a) => (a.id === id ? { ...a, ...item } : a));
     setAchievements(updated);
-    localStorage.setItem(STORAGE_KEY_PREFIX + "achievements", JSON.stringify(updated));
+    const target = updated.find((a) => a.id === id);
+    if (target) syncToApi("achievements", "save", target);
   };
 
   const deleteAchievement = (id: string) => {
     const updated = achievements.filter((a) => a.id !== id);
     setAchievements(updated);
-    localStorage.setItem(STORAGE_KEY_PREFIX + "achievements", JSON.stringify(updated));
+    syncToApi("achievements", "delete", undefined, id);
   };
 
+  // --- TEACHERS ---
   const addTeacher = (item: Omit<TeacherItem, "id">) => {
     const newItem: TeacherItem = {
       ...item,
@@ -302,38 +299,33 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
     const updated = [...teachers, newItem];
     setTeachers(updated);
-    localStorage.setItem(STORAGE_KEY_PREFIX + "teachers", JSON.stringify(updated));
     syncToApi("teachers", "save", newItem);
   };
 
   const updateTeacher = (id: string, item: Partial<TeacherItem>) => {
     const updated = teachers.map((t) => (t.id === id ? { ...t, ...item } : t));
     setTeachers(updated);
-    localStorage.setItem(STORAGE_KEY_PREFIX + "teachers", JSON.stringify(updated));
     const target = updated.find((t) => t.id === id);
     if (target) syncToApi("teachers", "save", target);
   };
 
   const deleteTeacher = (id: string) => {
-    markAsDeletedLocally("teachers", id);
     const updated = teachers.filter((t) => t.id !== id);
     setTeachers(updated);
-    localStorage.setItem(STORAGE_KEY_PREFIX + "teachers", JSON.stringify(updated));
     syncToApi("teachers", "delete", undefined, id);
   };
 
   const setTeachersData = (items: TeacherItem[]) => {
     setTeachers(items);
-    localStorage.setItem(STORAGE_KEY_PREFIX + "teachers", JSON.stringify(items));
     items.forEach((t) => syncToApi("teachers", "save", t));
   };
 
   const resetTeachersToDefault = () => {
     setTeachers(initialTeachers);
-    localStorage.setItem(STORAGE_KEY_PREFIX + "teachers", JSON.stringify(initialTeachers));
     initialTeachers.forEach((t) => syncToApi("teachers", "save", t));
   };
 
+  // --- GALLERY ---
   const addGalleryItem = (item: Omit<GalleryItem, "id">) => {
     const newItem: GalleryItem = {
       ...item,
@@ -341,26 +333,23 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
     const updated = [newItem, ...gallery];
     setGallery(updated);
-    localStorage.setItem(STORAGE_KEY_PREFIX + "gallery", JSON.stringify(updated));
     syncToApi("gallery", "save", newItem);
   };
 
   const updateGalleryItem = (id: string, item: Partial<GalleryItem>) => {
     const updated = gallery.map((g) => (g.id === id ? { ...g, ...item } : g));
     setGallery(updated);
-    localStorage.setItem(STORAGE_KEY_PREFIX + "gallery", JSON.stringify(updated));
     const target = updated.find((g) => g.id === id);
     if (target) syncToApi("gallery", "save", target);
   };
 
   const deleteGalleryItem = (id: string) => {
-    markAsDeletedLocally("gallery", id);
     const updated = gallery.filter((g) => g.id !== id);
     setGallery(updated);
-    localStorage.setItem(STORAGE_KEY_PREFIX + "gallery", JSON.stringify(updated));
     syncToApi("gallery", "delete", undefined, id);
   };
 
+  // --- FACILITIES ---
   const addFacility = (item: Omit<FacilityItem, "id">) => {
     const newItem: FacilityItem = {
       ...item,
@@ -368,14 +357,12 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
     const updated = [...facilities, newItem];
     setFacilities(updated);
-    localStorage.setItem(STORAGE_KEY_PREFIX + "facilities", JSON.stringify(updated));
     syncToApi("facilities", "save", newItem);
   };
 
   const updateFacility = (id: string, item: Partial<FacilityItem>) => {
     const updated = facilities.map((f) => (f.id === id ? { ...f, ...item } : f));
     setFacilities(updated);
-    localStorage.setItem(STORAGE_KEY_PREFIX + "facilities", JSON.stringify(updated));
     const target = updated.find((f) => f.id === id);
     if (target) syncToApi("facilities", "save", target);
   };
@@ -383,32 +370,34 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const deleteFacility = (id: string) => {
     const updated = facilities.filter((f) => f.id !== id);
     setFacilities(updated);
-    localStorage.setItem(STORAGE_KEY_PREFIX + "facilities", JSON.stringify(updated));
     syncToApi("facilities", "delete", undefined, id);
   };
 
+  // --- EXTRACURRICULARS ---
   const addExtracurricular = (item: Omit<ExtracurricularItem, "id">) => {
     const newItem: ExtracurricularItem = {
       ...item,
-      id: "extra-" + Date.now(),
+      id: "ekskul-" + Date.now(),
     };
     const updated = [...extracurriculars, newItem];
     setExtracurriculars(updated);
-    localStorage.setItem(STORAGE_KEY_PREFIX + "extracurriculars", JSON.stringify(updated));
+    syncToApi("extracurriculars", "save", newItem);
   };
 
   const updateExtracurricular = (id: string, item: Partial<ExtracurricularItem>) => {
     const updated = extracurriculars.map((e) => (e.id === id ? { ...e, ...item } : e));
     setExtracurriculars(updated);
-    localStorage.setItem(STORAGE_KEY_PREFIX + "extracurriculars", JSON.stringify(updated));
+    const target = updated.find((e) => e.id === id);
+    if (target) syncToApi("extracurriculars", "save", target);
   };
 
   const deleteExtracurricular = (id: string) => {
     const updated = extracurriculars.filter((e) => e.id !== id);
     setExtracurriculars(updated);
-    localStorage.setItem(STORAGE_KEY_PREFIX + "extracurriculars", JSON.stringify(updated));
+    syncToApi("extracurriculars", "delete", undefined, id);
   };
 
+  // --- KESISWAAN ACTIVITIES ---
   const addKesiswaanActivity = (item: Omit<KesiswaanActivity, "id">) => {
     const newItem: KesiswaanActivity = {
       ...item,
@@ -416,14 +405,12 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
     const updated = [newItem, ...kesiswaanActivities];
     setKesiswaanActivities(updated);
-    localStorage.setItem(STORAGE_KEY_PREFIX + "kesiswaan_activities", JSON.stringify(updated));
     syncToApi("kesiswaan_activities", "save", newItem);
   };
 
   const updateKesiswaanActivity = (id: string, item: Partial<KesiswaanActivity>) => {
     const updated = kesiswaanActivities.map((k) => (k.id === id ? { ...k, ...item } : k));
     setKesiswaanActivities(updated);
-    localStorage.setItem(STORAGE_KEY_PREFIX + "kesiswaan_activities", JSON.stringify(updated));
     const target = updated.find((k) => k.id === id);
     if (target) syncToApi("kesiswaan_activities", "save", target);
   };
@@ -431,10 +418,10 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const deleteKesiswaanActivity = (id: string) => {
     const updated = kesiswaanActivities.filter((k) => k.id !== id);
     setKesiswaanActivities(updated);
-    localStorage.setItem(STORAGE_KEY_PREFIX + "kesiswaan_activities", JSON.stringify(updated));
     syncToApi("kesiswaan_activities", "delete", undefined, id);
   };
 
+  // --- TESTIMONIALS ---
   const addTestimonial = (item: Omit<TestimonialItem, "id">) => {
     const newItem: TestimonialItem = {
       ...item,
@@ -442,14 +429,12 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
     const updated = [newItem, ...testimonials];
     setTestimonials(updated);
-    localStorage.setItem(STORAGE_KEY_PREFIX + "testimonials", JSON.stringify(updated));
     syncToApi("testimonials", "save", newItem);
   };
 
   const updateTestimonial = (id: string, item: Partial<TestimonialItem>) => {
     const updated = testimonials.map((t) => (t.id === id ? { ...t, ...item } : t));
     setTestimonials(updated);
-    localStorage.setItem(STORAGE_KEY_PREFIX + "testimonials", JSON.stringify(updated));
     const target = updated.find((t) => t.id === id);
     if (target) syncToApi("testimonials", "save", target);
   };
@@ -457,10 +442,10 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const deleteTestimonial = (id: string) => {
     const updated = testimonials.filter((t) => t.id !== id);
     setTestimonials(updated);
-    localStorage.setItem(STORAGE_KEY_PREFIX + "testimonials", JSON.stringify(updated));
     syncToApi("testimonials", "delete", undefined, id);
   };
 
+  // --- USERS ---
   const addUser = (item: Omit<UserItem, "id">) => {
     const newUser: UserItem = {
       ...item,
@@ -469,14 +454,12 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
     const updated = [...users, newUser];
     setUsers(updated);
-    localStorage.setItem(STORAGE_KEY_PREFIX + "users", JSON.stringify(updated));
     syncToApi("users", "save", newUser);
   };
 
   const updateUser = (id: string, item: Partial<UserItem>) => {
     const updated = users.map((u) => (u.id === id ? { ...u, ...item } : u));
     setUsers(updated);
-    localStorage.setItem(STORAGE_KEY_PREFIX + "users", JSON.stringify(updated));
     const target = updated.find((u) => u.id === id);
     if (target) syncToApi("users", "save", target);
     if (currentUser?.id === id) {
@@ -489,7 +472,6 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const deleteUser = (id: string) => {
     const updated = users.filter((u) => u.id !== id);
     setUsers(updated);
-    localStorage.setItem(STORAGE_KEY_PREFIX + "users", JSON.stringify(updated));
     syncToApi("users", "delete", undefined, id);
   };
 
@@ -511,7 +493,6 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
     const updatedUsersList = users.map((u) => (u.id === found.id ? updatedUser : u));
     setUsers(updatedUsersList);
-    localStorage.setItem(STORAGE_KEY_PREFIX + "users", JSON.stringify(updatedUsersList));
     syncToApi("users", "save", updatedUser);
 
     setCurrentUser(updatedUser);
@@ -526,6 +507,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.removeItem("sma_admin_token");
   };
 
+  // --- PPDB APPLICANTS ---
   const submitPPDB = (
     data: Omit<PPDBApplicant, "id" | "registrationNumber" | "registrationDate" | "status">
   ): PPDBApplicant => {
@@ -540,14 +522,15 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
     const updated = [newApplicant, ...applicants];
     setApplicants(updated);
-    localStorage.setItem(STORAGE_KEY_PREFIX + "applicants", JSON.stringify(updated));
+    syncToApi("ppdb_applicants", "save", newApplicant);
     return newApplicant;
   };
 
   const updateApplicantStatus = (id: string, status: PPDBApplicant["status"]) => {
     const updated = applicants.map((app) => (app.id === id ? { ...app, status } : app));
     setApplicants(updated);
-    localStorage.setItem(STORAGE_KEY_PREFIX + "applicants", JSON.stringify(updated));
+    const target = updated.find((app) => app.id === id);
+    if (target) syncToApi("ppdb_applicants", "save", target);
   };
 
   return (

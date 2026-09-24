@@ -59,6 +59,22 @@ export const initialSchoolInfo: SchoolInfo = {
 
 export const initialNews: NewsItem[] = [
   {
+    id: "news-1790224407534",
+    title: "Matangkan Persiapan Kelulusan, Siswa Kelas XII SMA Al Furqon Driyorejo Ikuti Simulasi TKA",
+    slug: "matangkan-persiapan-kelulusan-siswa-kelas-xii-sma-al-furqon-driyorejo-ikuti-simulasi-tka",
+    excerpt:
+      "Matangkan Persiapan Kelulusan, Siswa Kelas XII SMA Al Furqon Driyorejo Ikuti Simulasi TKA guna memperkuat kesiapan akademik serta mental menghadapi ujian.",
+    content:
+      "SMA Al Furqon Driyorejo menggelar kegiatan Simulasi Tes Kemampuan Akademik (TKA) bagi seluruh siswa kelas XII. Kegiatan ini dirancang secara terstruktur dan terukur guna mematangkan kesiapan akademik, membiasakan ritme manajemen waktu ujian berbasis komputer, serta melatih kesiapan psikologis para santri dan siswa dalam menghadapi ujian kelulusan serta seleksi masuk perguruan tinggi negeri impian.",
+    category: "Berita",
+    date: "2026-09-24",
+    author: "Admin SMA Al-Furqon",
+    image: "/bg-al-furqon4.jpg",
+    isFeatured: false,
+    tags: ["Akademik", "Kelas XII", "Simulasi TKA"],
+    youtubeUrl: "",
+  },
+  {
     id: "news-1",
     title: "Allah Ku Ajukan Proposal Perubahanku",
     slug: "allah-ku-ajukan-proposal-perubahanku",
@@ -72,6 +88,7 @@ export const initialNews: NewsItem[] = [
     image: "/bg-al-furqon2.jpg",
     isFeatured: true,
     tags: ["Pendidikan Karakter", "Spiritual", "Al-Furqon"],
+    youtubeUrl: "https://www.youtube.com/watch?v=aqz-KE-bpKQ",
   },
   {
     id: "news-2",
@@ -87,66 +104,7 @@ export const initialNews: NewsItem[] = [
     image: "/bg-al-furqon3.jpg",
     isFeatured: true,
     tags: ["UMMI", "Al-Qur'an", "Sertifikasi"],
-  },
-  {
-    id: "news-3",
-    title: "In House Training (IHT) Implementasi Kurikulum Merdeka",
-    slug: "in-house-training-iht-implementasi-kurikulum-merdeka",
-    excerpt:
-      "Peningkatan kapasitas dewan guru SMA Al-Furqon Driyorejo dalam menyusun modul ajar interaktif dan Pembelajaran Berbasis Proyek (P5).",
-    content:
-      "Dalam rangka memperkuat mutu pembelajaran berstandar tinggi, SMA Al-Furqon menyelenggarakan In House Training (IHT) Kurikulum Merdeka. Seluruh guru dilatih merancang Projek Penguatan Profil Pelajar Pancasila (P5) berwawasan lingkungan dan penguasaan teknologi pembelajaran modern.",
-    category: "Agenda",
-    date: "2025-08-10",
-    author: "Waka Kurikulum",
-    image: "/bg-al-furqon4.jpg",
-    isFeatured: true,
-    tags: ["Kurikulum Merdeka", "Guru", "Workshop"],
-  },
-  {
-    id: "news-4",
-    title: "Guruku Berubah Demi Dunia Pendidikan: Workshop Guru Kreatif Digital",
-    slug: "guruku-berubah-demi-dunia-pendidikan",
-    excerpt:
-      "Transformasi metode mengajar berbasis media digital modern dan kecerdasan buatan demi menyambut siswa era Z & Alpha.",
-    content:
-      "Dunia pendidikan bergerak sangat cepat. Dewan guru SMA Al-Furqon berkomitmen untuk tidak ketinggalan dengan rutin mengikuti workshop pengembangan media pembelajaran digital, game-based learning, serta pemanfaatan visualisasi interaktif di kelas.",
-    category: "Kegiatan",
-    date: "2025-05-18",
-    author: "Tim IT & Media",
-    image: "/bg-al-furqon2.jpg",
-    isFeatured: false,
-    tags: ["Inovasi Guru", "Teknologi"],
-  },
-  {
-    id: "news-5",
-    title: "Fingerprint Santri Baru SMA Al-Furqon Driyorejo",
-    slug: "fingerprint-santri-baru-sma-al-furqon-driyorejo",
-    excerpt:
-      "Penerapan sistem kehadiran berbasis Biometrik Fingerprint & Presensi Digital Otomatis yang terhubung langsung ke WhatsApp Orang Tua.",
-    content:
-      "Sebagai sekolah modern yang transparan, SMA Al-Furqon mengimplementasikan presensi santri berbasis fingerprint otomatis. Setiap kali siswa masuk dan pulang sekolah, notifikasi real-time terkirim ke ponsel orang tua wali murid.",
-    category: "Berita",
-    date: "2025-02-12",
-    author: "Tim Kesiswaan",
-    image: "/bg-al-furqon3.jpg",
-    isFeatured: false,
-    tags: ["Digitalisasi", "Sistem Sekolah"],
-  },
-  {
-    id: "news-6",
-    title: "Lomba Edu Science, Festival Budaya & Pameran Karya Adiwiyata Santri",
-    slug: "lomba-edu-science-festival-dan-pameran",
-    excerpt:
-      "Pameran karya daur ulang sampah dan eksperimen sains siswa SMA Al-Furqon memukau para pengunjung festival kabupaten.",
-    content:
-      "Sebagai bagian dari komitmen peduli lingkungan, santri SMA Al-Furqon menampilkan produk inovasi eco-brick, sistem pengolahan kompos mandiri, serta robotik hidroponik pada Ajang Edu Science Festival Gresik.",
-    category: "Kegiatan",
-    date: "2025-01-25",
-    author: "Tim Adiwiyata",
-    image: "/bg-al-furqon4.jpg",
-    isFeatured: false,
-    tags: ["EduScience", "Adiwiyata"],
+    youtubeUrl: "",
   },
 ];
 
@@ -169,104 +127,32 @@ export const initialAgenda: AgendaItem[] = [
     description: "Ujian terbuka hafalan Al-Qur'an Juz 30, 1, 2, dan 3.",
     category: "Keagamaan",
   },
-  {
-    id: "agenda-3",
-    title: "Peringatan Hari Lingkungan Hidup & Aksi Tanam 1000 Pohon",
-    date: "2026-07-05",
-    time: "06:30 - 11:00 WIB",
-    location: "Kawasan Wedoroanom Driyorejo",
-    description: "Aksi nyata peduli lingkungan hijau oleh santri & dewan guru.",
-    category: "Kesiswaan",
-  },
-  {
-    id: "agenda-4",
-    title: "Sosialisasi & Masuk Sekolah Santri Baru (MPLS Islami) 2026/2027",
-    date: "2026-07-14",
-    time: "07:00 - 14:00 WIB",
-    location: "Sekolah SMA Al-Furqon",
-    description: "Masa Pengenalan Lingkungan Sekolah berkarakter Islami & ramah santri.",
-    category: "Umum",
-  },
 ];
 
 export const initialAchievements: AchievementItem[] = [
   {
-    id: "achieve-1",
-    title: "Juara 1 Olimpiade Matematika Sains SMA Se-Jawa Timur",
-    event: "Jatim Islamic Science Competition 2025",
-    level: "Provinsi",
+    id: "ach-1",
+    title: "Juara 1 Olimpiade Matematika Terapan Nasional",
+    event: "National Science & Math Olympiad 2025",
+    level: "Nasional",
     rank: "Juara 1",
     category: "Akademik",
-    studentName: "Ahmad Rizky Pratama",
+    studentName: "Muhammad Rayhan Pratama",
     year: "2025",
-    image:
-      "https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=800&q=80",
-    description: "Meraih medali emas kategori matematika penalaran tingkat SMA se-Jawa Timur.",
+    image: "/bg-al-furqon2.jpg",
+    description: "Berhasil meraih Medali Emas pada kategori Matematika Terapan Tingkat SMA se-Indonesia.",
   },
   {
-    id: "achieve-2",
-    title: "Medali Emas Musabaqah Tilawatil Qur'an (MTQ) Kategori 5 Juz",
-    event: "MTQ Pelajar Kabupaten Gresik 2025",
-    level: "Kabupaten",
+    id: "ach-2",
+    title: "Juara 1 MHQ (Musabaqah Hifdzil Qur'an) 5 Juz",
+    event: "Pentas PAI Tingkat Provinsi Jawa Timur",
+    level: "Provinsi",
     rank: "Juara 1",
     category: "Keagamaan",
-    studentName: "Nur Fatimah Azzahra",
+    studentName: "Ahmad Zaki Al-Faruq",
     year: "2025",
-    image:
-      "https://images.unsplash.com/photo-1609599006353-e629aaabfeae?auto=format&fit=crop&w=800&q=80",
-    description: "Menampilkan bacaan tartil dan tajwid sempurna dengan nilai 98.5.",
-  },
-  {
-    id: "achieve-3",
-    title: "Juara 2 Inovasi Teknologi Hijau & Robotik Hidroponik",
-    event: "National Green Tech Innovation Expo 2025",
-    level: "Nasional",
-    rank: "Juara 2",
-    category: "Akademik",
-    studentName: "Tim Robotik Al-Furqon (Dimas & Rayhan)",
-    year: "2025",
-    image:
-      "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=80",
-    description: "Menciptakan alat penyiram dan pemupuk hidroponik otomatis berbasis solar panel.",
-  },
-  {
-    id: "achieve-4",
-    title: "Juara 1 Pencak Silat Seni Tunggal Putra Suci Gresik",
-    event: "Kejuaraan Silat Pelajar Jawa Timur 2025",
-    level: "Provinsi",
-    rank: "Juara 1",
-    category: "Olahraga",
-    studentName: "Muhammad Farhan Siddiq",
-    year: "2025",
-    image:
-      "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=800&q=80",
-    description: "Memperoleh nilai tertinggi pada ketepatan jurus seni bela diri tradisional.",
-  },
-  {
-    id: "achieve-5",
-    title: "Juara 1 Kaligrafi Islam Kontemporer Festival Seni",
-    event: "Festival Seni Islami Pelajar 2024",
-    level: "Kabupaten",
-    rank: "Juara 1",
-    category: "Seni",
-    studentName: "Siti Maryam Choirunnisa",
-    year: "2024",
-    image:
-      "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=800&q=80",
-    description: "Karya seni kaligrafi kontemporer dengan perpaduan ornamen batik nusantara.",
-  },
-  {
-    id: "achieve-6",
-    title: "Juara 3 Debat Bahasa Inggris & Pidato Bahasa Arab",
-    event: "Language Olympiad East Java 2024",
-    level: "Provinsi",
-    rank: "Juara 3",
-    category: "Non-Akademik",
-    studentName: "Bagus Setiawan & Aisyah Putri",
-    year: "2024",
-    image:
-      "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=800&q=80",
-    description: "Unjuk kebolehan berbahasa asing dengan topik diplomasi pemuda Muslim dunia.",
+    image: "/bg-al-furqon3.jpg",
+    description: "Meraih predikat terbaik kategori Tahfidz Al-Qur'an 5 Juz dengan tartil dan tajwid sempurna.",
   },
 ];
 
@@ -464,88 +350,48 @@ export const initialTeachers: TeacherItem[] = [
 
 export const initialExtracurriculars: ExtracurricularItem[] = [
   {
-    id: "extra-1",
-    name: "Desain Grafis",
-    category: "Sains & Teknologi",
-    description: "Pelatihan kreativitas visual, penguasaan aplikasi desain grafis, ilustrasi digital, editing media, dan pembuatan konten kreatif.",
-    schedule: "Jumat (09:00 - 11:00 WIB)",
-    instructor: "Tim IT & Media Al-Furqon",
-    icon: "Palette",
-    image:
-      "https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=800&q=80",
-    achievements: ["Juara Desain Poster Pelajar Jatim", "Pameran Desain Grafis Santri"],
+    id: "ekskul-1",
+    name: "Pramuka Penegak Ambalan",
+    category: "Kepemimpinan",
+    description: "Membina kecakapan hidup, kedisiplinan, survival skill, dan ketahanan mental santri berwawasan kebangsaan.",
+    schedule: "Jumat, 14.30 - 16.30 WIB",
+    instructor: "Kak Bambang Irawan",
+    icon: "ShieldCheck",
+    image: "/bg-al-furqon2.jpg",
+    achievements: ["Juara Pramuka Penegak Teladan Jatim"],
   },
   {
-    id: "extra-2",
-    name: "Tata Boga",
-    category: "Keterampilan",
-    description: "Seni olah kuliner Islami, pembuatan kue & pastry, tata hidang modern, serta wirausaha makanan.",
-    schedule: "Jumat (09:00 - 11:00 WIB)",
-    instructor: "Instruktur Tata Boga",
-    icon: "ChefHat",
-    image:
-      "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=800&q=80",
-    achievements: ["Juara Kreasi Olahan Pangan Lokal", "Pameran Culinary Student Expo"],
-  },
-  {
-    id: "extra-3",
-    name: "Handy Craft",
-    category: "Seni & Budaya",
-    description: "Kreasi kerajinan tangan berbahan daur ulang, aksesoris unik, dan pembuatan produk souvenir kreatif.",
-    schedule: "Jumat (09:00 - 11:00 WIB)",
-    instructor: "Tim Seni Kreatif",
-    icon: "Scissors",
-    image:
-      "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80",
-    achievements: ["Penghargaan Produk Adiwiyata Kreatif", "Juara Crafting Pelajar"],
-  },
-  {
-    id: "extra-4",
-    name: "Menjahit",
-    category: "Keterampilan",
-    description: "Keterampilan tata busana dasar hingga mahir, merancang pola, menjahit pakaian, dan kreasi pashmina.",
-    schedule: "Jumat (09:00 - 11:00 WIB)",
-    instructor: "Instruktur Busana",
-    icon: "Shirt",
-    image:
-      "https://images.unsplash.com/photo-1528459801416-a9e53bbf4e17?auto=format&fit=crop&w=800&q=80",
-    achievements: ["Karya Busana Santri Al-Furqon", "Sertifikasi Menjahit Busana"],
-  },
-  {
-    id: "extra-5",
-    name: "Futsal",
-    category: "Olahraga",
-    description: "Pengembangan bakat olahraga futsal, ketahanan fisik, strategi permainan, dan turnamen antar-pelajar.",
-    schedule: "Jumat (09:00 - 11:00 WIB)",
-    instructor: "Coach Futsal Al-Furqon",
-    icon: "Trophy",
-    image:
-      "https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80",
-    achievements: ["Juara 1 Turnamen Futsal Pelajar Gresik", "Best Player Turnamen Futsal"],
-  },
-  {
-    id: "extra-6",
-    name: "Al Banjari",
+    id: "ekskul-2",
+    name: "Seni Baca Al-Qur'an (Tilawah)",
     category: "Keagamaan",
-    description: "Seni musik tradisional rebana Al-Banjari, pembacaan sholawat, dan pertunjukan seni Islami.",
-    schedule: "Jumat (09:00 - 11:00 WIB)",
-    instructor: "Pembina Seni Hadrah",
+    description: "Pengembangan bakat seni membaca Al-Qur'an dengan berbagai lagu maqamat indah dan tajwid presisi.",
+    schedule: "Selasa, 15.30 - 17.00 WIB",
+    instructor: "Ustadz H. Ahmad Rifa'i",
     icon: "Music",
-    image:
-      "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=800&q=80",
-    achievements: ["Juara 1 Festival Hadrah Banjari Jatim", "Pentas Seni Keagamaan"],
+    image: "/bg-al-furqon3.jpg",
+    achievements: ["Juara MTQ Pelajar Tingkat Kabupaten"],
   },
   {
-    id: "extra-7",
-    name: "Pencak Silat",
+    id: "ekskul-3",
+    name: "Futsal Club Al-Furqon",
     category: "Olahraga",
-    description: "Seni olahraga bela diri pencak silat nusantara untuk pembentukan mental, ketangkasan fisik, dan pertahanan diri.",
-    schedule: "Jumat (09:00 - 11:00 WIB)",
-    instructor: "Pelatih Pencak Silat",
-    iconImage: "/pencak-silat2 (1).png",
-    image:
-      "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=800&q=80",
-    achievements: ["Juara 1 Seni Tunggal Pelajar Jatim", "Medali Emas Kejurkab Silat"],
+    description: "Latihan taktik sepak bola futsal, pembinaan fisik atletis, dan persiapan turnamen antar-pelajar se-Jawa Timur.",
+    schedule: "Rabu, 15.30 - 17.30 WIB",
+    instructor: "Coach Dimas Prasetyo",
+    icon: "Trophy",
+    image: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80",
+    achievements: ["Juara 1 Turnamen Futsal Pelajar Gresik"],
+  },
+  {
+    id: "ekskul-4",
+    name: "Klub Robotik & Coding AI",
+    category: "Sains & Teknologi",
+    description: "Pengenalan pemrograman mikrokontroler Arduino, IoT, sensorika robotik, dan dasar-dasar kecerdasan buatan.",
+    schedule: "Kamis, 15.00 - 17.00 WIB",
+    instructor: "Masyhudan, S.T.",
+    icon: "Sparkles",
+    image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=80",
+    achievements: ["Penghargaan Inovasi Robotika Pelajar Jatim"],
   },
 ];
 
@@ -631,149 +477,18 @@ export const initialGallery: GalleryItem[] = [
     date: "2025-05-02",
     description: "Khidmat upacara memperingati Hari Pendidikan Nasional di lapangan utama.",
   },
-];
-
-export const initialApplicants: PPDBApplicant[] = [
   {
-    id: "ppdb-001",
-    registrationNumber: "PPDB-2026-001",
-    registrationDate: "2026-02-01",
-    status: "Diterima",
-
-    // Step 1
-    fullName: "Muhammad Hafiz Ar-Rasyid",
-    birthPlace: "Gresik",
-    birthDate: "2010-05-14",
-    gender: "Laki-laki",
-    siblingsCount: "2",
-    childNumber: "1",
-    address: "Jl. Raya Driyorejo No. 45, Gresik",
-    nik: "3525011405100001",
-    nisn: "0089123456",
-
-    // Step 2
-    schoolLevel: "SMP / MTs",
-    originSchool: "SMP Negeri 1 Driyorejo",
-    npsnSchool: "20501234",
-    originSchoolAddress: "Jl. Raya Driyorejo No. 12, Gresik",
-    graduationYear: "2026",
-
-    // Step 3
-    fatherName: "Drs. H. Bambang Hidayat",
-    fatherAddress: "Jl. Raya Driyorejo No. 45, Gresik",
-    fatherEducation: "D.4 / S.1",
-    fatherOccupation: "PNS",
-    fatherPhone: "081234567890",
-
-    motherName: "Hj. Siti Aminah",
-    motherAddress: "Jl. Raya Driyorejo No. 45, Gresik",
-    motherEducation: "SMA / MA / SMK",
-    motherOccupation: "IRT",
-    motherPhone: "081234567891",
-
-    // Step 4
-    hasGuardian: "Tidak",
-
-    // Compatibility fields
-    parentName: "Drs. H. Bambang Hidayat",
-    phoneWhatsapp: "081234567890",
-    selectedMajor: "Kurikulum Merdeka Unggulan",
-  },
-  {
-    id: "ppdb-002",
-    registrationNumber: "PPDB-2026-002",
-    registrationDate: "2026-02-03",
-    status: "Terverifikasi",
-
-    // Step 1
-    fullName: "Naila Syahda Az-Zahra",
-    birthPlace: "Gresik",
-    birthDate: "2010-08-20",
-    gender: "Perempuan",
-    siblingsCount: "3",
-    childNumber: "2",
-    address: "Wedoroanom RT 04 RW 02 Driyorejo, Gresik",
-    nik: "3525012008100002",
-    nisn: "0087654321",
-
-    // Step 2
-    schoolLevel: "SMP / MTs",
-    originSchool: "MTs Al-Furqon Driyorejo",
-    npsnSchool: "20505678",
-    originSchoolAddress: "Jl. KH. Abdurrohim No.01, Wedoroanom",
-    graduationYear: "2026",
-
-    // Step 3
-    fatherName: "H. Ahmad Fauzi",
-    fatherAddress: "Wedoroanom RT 04 RW 02 Driyorejo",
-    fatherEducation: "D.4 / S.1",
-    fatherOccupation: "Wiraswasta",
-    fatherPhone: "085712349988",
-
-    motherName: "Hajah Rahmawati",
-    motherAddress: "Wedoroanom RT 04 RW 02 Driyorejo",
-    motherEducation: "SMA / MA / SMK",
-    motherOccupation: "Pedagang",
-    motherPhone: "085712349988",
-
-    // Step 4
-    hasGuardian: "Tidak",
-
-    // Compatibility fields
-    parentName: "Hajah Rahmawati",
-    phoneWhatsapp: "085712349988",
-    selectedMajor: "MIPA / IPA",
-  },
-  {
-    id: "ppdb-003",
-    registrationNumber: "PPDB-2026-003",
-    registrationDate: "2026-02-05",
-    status: "Menunggu Verifikasi",
-
-    // Step 1
-    fullName: "Fathan Al-Ghazali",
-    birthPlace: "Surabaya",
-    birthDate: "2010-11-03",
-    gender: "Laki-laki",
-    siblingsCount: "1",
-    childNumber: "1",
-    address: "Kebraon Permai Blok E-12, Surabaya",
-    nik: "3578010311100003",
-    nisn: "0089988776",
-
-    // Step 2
-    schoolLevel: "SMP / MTs",
-    originSchool: "SMP Negeri 2 Karangpilang",
-    npsnSchool: "20509988",
-    originSchoolAddress: "Kebraon, Karangpilang, Surabaya",
-    graduationYear: "2026",
-
-    // Step 3
-    fatherName: "Suryanto, S.E.",
-    fatherAddress: "Kebraon Permai Blok E-12, Surabaya",
-    fatherEducation: "D.4 / S.1",
-    fatherOccupation: "Pegawai Swasta",
-    fatherPhone: "082198765432",
-
-    motherName: "Dwi Astuti, S.Pd.",
-    motherAddress: "Kebraon Permai Blok E-12, Surabaya",
-    motherEducation: "D.4 / S.1",
-    motherOccupation: "Guru",
-    motherPhone: "082198765433",
-
-    // Step 4
-    hasGuardian: "Ya",
-    guardianName: "Budi Santoso",
-    guardianAddress: "Kebraon Permai Blok E-14, Surabaya",
-    guardianRelation: "Keluarga",
-    guardianPhone: "081398765434",
-
-    // Compatibility fields
-    parentName: "Suryanto, S.E.",
-    phoneWhatsapp: "082198765432",
-    selectedMajor: "IPS",
+    id: "g-1790225773111",
+    title: "Simulasi TKA Kelas XII",
+    category: "Kegiatan",
+    imageUrl:
+      "/bg-al-furqon4.jpg",
+    date: "2026-09-24",
+    description: "SMA Al Furqon Driyorejo menggelar kegiatan Simulasi Tes Kemampuan Akademik (TKA) bagi seluruh siswa kelas XII. Kegiatan ini bertujuan untuk mengukur kesiapan akademik serta melatih kesiapan psikologis para siswa dalam menghadapi ujian mendatang.",
   },
 ];
+
+export const initialApplicants: PPDBApplicant[] = [];
 
 export const initialFAQs: FAQItem[] = [
   {
@@ -901,37 +616,24 @@ export const initialFacilities: FacilityItem[] = [
 
 export const initialUsers: UserItem[] = [
   {
-    id: "user-1",
-    name: "Administrator Utama",
+    id: "user-admin",
+    name: "Administrator Sekolah",
     username: "admin",
     password: "admin123",
-    role: "Super Admin",
+    role: "Admin",
     status: "Aktif",
-    email: "admin@smaalfurqon.sch.id",
-    lastLogin: "2026-08-26 11:30 WIB",
-    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
+    email: "admin@smaalfurqondriyorejo.sch.id",
+    lastLogin: "2026-09-24 10:00 WIB",
   },
   {
-    id: "user-2",
-    name: "Humas & Publikasi",
-    username: "smalfurqon",
+    id: "user-1790261921861",
+    name: "Khoirum Umala, S.pd.",
+    username: "umala",
     password: "admin123",
-    role: "Administrator",
+    role: "Editor Berita",
     status: "Aktif",
-    email: "humas@smaalfurqon.sch.id",
-    lastLogin: "2026-08-25 15:45 WIB",
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80",
-  },
-  {
-    id: "user-3",
-    name: "Panitia PPDB 2026",
-    username: "ppdb2026",
-    password: "ppdb123",
-    role: "Petugas PPDB",
-    status: "Aktif",
-    email: "ppdb@smaalfurqon.sch.id",
-    lastLogin: "2026-08-24 09:15 WIB",
-    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=400&q=80",
+    email: "khoirumumala@gmail.com",
+    lastLogin: "2026-09-24 15:00 WIB",
   },
 ];
 

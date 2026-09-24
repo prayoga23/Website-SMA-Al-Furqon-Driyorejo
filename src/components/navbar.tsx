@@ -143,16 +143,17 @@ export const Navbar: React.FC = () => {
               className="h-11 sm:h-12 w-auto object-contain group-hover:scale-105 transition-transform duration-300"
             />
             <div>
-              <div className="flex items-center gap-2">
-                <span className="font-extrabold text-lg sm:text-xl tracking-tight text-[#064E3B] font-heading">
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <span className="font-extrabold text-base sm:text-xl tracking-tight text-[#064E3B] font-heading">
                   SMA AL-FURQON
                 </span>
-                <span className="bg-amber-100 text-amber-800 text-[10px] font-bold px-1.5 py-0.5 rounded border border-amber-300">
+                <span className="bg-amber-100 text-amber-800 text-[9px] sm:text-[10px] font-bold px-1.5 py-0.5 rounded border border-amber-300">
                   DRIYOREJO
                 </span>
               </div>
-              <p className="text-[11px] text-slate-500 font-medium hidden sm:block">
-                Pondok Pesantren Al - Furqon Driyorejo Gresik
+              <p className="text-[10px] sm:text-[11px] text-slate-500 font-medium mt-0.5 leading-tight">
+                <span className="sm:hidden">Pondok Pesantren Al - Furqon</span>
+                <span className="hidden sm:inline">Pondok Pesantren Al - Furqon Driyorejo Gresik</span>
               </p>
             </div>
           </Link>
@@ -251,7 +252,7 @@ export const Navbar: React.FC = () => {
                     <h3 className="font-bold text-sm text-[#064E3B]">
                       SMA AL-FURQON
                     </h3>
-                    <p className="text-[10px] text-slate-500 font-medium">Driyorejo, Gresik</p>
+                    <p className="text-[10px] text-slate-500 font-medium">Pondok Pesantren Al - Furqon</p>
                   </div>
                 </div>
                 <button

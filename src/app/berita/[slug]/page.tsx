@@ -10,6 +10,7 @@ import { FloatingWidgets } from "@/components/floating-widgets";
 import { useData } from "@/context/data-context";
 import { Calendar, User, Tag, ArrowLeft, Share2 } from "lucide-react";
 import { formatDate } from "@/lib/utils";
+import { YouTubePlayer } from "@/components/youtube-player";
 
 export default function BeritaDetailPage() {
   const params = useParams();
@@ -83,6 +84,13 @@ export default function BeritaDetailPage() {
             </p>
             <div className="whitespace-pre-line">{article.content}</div>
           </div>
+
+          {/* Embedded YouTube Video */}
+          {article.youtubeUrl && (
+            <div className="pt-6 border-t border-slate-100 dark:border-emerald-900/40">
+              <YouTubePlayer url={article.youtubeUrl} title={article.title} />
+            </div>
+          )}
 
           {/* Tags */}
           {article.tags && article.tags.length > 0 && (

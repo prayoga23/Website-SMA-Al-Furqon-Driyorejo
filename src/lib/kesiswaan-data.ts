@@ -15,6 +15,7 @@ export interface KesiswaanActivity {
   schedule: string;
   target: string;
   tags: string[];
+  youtubeUrl?: string;
 }
 
 export const kesiswaanActivities: KesiswaanActivity[] = [
@@ -54,7 +55,8 @@ Melalui program OSIS Peduli, para siswa rutin mengadakan penggalangan dana benca
     ],
     schedule: "Kegiatan Mingguan & Event Tahunan",
     target: "Seluruh Santri & Siswa SMA Al-Furqon",
-    tags: ["Kepemimpinan", "OSIS", "Pramuka", "LDKS", "KarakterSantri", "SMAAlFurqon"]
+    tags: ["Kepemimpinan", "OSIS", "Pramuka", "LDKS", "KarakterSantri", "SMAAlFurqon"],
+    youtubeUrl: "https://www.youtube.com/watch?v=aqz-KE-bpKQ",
   },
   {
     id: "keagamaan-tahfidz",

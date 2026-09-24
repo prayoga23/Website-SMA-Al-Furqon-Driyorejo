@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Calendar, User, ArrowRight, Tag, Search, Sparkles } from "lucide-react";
+import { YoutubeIcon } from "@/components/youtube-icon";
 import { useData } from "@/context/data-context";
 import { formatDate } from "@/lib/utils";
 
@@ -89,7 +90,7 @@ export const BeritaSection: React.FC = () => {
                   {/* Image & Category Tag */}
                   <div className="relative h-48 overflow-hidden">
                     <img
-                      src={cardImg}
+                      src={item.image || cardImg}
                       alt={item.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
@@ -97,6 +98,12 @@ export const BeritaSection: React.FC = () => {
                     <span className="absolute top-3 left-3 bg-[#064E3B] text-amber-300 text-[10px] font-bold px-2.5 py-1 rounded-md uppercase border border-amber-400/30 shadow">
                       {item.category}
                     </span>
+                    {item.youtubeUrl && (
+                      <span className="absolute top-3 right-3 bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-md flex items-center gap-1 shadow">
+                        <YoutubeIcon className="w-3 h-3 text-white" />
+                        <span>Video</span>
+                      </span>
+                    )}
                   </div>
 
                   {/* Article Content */}

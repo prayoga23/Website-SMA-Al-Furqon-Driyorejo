@@ -30,6 +30,16 @@ async function initSchema() {
       image TEXT,
       is_featured BOOLEAN DEFAULT false,
       tags JSONB DEFAULT '[]'::jsonb,
+      youtube_url TEXT,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+  `;
+
+  await sql`
+    CREATE TABLE IF NOT EXISTS kesiswaan_activities (
+      id VARCHAR(100) PRIMARY KEY,
+      slug VARCHAR(100) UNIQUE,
+      data JSONB NOT NULL,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
   `;

@@ -40,6 +40,7 @@ export interface NewsItem {
   image: string;
   isFeatured?: boolean;
   tags?: string[];
+  youtubeUrl?: string;
 }
 
 export interface AgendaItem {
@@ -186,7 +187,7 @@ export interface UserItem {
   name: string;
   username: string;
   password: string;
-  role: "Super Admin" | "Administrator" | "Editor Berita" | "Petugas PPDB";
+  role: "Super Admin" | "Administrator" | "Admin" | "Editor Berita" | "Petugas PPDB";
   status: "Aktif" | "Nonaktif";
   email: string;
   lastLogin?: string;

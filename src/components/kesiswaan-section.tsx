@@ -18,6 +18,7 @@ import {
   Music,
   ShieldCheck,
 } from "lucide-react";
+import { YoutubeIcon } from "@/components/youtube-icon";
 import { useData } from "@/context/data-context";
 import { kesiswaanActivities } from "@/lib/kesiswaan-data";
 
@@ -79,6 +80,12 @@ export const KesiswaanSection: React.FC = () => {
                 <span className={`absolute top-4 left-4 text-[10px] font-bold px-2.5 py-1 rounded-md uppercase ${feature.categoryBadgeBg}`}>
                   {feature.category}
                 </span>
+                {feature.youtubeUrl && (
+                  <span className="absolute top-4 right-4 bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-md flex items-center gap-1 shadow">
+                    <YoutubeIcon className="w-3 h-3 text-white" />
+                    <span>Video</span>
+                  </span>
+                )}
               </div>
               <div className="p-6 flex flex-col justify-between flex-1">
                 <div>

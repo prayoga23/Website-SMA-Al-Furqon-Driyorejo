@@ -6,6 +6,8 @@ import { useData } from "@/context/data-context";
 import { Plus, Trash2, Edit3, Heart, X, Search, Sparkles, Check, ArrowRight } from "lucide-react";
 import { KesiswaanActivity } from "@/lib/kesiswaan-data";
 import { ImageUploadInput } from "@/components/image-upload-input";
+import { YouTubeInput } from "@/components/youtube-input";
+import { YoutubeIcon } from "@/components/youtube-icon";
 import { Pagination } from "@/components/pagination";
 
 export default function AdminKesiswaanPage() {
@@ -32,6 +34,7 @@ export default function AdminKesiswaanPage() {
   const [schedule, setSchedule] = useState("");
   const [target, setTarget] = useState("");
   const [tagsInput, setTagsInput] = useState("");
+  const [youtubeUrl, setYoutubeUrl] = useState("");
 
   const openAddModal = () => {
     setEditingItem(null);
@@ -50,6 +53,7 @@ export default function AdminKesiswaanPage() {
     setSchedule("Kegiatan Rutin Pekanan");
     setTarget("Seluruh Santri & Siswa");
     setTagsInput("Kesiswaan, Santri, SMAAlFurqon");
+    setYoutubeUrl("");
     setModalOpen(true);
   };
 
@@ -70,6 +74,7 @@ export default function AdminKesiswaanPage() {
     setSchedule(item.schedule || "");
     setTarget(item.target || "");
     setTagsInput((item.tags || []).join(", "));
+    setYoutubeUrl(item.youtubeUrl || "");
     setModalOpen(true);
   };
 
@@ -105,6 +110,7 @@ export default function AdminKesiswaanPage() {
       schedule,
       target,
       tags,
+      youtubeUrl: youtubeUrl.trim(),
     };
 
     if (editingItem) {
@@ -193,6 +199,12 @@ export default function AdminKesiswaanPage() {
                   <span className={`absolute top-3 left-3 text-[10px] font-extrabold px-2.5 py-1 rounded-md uppercase ${item.categoryBadgeBg}`}>
                     {item.category}
                   </span>
+                  {item.youtubeUrl && (
+                    <span className="absolute top-3 right-3 text-[10px] font-bold px-2 py-1 rounded-md bg-red-600 text-white flex items-center gap-1 shadow-md">
+                      <YoutubeIcon className="w-3.5 h-3.5 text-white" />
+                      <span>Video</span>
+                    </span>
+                  )}
                 </div>
 
                 <div className="p-5 space-y-2">
@@ -345,6 +357,13 @@ export default function AdminKesiswaanPage() {
                   value={image}
                   onChange={setImage}
                   label="Foto Utama Program / Kegiatan *"
+                />
+
+                {/* YouTube Video URL Input */}
+                <YouTubeInput
+                  value={youtubeUrl}
+                  onChange={setYoutubeUrl}
+                  label="Link Video YouTube Kegiatan (Opsional)"
                 />
 
                 <div>
