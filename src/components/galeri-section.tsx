@@ -74,49 +74,56 @@ export const GaleriSection: React.FC = () => {
         </div>
 
         {/* Masonry Grid Layout (3 items per row on desktop) */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {displayedGallery.map((item, idx) => {
-            const bgImages = ["/bg-al-furqon2.jpg", "/bg-al-furqon3.jpg", "/bg-al-furqon4.jpg"];
-            const cardImg = bgImages[idx % bgImages.length];
+        {displayedGallery.length === 0 ? (
+          <div className="text-center py-16 bg-white dark:bg-[#0E241E] rounded-3xl border border-slate-200 dark:border-emerald-900/40 max-w-xl mx-auto shadow-sm">
+            <ImageIcon className="w-12 h-12 text-slate-400 mx-auto mb-3 opacity-60" />
+            <p className="text-slate-600 dark:text-slate-300 font-medium text-sm">Belum ada foto dokumentasi untuk kategori ini.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {displayedGallery.map((item, idx) => {
+              const bgImages = ["/bg-al-furqon2.jpg", "/bg-al-furqon3.jpg", "/bg-al-furqon4.jpg"];
+              const cardImg = bgImages[idx % bgImages.length];
 
-            return (
-              <div
-                key={item.id}
-                onClick={() => setActiveModalItem(item)}
-                className="bg-white dark:bg-[#0E241E] rounded-3xl overflow-hidden border border-slate-200 dark:border-emerald-900/40 shadow-sm hover:shadow-xl transition-all duration-300 group cursor-pointer relative animate-fade-in"
-              >
-                <div className="h-64 relative overflow-hidden">
-                  <img
-                    src={cardImg}
-                    alt={item.title}
-                    className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-90 group-hover:opacity-100 transition-opacity"></div>
+              return (
+                <div
+                  key={item.id}
+                  onClick={() => setActiveModalItem(item)}
+                  className="bg-white dark:bg-[#0E241E] rounded-3xl overflow-hidden border border-slate-200 dark:border-emerald-900/40 shadow-sm hover:shadow-xl transition-all duration-300 group cursor-pointer relative animate-fade-in"
+                >
+                  <div className="h-64 relative overflow-hidden">
+                    <img
+                      src={cardImg}
+                      alt={item.title}
+                      className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-90 group-hover:opacity-100 transition-opacity"></div>
 
-                  {/* Category Badge */}
-                  <span className="absolute top-3 left-3 bg-[#064E3B] text-amber-300 text-[10px] font-bold px-2.5 py-1 rounded-md uppercase border border-amber-400/30">
-                    {item.category}
-                  </span>
+                    {/* Category Badge */}
+                    <span className="absolute top-3 left-3 bg-[#064E3B] text-amber-300 text-[10px] font-bold px-2.5 py-1 rounded-md uppercase border border-amber-400/30">
+                      {item.category}
+                    </span>
 
-                  {/* Zoom Icon Button */}
-                  <div className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/20 backdrop-blur-md text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Maximize2 className="w-4 h-4" />
-                  </div>
+                    {/* Zoom Icon Button */}
+                    <div className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/20 backdrop-blur-md text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                      <Maximize2 className="w-4 h-4" />
+                    </div>
 
-                  {/* Title & Description Overlay */}
-                  <div className="absolute bottom-4 left-4 right-4 text-white">
-                    <h3 className="text-sm font-bold font-heading line-clamp-1 mb-1 group-hover:text-amber-300 transition-colors">
-                      {item.title}
-                    </h3>
-                    <p className="text-[11px] text-slate-300 line-clamp-2 leading-tight">
-                      {item.description}
-                    </p>
+                    {/* Title & Description Overlay */}
+                    <div className="absolute bottom-4 left-4 right-4 text-white">
+                      <h3 className="text-sm font-bold font-heading line-clamp-1 mb-1 group-hover:text-amber-300 transition-colors">
+                        {item.title}
+                      </h3>
+                      <p className="text-[11px] text-slate-300 line-clamp-2 leading-tight">
+                        {item.description}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+        )}
 
         {/* Action Buttons: Show 3 More Items / Show Less / Link */}
         <div className="mt-12 text-center flex flex-col sm:flex-row items-center justify-center gap-4">

@@ -43,7 +43,7 @@ export const FasilitasSection: React.FC = () => {
   const keunggulanList = [
     {
       title: "Terakreditasi A",
-      desc: "Status akreditasi Unggulan (A) dari BAN-SM dengan penjaminan mutu pendidikan nasional terpercaya.",
+      desc: "Status akreditasi Unggul (A) dari BAN-SM dengan penjaminan mutu pendidikan nasional terpercaya.",
       icon: Award,
       badge: "Akreditasi A",
       color: "from-amber-500 to-amber-600",

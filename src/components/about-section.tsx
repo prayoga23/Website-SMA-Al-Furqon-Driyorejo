@@ -71,7 +71,7 @@ export const AboutSection: React.FC = () => {
       title: "Akreditasi",
       value: schoolInfo?.accreditation || "A (Unggul)",
       icon: Award,
-      desc: "Status Unggulan BAN-SM",
+      desc: "Status Unggul BAN-SM",
     },
     {
       title: "Tahun Berdiri",

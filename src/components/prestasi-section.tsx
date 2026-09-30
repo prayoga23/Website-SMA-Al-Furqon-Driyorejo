@@ -59,61 +59,68 @@ export const PrestasiSection: React.FC = () => {
         </div>
 
         {/* Achievements Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredAchievements.map((item, idx) => {
-            const bgImages = ["/bg-al-furqon2.jpg", "/bg-al-furqon3.jpg", "/bg-al-furqon4.jpg"];
-            const cardImg = bgImages[idx % bgImages.length];
+        {filteredAchievements.length === 0 ? (
+          <div className="text-center py-16 bg-slate-800/50 rounded-2xl border border-slate-700/50 max-w-xl mx-auto">
+            <Trophy className="w-12 h-12 text-amber-400/40 mx-auto mb-3" />
+            <p className="text-slate-300 font-medium">Belum ada data prestasi untuk kategori ini.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredAchievements.map((item, idx) => {
+              const bgImages = ["/bg-al-furqon2.jpg", "/bg-al-furqon3.jpg", "/bg-al-furqon4.jpg"];
+              const cardImg = bgImages[idx % bgImages.length];
 
-            return (
-              <div
-                key={item.id}
-                className="bg-slate-800/90 rounded-2xl overflow-hidden border border-slate-700/60 hover:border-amber-400/50 shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col justify-between group"
-              >
-                <div className="relative h-48 overflow-hidden">
-                  <img
-                    src={cardImg}
-                    alt={item.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent"></div>
+              return (
+                <div
+                  key={item.id}
+                  className="bg-slate-800/90 rounded-2xl overflow-hidden border border-slate-700/60 hover:border-amber-400/50 shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col justify-between group"
+                >
+                  <div className="relative h-48 overflow-hidden">
+                    <img
+                      src={cardImg}
+                      alt={item.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent"></div>
 
-                  {/* Badges Overlay */}
-                  <div className="absolute top-3 left-3 flex items-center gap-2">
-                    <span className="bg-amber-400 text-slate-950 text-[10px] font-extrabold px-2.5 py-1 rounded-md shadow flex items-center gap-1">
-                      <Trophy className="w-3 h-3" />
-                      {item.rank}
-                    </span>
-                    <span className="bg-emerald-800 text-emerald-100 text-[10px] font-bold px-2.5 py-1 rounded-md shadow border border-emerald-600/50">
-                      {item.level}
-                    </span>
+                    {/* Badges Overlay */}
+                    <div className="absolute top-3 left-3 flex items-center gap-2">
+                      <span className="bg-amber-400 text-slate-950 text-[10px] font-extrabold px-2.5 py-1 rounded-md shadow flex items-center gap-1">
+                        <Trophy className="w-3 h-3" />
+                        {item.rank}
+                      </span>
+                      <span className="bg-emerald-800 text-emerald-100 text-[10px] font-bold px-2.5 py-1 rounded-md shadow border border-emerald-600/50">
+                        {item.level}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="p-6 flex-1 flex flex-col justify-between">
+                    <div>
+                      <span className="text-[10px] font-bold text-amber-400 uppercase tracking-wider block mb-1">
+                        {item.category} • {item.year}
+                      </span>
+                      <h3 className="text-base font-bold text-white font-heading mb-2 group-hover:text-amber-300 transition-colors">
+                        {item.title}
+                      </h3>
+                      <p className="text-xs text-slate-400 font-medium mb-3">
+                        Ajang: {item.event}
+                      </p>
+                      <p className="text-xs text-slate-300 leading-relaxed mb-4">
+                        {item.description}
+                      </p>
+                    </div>
+
+                    <div className="pt-3 border-t border-slate-700/60 flex items-center justify-between text-xs text-slate-400">
+                      <span className="font-semibold text-slate-200">Peraih: {item.studentName}</span>
+                      <Award className="w-4 h-4 text-amber-400" />
+                    </div>
                   </div>
                 </div>
-
-                <div className="p-6 flex-1 flex flex-col justify-between">
-                  <div>
-                    <span className="text-[10px] font-bold text-amber-400 uppercase tracking-wider block mb-1">
-                      {item.category} • {item.year}
-                    </span>
-                    <h3 className="text-base font-bold text-white font-heading mb-2 group-hover:text-amber-300 transition-colors">
-                      {item.title}
-                    </h3>
-                    <p className="text-xs text-slate-400 font-medium mb-3">
-                      Ajang: {item.event}
-                    </p>
-                    <p className="text-xs text-slate-300 leading-relaxed mb-4">
-                      {item.description}
-                    </p>
-                  </div>
-
-                  <div className="pt-3 border-t border-slate-700/60 flex items-center justify-between text-xs text-slate-400">
-                    <span className="font-semibold text-slate-200">Peraih: {item.studentName}</span>
-                    <Award className="w-4 h-4 text-amber-400" />
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     </section>
   );

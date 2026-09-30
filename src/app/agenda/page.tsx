@@ -33,48 +33,55 @@ export default function AgendaPage() {
             </h2>
           </div>
 
-          <div className="space-y-4">
-            {agendas.map((item) => (
-              <div
-                key={item.id}
-                className="bg-slate-50 dark:bg-emerald-950/40 p-6 rounded-2xl border border-slate-200 dark:border-emerald-900/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
-              >
-                <div className="flex items-start gap-4">
-                  <div className="bg-[#064E3B] text-amber-300 text-center px-4 py-2.5 rounded-xl min-w-[80px] shadow">
-                    <span className="block text-lg font-extrabold font-heading">
-                      {new Date(item.date).getDate()}
-                    </span>
-                    <span className="block text-[10px] uppercase font-semibold">
-                      {new Date(item.date).toLocaleString("id-ID", { month: "long", year: "numeric" })}
-                    </span>
-                  </div>
-
-                  <div>
-                    <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1">
-                      {item.title}
-                    </h3>
-                    <p className="text-xs text-slate-600 dark:text-slate-300 mb-3 leading-relaxed">
-                      {item.description}
-                    </p>
-                    <div className="flex items-center gap-4 text-xs text-slate-400">
-                      <span className="flex items-center gap-1">
-                        <Clock className="w-3.5 h-3.5 text-emerald-500" />
-                        {item.time}
+          {agendas.length === 0 ? (
+            <div className="text-center py-12 text-slate-500 dark:text-slate-400">
+              <Calendar className="w-10 h-10 mx-auto mb-2 opacity-40 text-amber-500" />
+              <p className="text-sm font-medium">Belum ada agenda kegiatan mendatang saat ini.</p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {agendas.map((item) => (
+                <div
+                  key={item.id}
+                  className="bg-slate-50 dark:bg-emerald-950/40 p-6 rounded-2xl border border-slate-200 dark:border-emerald-900/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+                >
+                  <div className="flex items-start gap-4">
+                    <div className="bg-[#064E3B] text-amber-300 text-center px-4 py-2.5 rounded-xl min-w-[80px] shadow">
+                      <span className="block text-lg font-extrabold font-heading">
+                        {new Date(item.date).getDate()}
                       </span>
-                      <span className="flex items-center gap-1">
-                        <MapPin className="w-3.5 h-3.5 text-emerald-500" />
-                        {item.location}
+                      <span className="block text-[10px] uppercase font-semibold">
+                        {new Date(item.date).toLocaleString("id-ID", { month: "long", year: "numeric" })}
                       </span>
                     </div>
-                  </div>
-                </div>
 
-                <span className="text-xs font-bold px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-300 self-start sm:self-center">
-                  {item.category}
-                </span>
-              </div>
-            ))}
-          </div>
+                    <div>
+                      <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1">
+                        {item.title}
+                      </h3>
+                      <p className="text-xs text-slate-600 dark:text-slate-300 mb-3 leading-relaxed">
+                        {item.description}
+                      </p>
+                      <div className="flex items-center gap-4 text-xs text-slate-400">
+                        <span className="flex items-center gap-1">
+                          <Clock className="w-3.5 h-3.5 text-emerald-500" />
+                          {item.time}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <MapPin className="w-3.5 h-3.5 text-emerald-500" />
+                          {item.location}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <span className="text-xs font-bold px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-300 self-start sm:self-center">
+                    {item.category}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </main>
 

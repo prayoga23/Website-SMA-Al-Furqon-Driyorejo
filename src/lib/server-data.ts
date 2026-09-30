@@ -83,13 +83,13 @@ export async function getServerDataBundle(): Promise<ServerDataBundle> {
     const bundle = result[0]?.bundle || {};
 
     const rawNews = bundle.news && bundle.news.length > 0 ? bundle.news : initialNews;
-    const rawAgendas = bundle.agendas && bundle.agendas.length > 0 ? bundle.agendas : initialAgenda;
-    const rawAchievements = bundle.achievements && bundle.achievements.length > 0 ? bundle.achievements : initialAchievements;
+    const rawAgendas = Array.isArray(bundle.agendas) ? bundle.agendas : initialAgenda;
+    const rawAchievements = Array.isArray(bundle.achievements) ? bundle.achievements : initialAchievements;
     const rawTeachers = bundle.teachers && bundle.teachers.length > 0 ? bundle.teachers : initialTeachers;
     const rawExtracurriculars = bundle.extracurriculars && bundle.extracurriculars.length > 0 ? bundle.extracurriculars : initialExtracurriculars;
-    const rawGallery = bundle.gallery && bundle.gallery.length > 0 ? bundle.gallery : initialGallery;
+    const rawGallery = Array.isArray(bundle.gallery) ? bundle.gallery : initialGallery;
     const rawFaqs = bundle.faqs && bundle.faqs.length > 0 ? bundle.faqs : initialFAQs;
-    const rawTestimonials = bundle.testimonials && bundle.testimonials.length > 0 ? bundle.testimonials : initialTestimonials;
+    const rawTestimonials = Array.isArray(bundle.testimonials) ? bundle.testimonials : initialTestimonials;
     const rawFacilities = bundle.facilities && bundle.facilities.length > 0 ? bundle.facilities : initialFacilities;
 
     const formattedGallery: GalleryItem[] = rawGallery.map((g: any) => ({

@@ -108,53 +108,9 @@ export const initialNews: NewsItem[] = [
   },
 ];
 
-export const initialAgenda: AgendaItem[] = [
-  {
-    id: "agenda-1",
-    title: "Pelaksanaan Penilaian Sumatif Akhir Semester (PSAS) 2026",
-    date: "2026-06-02",
-    time: "07:00 - 12:30 WIB",
-    location: "Gedung Utama SMA Al-Furqon",
-    description: "Evaluasi hasil belajar siswa berbasis CBT Tablet & Komputer.",
-    category: "Akademik",
-  },
-  {
-    id: "agenda-2",
-    title: "Munaqosyah Al-Qur'an & Wisuda Tahfidz Gelombang II",
-    date: "2026-06-20",
-    time: "08:00 - 15:00 WIB",
-    location: "Aula Masjid Al-Furqon Driyorejo",
-    description: "Ujian terbuka hafalan Al-Qur'an Juz 30, 1, 2, dan 3.",
-    category: "Keagamaan",
-  },
-];
+export const initialAgenda: AgendaItem[] = [];
 
-export const initialAchievements: AchievementItem[] = [
-  {
-    id: "ach-1",
-    title: "Juara 1 Olimpiade Matematika Terapan Nasional",
-    event: "National Science & Math Olympiad 2025",
-    level: "Nasional",
-    rank: "Juara 1",
-    category: "Akademik",
-    studentName: "Muhammad Rayhan Pratama",
-    year: "2025",
-    image: "/bg-al-furqon2.jpg",
-    description: "Berhasil meraih Medali Emas pada kategori Matematika Terapan Tingkat SMA se-Indonesia.",
-  },
-  {
-    id: "ach-2",
-    title: "Juara 1 MHQ (Musabaqah Hifdzil Qur'an) 5 Juz",
-    event: "Pentas PAI Tingkat Provinsi Jawa Timur",
-    level: "Provinsi",
-    rank: "Juara 1",
-    category: "Keagamaan",
-    studentName: "Ahmad Zaki Al-Faruq",
-    year: "2025",
-    image: "/bg-al-furqon3.jpg",
-    description: "Meraih predikat terbaik kategori Tahfidz Al-Qur'an 5 Juz dengan tartil dan tajwid sempurna.",
-  },
-];
+export const initialAchievements: AchievementItem[] = [];
 
 export const initialTeachers: TeacherItem[] = [
   {
@@ -422,98 +378,7 @@ export const initialExtracurriculars: ExtracurricularItem[] = [
   },
 ];
 
-export const initialGallery: GalleryItem[] = [
-  {
-    id: "g-1",
-    title: "Workshop Guru Kreatif & Inovasi Pembelajaran Digital",
-    category: "Kegiatan",
-    imageUrl:
-      "/bg-al-furqon2.jpg",
-    date: "2025-08-10",
-    description: "Dokumentasi pelatihan dewan guru SMA Al-Furqon dalam pengembangan media digital modern.",
-  },
-  {
-    id: "g-2",
-    title: "Sertifikasi & Munaqosyah Al-Qur'an Metode UMMI",
-    category: "Keagamaan",
-    imageUrl:
-      "/bg-al-furqon3.jpg",
-    date: "2025-11-20",
-    description: "Ujian terbuka hafalan Al-Qur'an santri disaksikan orang tua wali murid.",
-  },
-  {
-    id: "g-3",
-    title: "Praktikum Laboratorium Sains Berbasis Projek (P5)",
-    category: "Pembelajaran",
-    imageUrl:
-      "/bg-al-furqon4.jpg",
-    date: "2025-09-14",
-    description: "Siswa melakukan eksperimen uji kadar air tanah dan pupuk organik daur ulang.",
-  },
-  {
-    id: "g-4",
-    title: "Aksi Tanam 1000 Pohon & Green School Adiwiyata",
-    category: "Lingkungan Sekolah",
-    imageUrl:
-      "/bg-al-furqon2.jpg",
-    date: "2025-07-05",
-    description: "Penanaman bibit pohon di halaman hijau sekolah SMA Al-Furqon Driyorejo.",
-  },
-  {
-    id: "g-5",
-    title: "Penyerahan Trofi Juara 1 Olimpiade Sains Jatim",
-    category: "Prestasi",
-    imageUrl:
-      "/bg-al-furqon3.jpg",
-    date: "2025-10-02",
-    description: "Momen penganugerahan medali emas oleh Dinas Pendidikan Provinsi.",
-  },
-  {
-    id: "g-6",
-    title: "Latihan Rutin Ekstrakurikuler Robotik & IoT",
-    category: "Ekstrakurikuler",
-    imageUrl:
-      "/bg-al-furqon4.jpg",
-    date: "2025-10-18",
-    description: "Siswa merakit sensor suhu otomatis untuk greenhouse sekolah.",
-  },
-  {
-    id: "g-7",
-    title: "Kajian Rutin & Sholat Dhuha Berjamaah Santri",
-    category: "Keagamaan",
-    imageUrl:
-      "/bg-al-furqon2.jpg",
-    date: "2025-12-01",
-    description: "Pembiasaan ibadah harian dan kebersamaan di masjid sekolah.",
-  },
-  {
-    id: "g-8",
-    title: "Pentas Seni & Budaya Nusantara Santri Al-Furqon",
-    category: "Kegiatan",
-    imageUrl:
-      "/bg-al-furqon3.jpg",
-    date: "2025-12-15",
-    description: "Pertunjukan bakat seni tari, al-banjari, dan drama pahlawan Islami.",
-  },
-  {
-    id: "g-9",
-    title: "Upacara Bendera & Peringatan Hari Pendidikan",
-    category: "Kegiatan",
-    imageUrl:
-      "/bg-al-furqon4.jpg",
-    date: "2025-05-02",
-    description: "Khidmat upacara memperingati Hari Pendidikan Nasional di lapangan utama.",
-  },
-  {
-    id: "g-1790225773111",
-    title: "Simulasi TKA Kelas XII",
-    category: "Kegiatan",
-    imageUrl:
-      "/bg-al-furqon4.jpg",
-    date: "2026-09-24",
-    description: "SMA Al Furqon Driyorejo menggelar kegiatan Simulasi Tes Kemampuan Akademik (TKA) bagi seluruh siswa kelas XII. Kegiatan ini bertujuan untuk mengukur kesiapan akademik serta melatih kesiapan psikologis para siswa dalam menghadapi ujian mendatang.",
-  },
-];
+export const initialGallery: GalleryItem[] = [];
 
 export const initialApplicants: PPDBApplicant[] = [];
 
@@ -555,52 +420,7 @@ export const initialFAQs: FAQItem[] = [
   },
 ];
 
-export const initialTestimonials: TestimonialItem[] = [
-  {
-    id: "testi-1",
-    name: "Elvina Cahyani",
-    role: "Alumni",
-    graduationYear: "Alumni Diterima di ITS SURABAYA",
-    avatar:
-      "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80",
-    content:
-      "Selama saya belajar di SMA PP. Al Furqon, selain saya mendapat ilmu agama dan Al Qur'an metode UMMI, saya juga mendapat bimbingan LKTI dan bimbingan masuk Perguruan Tinggi Negeri, sehingga saya diterima di ITS. Terima kasih Al Furqon.",
-    rating: 5,
-  },
-  {
-    id: "testi-2",
-    name: "Afif Hidayatulloh, S.E., S.Pd., M.Ak., C.HT C.NNLP",
-    role: "Alumni",
-    graduationYear: "Dosen, Praktisi, & Motivator",
-    avatar:
-      "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=400&q=80",
-    content:
-      "Di SMA PP. Al Furqon tidak hanya diajarkan hard skill tapi soft skill. Itu diasah dengan sangat luar biasa sehingga mampu mencetak santri yang unggul dalam intelektual dan anggun dalam moralitas.",
-    rating: 5,
-  },
-  {
-    id: "testi-3",
-    name: "Adinda Puspitasari",
-    role: "Alumni",
-    graduationYear: "Alumni Diterima di UNESA",
-    avatar:
-      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
-    content:
-      "Bersekolah di SMA PP. Al Furqon yang notabene berbasis pesantren, namun tidak diragukan lagi untuk kualitas pendidikan formalnya, apalagi sekarang sudah menjadi sekolah penggerak yang mewujudkan visi pendidikan Indonesia untuk mencetak generasi unggul segala bidang.",
-    rating: 5,
-  },
-  {
-    id: "testi-4",
-    name: "Nanang Priyatnahari",
-    role: "Orang Tua Wali",
-    graduationYear: "Pensiunan PT. Petrokimia Gresik / Praktisi Vokasi",
-    avatar:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80",
-    content:
-      "SMA PP. Al Furqon adalah sekolah menengah umum yang berlandaskan keagamaan yang kuat, dengan manajemen yang inovatif dengan dukungan dari perguruan tinggi dan industri. Sangat layak menjadi pilihan utama!",
-    rating: 5,
-  },
-];
+export const initialTestimonials: TestimonialItem[] = [];
 
 export const initialFacilities: FacilityItem[] = [
   {
