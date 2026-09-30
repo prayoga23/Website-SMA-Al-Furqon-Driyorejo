@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import {
   SchoolInfo,
   NewsItem,
@@ -48,6 +48,7 @@ interface DataContextType {
   currentUser: UserItem | null;
   darkMode: boolean;
   setDarkMode: (val: boolean) => void;
+  refreshData: () => Promise<void>;
   // State Mutations (Admin CMS Actions)
   updateSchoolInfo: (info: Partial<SchoolInfo>) => void;
   addNews: (item: Omit<NewsItem, "id">) => void;
@@ -79,6 +80,9 @@ interface DataContextType {
   addTestimonial: (item: Omit<TestimonialItem, "id">) => void;
   updateTestimonial: (id: string, item: Partial<TestimonialItem>) => void;
   deleteTestimonial: (id: string) => void;
+  addFAQ: (item: Omit<FAQItem, "id">) => void;
+  updateFAQ: (id: string, item: Partial<FAQItem>) => void;
+  deleteFAQ: (id: string) => void;
   addUser: (item: Omit<UserItem, "id">) => void;
   updateUser: (id: string, item: Partial<UserItem>) => void;
   deleteUser: (id: string) => void;
@@ -92,41 +96,99 @@ const DataContext = createContext<DataContextType | undefined>(undefined);
 
 const STORAGE_KEY_PREFIX = "sma_alfurqon_";
 
-export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const DataProvider: React.FC<{
+  children: React.ReactNode;
+  initialData?: any;
+}> = ({ children, initialData }) => {
   const [darkMode, setDarkModeState] = useState<boolean>(false);
-  const [schoolInfo, setSchoolInfo] = useState<SchoolInfo>(initialSchoolInfo);
-  const [news, setNews] = useState<NewsItem[]>(initialNews);
-  const [agendas, setAgendas] = useState<AgendaItem[]>(initialAgenda);
-  const [achievements, setAchievements] = useState<AchievementItem[]>(initialAchievements);
-  const [teachers, setTeachers] = useState<TeacherItem[]>(initialTeachers);
-  const [extracurriculars, setExtracurriculars] = useState<ExtracurricularItem[]>(initialExtracurriculars);
-  const [gallery, setGallery] = useState<GalleryItem[]>(initialGallery);
-  const [applicants, setApplicants] = useState<PPDBApplicant[]>(initialApplicants);
-  const [faqs] = useState<FAQItem[]>(initialFAQs);
-  const [testimonials, setTestimonials] = useState<TestimonialItem[]>(initialTestimonials);
-  const [facilities, setFacilities] = useState<FacilityItem[]>(initialFacilities);
-  const [users, setUsers] = useState<UserItem[]>(initialUsers);
-  const [kesiswaanActivities, setKesiswaanActivities] = useState<KesiswaanActivity[]>(initialKesiswaanActivities);
+  const [schoolInfo, setSchoolInfo] = useState<SchoolInfo>(initialData?.schoolInfo || initialSchoolInfo);
+  const [news, setNews] = useState<NewsItem[]>(initialData?.news || initialNews);
+  const [agendas, setAgendas] = useState<AgendaItem[]>(initialData?.agendas || initialAgenda);
+  const [achievements, setAchievements] = useState<AchievementItem[]>(initialData?.achievements || initialAchievements);
+  const [teachers, setTeachers] = useState<TeacherItem[]>(initialData?.teachers || initialTeachers);
+  const [extracurriculars, setExtracurriculars] = useState<ExtracurricularItem[]>(initialData?.extracurriculars || initialExtracurriculars);
+  const [gallery, setGallery] = useState<GalleryItem[]>(initialData?.gallery || initialGallery);
+  const [applicants, setApplicants] = useState<PPDBApplicant[]>(initialData?.applicants || initialApplicants);
+  const [faqs, setFaqs] = useState<FAQItem[]>(initialData?.faqs || initialFAQs);
+  const [testimonials, setTestimonials] = useState<TestimonialItem[]>(initialData?.testimonials || initialTestimonials);
+  const [facilities, setFacilities] = useState<FacilityItem[]>(initialData?.facilities || initialFacilities);
+  const [users, setUsers] = useState<UserItem[]>(initialData?.users || initialUsers);
+  const [kesiswaanActivities, setKesiswaanActivities] = useState<KesiswaanActivity[]>(initialData?.kesiswaanActivities || initialKesiswaanActivities);
   const [currentUser, setCurrentUser] = useState<UserItem | null>(null);
 
-  // Fast background synchronization with Neon PostgreSQL DB
-  const syncToApi = (table: string, action: "save" | "delete", item?: any, id?: string) => {
-    fetch("/api/data", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ table, action, item, id }),
-    }).catch((e) => {
+  // Synchronize state directly to Neon PostgreSQL DB
+  const syncToApi = async (table: string, action: "save" | "delete", item?: any, id?: string): Promise<boolean> => {
+    try {
+      const res = await fetch("/api/data", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ table, action, item, id }),
+      });
+      if (!res.ok) {
+        console.error(`Failed to sync ${table} (${action}): HTTP ${res.status}`);
+        return false;
+      }
+      return true;
+    } catch (e) {
       console.error(`Error syncing ${table} (${action}) to Neon DB:`, e);
-    });
+      return false;
+    }
   };
 
-  // Load authoritative state directly from Neon DB on mount
+  // Authoritative refresh from Neon DB API without cache
+  const refreshFromApi = useCallback(async () => {
+    try {
+      const res = await fetch(`/api/data?_t=${Date.now()}`, {
+        cache: "no-store",
+        headers: {
+          "Cache-Control": "no-cache, no-store, must-revalidate",
+          Pragma: "no-cache",
+        },
+      });
+      if (!res.ok) return;
+      const data = await res.json();
+      if (data.schoolInfo) {
+        setSchoolInfo({
+          ...initialSchoolInfo,
+          ...data.schoolInfo,
+          headmasterName:
+            data.schoolInfo.headmasterName && data.schoolInfo.headmasterName !== "Suryanto, S.Pd., M.Pd."
+              ? data.schoolInfo.headmasterName
+              : "Dr. Suryanto, S.Pd., M.Pd.",
+          headmasterPhoto:
+            data.schoolInfo.headmasterPhoto && !data.schoolInfo.headmasterPhoto.includes("unsplash.com")
+              ? data.schoolInfo.headmasterPhoto
+              : "/foto-kepala-sekolah.png",
+          stats: {
+            ...initialSchoolInfo.stats,
+            ...(data.schoolInfo.stats || {}),
+          },
+        });
+      }
+      if (Array.isArray(data.news) && data.news.length > 0) setNews(data.news);
+      if (Array.isArray(data.agendas) && data.agendas.length > 0) setAgendas(data.agendas);
+      if (Array.isArray(data.achievements) && data.achievements.length > 0) setAchievements(data.achievements);
+      if (Array.isArray(data.teachers) && data.teachers.length > 0) setTeachers(data.teachers);
+      if (Array.isArray(data.extracurriculars) && data.extracurriculars.length > 0) setExtracurriculars(data.extracurriculars);
+      if (Array.isArray(data.gallery) && data.gallery.length > 0) setGallery(data.gallery);
+      if (Array.isArray(data.applicants)) setApplicants(data.applicants);
+      if (Array.isArray(data.facilities) && data.facilities.length > 0) setFacilities(data.facilities);
+      if (Array.isArray(data.testimonials) && data.testimonials.length > 0) setTestimonials(data.testimonials);
+      if (Array.isArray(data.users) && data.users.length > 0) setUsers(data.users);
+      if (Array.isArray(data.kesiswaanActivities) && data.kesiswaanActivities.length > 0) setKesiswaanActivities(data.kesiswaanActivities);
+      if (Array.isArray(data.faqs) && data.faqs.length > 0) setFaqs(data.faqs);
+    } catch (err) {
+      console.error("Error refreshing from Neon DB:", err);
+    }
+  }, []);
+
+  // Set up synchronization and tab listeners
   useEffect(() => {
     try {
       document.documentElement.classList.remove("dark");
       localStorage.removeItem(STORAGE_KEY_PREFIX + "dark_mode");
 
-      // Purge any stale mock items or local deleted tombstones from previous sessions
+      // Clear any legacy client cache keys
       const staleKeys = [
         "sma_alfurqon_news",
         "sma_alfurqon_agendas",
@@ -138,65 +200,36 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
         "sma_alfurqon_users",
         "sma_alfurqon_applicants",
         "sma_alfurqon_kesiswaan_activities",
-        "sma_alfurqon_deleted_news",
-        "sma_alfurqon_deleted_agendas",
-        "sma_alfurqon_deleted_achievements",
-        "sma_alfurqon_deleted_teachers",
-        "sma_alfurqon_deleted_facilities",
-        "sma_alfurqon_deleted_gallery",
-        "sma_alfurqon_deleted_extracurriculars",
-        "sma_alfurqon_deleted_testimonials",
-        "sma_alfurqon_deleted_users",
-        "sma_alfurqon_deleted_kesiswaan_activities",
       ];
       staleKeys.forEach((key) => {
-        try { localStorage.removeItem(key); } catch (e) {}
+        try { localStorage.removeItem(key); } catch {}
       });
 
-      // Fetch authentic data bundle from Neon DB API
-      fetch("/api/data", { cache: "no-store", headers: { "Cache-Control": "no-cache" } })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.schoolInfo) {
-            setSchoolInfo({
-              ...initialSchoolInfo,
-              ...data.schoolInfo,
-              headmasterName:
-                data.schoolInfo.headmasterName && data.schoolInfo.headmasterName !== "Suryanto, S.Pd., M.Pd."
-                  ? data.schoolInfo.headmasterName
-                  : "Dr. Suryanto, S.Pd., M.Pd.",
-              headmasterPhoto:
-                data.schoolInfo.headmasterPhoto && !data.schoolInfo.headmasterPhoto.includes("unsplash.com")
-                  ? data.schoolInfo.headmasterPhoto
-                  : "/foto-kepala-sekolah.png",
-              stats: {
-                ...initialSchoolInfo.stats,
-                ...(data.schoolInfo.stats || {}),
-              },
-            });
-          }
-          if (Array.isArray(data.news)) setNews(data.news);
-          if (Array.isArray(data.agendas)) setAgendas(data.agendas);
-          if (Array.isArray(data.achievements)) setAchievements(data.achievements);
-          if (Array.isArray(data.teachers)) setTeachers(data.teachers);
-          if (Array.isArray(data.extracurriculars)) setExtracurriculars(data.extracurriculars);
-          if (Array.isArray(data.gallery)) setGallery(data.gallery);
-          if (Array.isArray(data.applicants)) setApplicants(data.applicants);
-          if (Array.isArray(data.facilities)) setFacilities(data.facilities);
-          if (Array.isArray(data.testimonials)) setTestimonials(data.testimonials);
-          if (Array.isArray(data.users)) setUsers(data.users);
-          if (Array.isArray(data.kesiswaanActivities)) setKesiswaanActivities(data.kesiswaanActivities);
-        })
-        .catch((err) => console.error("Error loading Neon DB data:", err));
+      // Always execute background refresh on client mount
+      refreshFromApi();
+
+      // Automatically refresh when user returns to this browser tab
+      const handleVisibilityChange = () => {
+        if (document.visibilityState === "visible") {
+          refreshFromApi();
+        }
+      };
+      window.addEventListener("focus", handleVisibilityChange);
+      document.addEventListener("visibilitychange", handleVisibilityChange);
 
       const savedActiveUser = localStorage.getItem(STORAGE_KEY_PREFIX + "admin_user");
       if (savedActiveUser) {
-        try { setCurrentUser(JSON.parse(savedActiveUser)); } catch (e) {}
+        try { setCurrentUser(JSON.parse(savedActiveUser)); } catch {}
       }
+
+      return () => {
+        window.removeEventListener("focus", handleVisibilityChange);
+        document.removeEventListener("visibilitychange", handleVisibilityChange);
+      };
     } catch (e) {
-      console.error("Error loading initial data:", e);
+      console.error("Error in DataProvider setup:", e);
     }
-  }, []);
+  }, [refreshFromApi]);
 
   const setDarkMode = (_val: boolean) => {
     setDarkModeState(false);
@@ -318,12 +351,10 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const setTeachersData = (items: TeacherItem[]) => {
     setTeachers(items);
-    items.forEach((t) => syncToApi("teachers", "save", t));
   };
 
   const resetTeachersToDefault = () => {
     setTeachers(initialTeachers);
-    initialTeachers.forEach((t) => syncToApi("teachers", "save", t));
   };
 
   // --- GALLERY ---
@@ -374,11 +405,14 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     syncToApi("facilities", "delete", undefined, id);
   };
 
-  // --- EXTRACURRICULARS ---
+  // --- EXTRACURRICULARS (Hanya Icon Saja, Tidak Ada Gambar) ---
   const addExtracurricular = (item: Omit<ExtracurricularItem, "id">) => {
     const newItem: ExtracurricularItem = {
       ...item,
       id: "ekskul-" + Date.now(),
+      image: "", // Ekstrakurikuler: tidak ada gambar banner
+      icon: item.icon || "Sparkles",
+      iconImage: item.iconImage,
     };
     const updated = [...extracurriculars, newItem];
     setExtracurriculars(updated);
@@ -386,10 +420,12 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const updateExtracurricular = (id: string, item: Partial<ExtracurricularItem>) => {
-    const updated = extracurriculars.map((e) => (e.id === id ? { ...e, ...item } : e));
+    const updated = extracurriculars.map((e) =>
+      e.id === id ? { ...e, ...item, image: "" } : e
+    );
     setExtracurriculars(updated);
     const target = updated.find((e) => e.id === id);
-    if (target) syncToApi("extracurriculars", "save", target);
+    if (target) syncToApi("extracurriculars", "save", { ...target, image: "" });
   };
 
   const deleteExtracurricular = (id: string) => {
@@ -445,6 +481,30 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const updated = testimonials.filter((t) => t.id !== id);
     setTestimonials(updated);
     syncToApi("testimonials", "delete", undefined, id);
+  };
+
+  // --- FAQS ---
+  const addFAQ = (item: Omit<FAQItem, "id">) => {
+    const newItem: FAQItem = {
+      ...item,
+      id: "faq-" + Date.now(),
+    };
+    const updated = [...faqs, newItem];
+    setFaqs(updated);
+    syncToApi("faqs", "save", newItem);
+  };
+
+  const updateFAQ = (id: string, item: Partial<FAQItem>) => {
+    const updated = faqs.map((f) => (f.id === id ? { ...f, ...item } : f));
+    setFaqs(updated);
+    const target = updated.find((f) => f.id === id);
+    if (target) syncToApi("faqs", "save", target);
+  };
+
+  const deleteFAQ = (id: string) => {
+    const updated = faqs.filter((f) => f.id !== id);
+    setFaqs(updated);
+    syncToApi("faqs", "delete", undefined, id);
   };
 
   // --- USERS ---
@@ -553,6 +613,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
         currentUser,
         darkMode,
         setDarkMode,
+        refreshData: refreshFromApi,
         updateSchoolInfo,
         addNews,
         updateNews,
@@ -584,6 +645,9 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
         addTestimonial,
         updateTestimonial,
         deleteTestimonial,
+        addFAQ,
+        updateFAQ,
+        deleteFAQ,
         addUser,
         updateUser,
         deleteUser,

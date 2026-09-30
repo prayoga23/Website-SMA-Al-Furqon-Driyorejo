@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { DataProvider } from "@/context/data-context";
 import DisableInspect from "@/components/disable-inspect";
+import { getServerDataBundle } from "@/lib/server-data";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export const metadata: Metadata = {
   title: "SMA AL-FURQON DRIYOREJO | Official School Website 2026",
@@ -33,18 +37,19 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const initialData = await getServerDataBundle();
+
   return (
     <html lang="id">
       <body className="font-sans antialiased bg-[#FDFBF7] dark:bg-[#091512] text-slate-800 dark:text-slate-100 transition-colors duration-300">
         <DisableInspect />
-        <DataProvider>{children}</DataProvider>
+        <DataProvider initialData={initialData}>{children}</DataProvider>
       </body>
     </html>
   );
 }
-

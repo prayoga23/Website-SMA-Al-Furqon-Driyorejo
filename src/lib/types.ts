@@ -85,7 +85,7 @@ export interface ExtracurricularItem {
   description: string;
   schedule: string;
   instructor: string;
-  image: string;
+  image?: string;
   icon?: string;
   iconImage?: string;
   achievements?: string[];

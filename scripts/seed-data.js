@@ -247,6 +247,27 @@ async function seedData() {
     `;
   }
 
+  // Seed Extracurriculars (7 Official Clubs)
+  const extracurricularsList = [
+    { id: "ekskul-1", name: "Desain Grafis", category: "Keterampilan" },
+    { id: "ekskul-2", name: "Tata Boga", category: "Keterampilan" },
+    { id: "ekskul-3", name: "Handy Craft", category: "Keterampilan" },
+    { id: "ekskul-4", name: "Menjahit", category: "Keterampilan" },
+    { id: "ekskul-5", name: "Futsal", category: "Olahraga" },
+    { id: "ekskul-6", name: "Al Banjari", category: "Keagamaan" },
+    { id: "ekskul-7", name: "Pencak Silat", category: "Olahraga" },
+  ];
+
+  for (const item of extracurricularsList) {
+    await sql`
+      INSERT INTO extracurriculars (id, name, category, mentor, instructor, schedule, description, image)
+      VALUES (${item.id}, ${item.name}, ${item.category}, '', '', '', '', '')
+      ON CONFLICT (id) DO UPDATE SET
+        name = ${item.name},
+        category = ${item.category};
+    `;
+  }
+
   console.log("✅ Seed data inserted successfully into Neon PostgreSQL!");
 }
 

@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { AdminSidebar } from "@/components/admin-sidebar";
 import { useData } from "@/context/data-context";
-import { Plus, Trash2, Edit3, Sparkles, X, Clock, User, Award, Image as ImageIcon } from "lucide-react";
+import { Plus, Trash2, Edit3, Sparkles, X, Clock, User, Award } from "lucide-react";
 import { ExtracurricularItem } from "@/lib/types";
 import { ImageUploadInput } from "@/components/image-upload-input";
 import { Pagination } from "@/components/pagination";
@@ -23,30 +23,28 @@ export default function AdminEkstrakurikulerPage() {
   const [description, setDescription] = useState("");
   const [icon, setIcon] = useState("Sparkles");
   const [iconImage, setIconImage] = useState("");
-  const [image, setImage] = useState("");
   const [achievementsInput, setAchievementsInput] = useState("");
 
   const iconOptions = [
-    { label: "Sparkles (Bintang)", value: "Sparkles" },
-    { label: "Palette (Desain Grafis)", value: "Palette" },
-    { label: "ChefHat (Tata Boga)", value: "ChefHat" },
-    { label: "Scissors (Handy Craft)", value: "Scissors" },
-    { label: "Shirt (Menjahit)", value: "Shirt" },
+    { label: "Sparkles (Bintang / Umum)", value: "Sparkles" },
+    { label: "Palette (Desain Grafis / Seni Visual)", value: "Palette" },
+    { label: "ChefHat (Tata Boga / Kuliner)", value: "ChefHat" },
+    { label: "Scissors (Handy Craft / Kerajinan)", value: "Scissors" },
+    { label: "Shirt (Menjahit / Tata Busana)", value: "Shirt" },
     { label: "Trophy (Futsal / Olahraga)", value: "Trophy" },
-    { label: "Music (Al Banjari / Seni)", value: "Music" },
-    { label: "ShieldCheck (Pencak Silat)", value: "ShieldCheck" },
+    { label: "Music (Al Banjari / Seni Musik)", value: "Music" },
+    { label: "ShieldCheck (Pencak Silat / Bela Diri)", value: "ShieldCheck" },
   ];
 
   const openAddModal = () => {
     setEditingItem(null);
     setName("");
     setCategory("Olahraga");
-    setSchedule("Jumat (09:00 - 11:00 WIB)");
+    setSchedule("");
     setInstructor("");
     setDescription("");
     setIcon("Sparkles");
     setIconImage("");
-    setImage("");
     setAchievementsInput("");
     setModalOpen(true);
   };
@@ -60,7 +58,6 @@ export default function AdminEkstrakurikulerPage() {
     setDescription(item.description);
     setIcon(item.icon || "Sparkles");
     setIconImage(item.iconImage || "");
-    setImage(item.image || "");
     setAchievementsInput(item.achievements ? item.achievements.join(", ") : "");
     setModalOpen(true);
   };
@@ -72,10 +69,6 @@ export default function AdminEkstrakurikulerPage() {
       .map((s) => s.trim())
       .filter((s) => s.length > 0);
 
-    const imageValue =
-      image ||
-      "https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&w=800&q=80";
-
     const dataPayload = {
       name,
       category,
@@ -84,7 +77,7 @@ export default function AdminEkstrakurikulerPage() {
       description,
       icon,
       iconImage: iconImage || undefined,
-      image: imageValue,
+      image: "", // Ekstrakurikuler: Hanya Icon saja, tidak ada gambar
       achievements: achievementsList,
     };
 
@@ -114,7 +107,7 @@ export default function AdminEkstrakurikulerPage() {
               Manajemen Ekstrakurikuler
             </h1>
             <p className="text-xs text-slate-500">
-              Kelola daftar klub ekstrakurikuler, jadwal, ikon, dan pembina ({extracurriculars.length} klub terdaftar).
+              Kelola daftar klub ekstrakurikuler berbasis Ikon Vektor & Custom Ikon ({extracurriculars.length} klub terdaftar).
             </p>
           </div>
 
@@ -195,12 +188,11 @@ export default function AdminEkstrakurikulerPage() {
                 <div className="grid grid-cols-2 gap-3">
                   <div>
                     <label className="block font-bold mb-1 text-slate-700 dark:text-slate-200">
-                      Jadwal Kegiatan *
+                      Jadwal Kegiatan (Opsional)
                     </label>
                     <input
                       type="text"
-                      required
-                      placeholder="Jumat (09:00 - 11:00 WIB)"
+                      placeholder="Contoh: Jumat (09:00 - 11:00 WIB)"
                       value={schedule}
                       onChange={(e) => setSchedule(e.target.value)}
                       className="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-[#081612] border border-slate-200 dark:border-emerald-900/50"
@@ -225,23 +217,15 @@ export default function AdminEkstrakurikulerPage() {
                 <ImageUploadInput
                   value={iconImage}
                   onChange={(imgData) => setIconImage(imgData)}
-                  label="Upload Custom Ikon Gambar (Opsional PNG)"
-                />
-
-                {/* Banner Photo Upload */}
-                <ImageUploadInput
-                  value={image}
-                  onChange={(imgData) => setImage(imgData)}
-                  label="Upload Foto Banner Kegiatan (Opsional)"
+                  label="Upload Custom Ikon Logo/PNG (Opsional)"
                 />
 
                 <div>
                   <label className="block font-bold mb-1 text-slate-700 dark:text-slate-200">
-                    Deskripsi Ringkas *
+                    Deskripsi Ringkas (Opsional)
                   </label>
                   <textarea
                     rows={2}
-                    required
                     placeholder="Jelaskan mengenai fokus dan kegiatan ekstrakurikuler ini..."
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
@@ -287,7 +271,7 @@ export default function AdminEkstrakurikulerPage() {
           <table className="w-full text-xs text-left">
             <thead className="bg-slate-50 dark:bg-emerald-950/60 text-slate-500 font-bold uppercase">
               <tr>
-                <th className="p-3">Klub Ekstrakurikuler</th>
+                <th className="p-3">Ikon & Klub Ekstrakurikuler</th>
                 <th className="p-3">Kategori</th>
                 <th className="p-3">Jadwal</th>
                 <th className="p-3">Pembina</th>
@@ -297,20 +281,20 @@ export default function AdminEkstrakurikulerPage() {
             <tbody className="divide-y divide-slate-100 dark:divide-emerald-900/30">
               {paginatedItems.map((item) => {
                 const IconComp = getExtraIcon(item.icon, item.name);
-                const imgIcon = item.iconImage;
+                const imgIcon = item.iconImage || (item.name.toLowerCase().includes("silat") ? "/pencak-silat2 (1).png" : undefined);
                 return (
                   <tr key={item.id} className="hover:bg-slate-50/50 dark:hover:bg-emerald-950/30">
                     <td className="p-3 font-bold text-slate-900 dark:text-white flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-amber-400/20 text-amber-500 dark:text-amber-300 flex items-center justify-center shrink-0 overflow-hidden p-1">
+                      <div className="w-9 h-9 rounded-xl bg-emerald-100/70 dark:bg-emerald-950/70 text-emerald-700 dark:text-emerald-300 border border-emerald-300/40 flex items-center justify-center shrink-0 overflow-hidden p-1.5 shadow-sm">
                         {imgIcon ? (
-                          <img src={imgIcon} alt={item.name} className="w-full h-full object-contain mix-blend-multiply" />
+                          <img src={imgIcon} alt={item.name} className="w-full h-full object-contain mix-blend-multiply dark:mix-blend-normal" />
                         ) : (
                           <IconComp className="w-4 h-4" />
                         )}
                       </div>
                       <div>
                         <div className="font-bold text-slate-900 dark:text-white">{item.name}</div>
-                        <div className="text-[10px] text-slate-400 line-clamp-1">{item.description}</div>
+                        <div className="text-[10px] text-slate-400 line-clamp-1">{item.description || "Ekstrakurikuler SMA Al-Furqon"}</div>
                       </div>
                     </td>
                     <td className="p-3">
@@ -321,7 +305,7 @@ export default function AdminEkstrakurikulerPage() {
                     <td className="p-3 text-slate-600 dark:text-slate-300 font-medium">
                       <span className="flex items-center gap-1">
                         <Clock className="w-3 h-3 text-emerald-500" />
-                        {item.schedule}
+                        {item.schedule || "-"}
                       </span>
                     </td>
                     <td className="p-3 text-slate-500">{item.instructor || "-"}</td>
@@ -358,7 +342,7 @@ export default function AdminEkstrakurikulerPage() {
         {/* Pagination */}
         <Pagination
           currentPage={currentPage}
-          totalPages={Math.ceil(extracurriculars.length / itemsPerPage)}
+          totalPages={Math.ceil(extracurriculars.length / itemsPerPage) || 1}
           totalItems={extracurriculars.length}
           itemsPerPage={itemsPerPage}
           onPageChange={(page) => setCurrentPage(page)}
