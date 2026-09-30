@@ -33,7 +33,8 @@ export const AboutSection: React.FC = () => {
       role: "Ketua Yayasan & Pengasuh PP. Al-Furqon",
       image: "/gambar kyai.jpg",
       fitStyle: "object-cover object-[center_15%]",
-      photoTag: "KH. Mashuri Abdurrohiem (Pengasuh Pondok Pesantren Al-Furqon bersama Bu Nyai)",
+      containerBg: "bg-slate-900",
+      photoTag: "Pengasuh Pondok Pesantren",
       headingText: "Selayang Pandang SMA PP. Al-Furqon",
       quoteText:
         "SMA PP. Al Furqon merupakan lembaga pendidikan dengan penyelenggara Pondok Pesantren Al Furqon yang didirikan dan diasuh oleh KH. Mashuri Abdurrohiem. Kami hadir dan siap untuk memenuhi kebutuhan masyarakat akan pentingnya pendidikan karakter Islami yang kuat dan memiliki kemampuan berpikir kritis, kolaboratif, kreatif, inovatif serta komunikatif. Program dan lingkungan kondusif yang kami tawarkan insyaAllah akan menempa dan memproses santri meraih asa.",
@@ -46,8 +47,9 @@ export const AboutSection: React.FC = () => {
       name: schoolInfo?.headmasterName || "Dr. Suryanto, S.Pd., M.Pd.",
       role: `Kepala Sekolah ${schoolInfo?.name || "SMA Al-Furqon Driyorejo"}`,
       image: schoolInfo?.headmasterPhoto || "/Pak Sur.jpeg",
-      fitStyle: "object-cover object-[center_12%]",
-      photoTag: `${schoolInfo?.headmasterName || "Dr. Suryanto, S.Pd., M.Pd."} (Kepala Sekolah SMA Al-Furqon Driyorejo)`,
+      fitStyle: "object-contain p-2 pb-16 pt-3 drop-shadow-2xl",
+      containerBg: "bg-gradient-to-b from-[#092e74] via-[#0942a3] to-[#041c49]",
+      photoTag: "Kepala Sekolah SMA Al-Furqon",
       headingText: "Kata Pengantar Kepala Sekolah",
       quoteText:
         schoolInfo?.headmasterWelcome ||
@@ -157,37 +159,52 @@ export const AboutSection: React.FC = () => {
               </div>
 
               {/* Main Photo Card with Carousel Controls */}
-              <div className="rounded-3xl overflow-hidden shadow-2xl border-4 border-white dark:border-emerald-950 aspect-[4/3] relative group bg-slate-900">
+              <div
+                className={`rounded-3xl overflow-hidden shadow-2xl border-4 border-white dark:border-emerald-950 aspect-[4/3] relative group transition-colors duration-500 ${
+                  currentSlide.containerBg || "bg-slate-900"
+                }`}
+              >
+                {/* Ambient Blurred Backdrop for soft lighting & natural framing */}
+                <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                  <img
+                    src={currentSlide.image}
+                    alt=""
+                    className="w-full h-full object-cover blur-2xl opacity-40 scale-125 transform transition-all duration-500"
+                    aria-hidden="true"
+                  />
+                  <div className="absolute inset-0 bg-slate-950/25 dark:bg-black/40" />
+                </div>
+
                 <img
                   key={currentSlide.id}
                   src={currentSlide.image}
                   alt={currentSlide.name}
-                  className={`w-full h-full ${currentSlide.fitStyle} transition-all duration-500`}
+                  className={`w-full h-full relative z-10 ${currentSlide.fitStyle} transition-all duration-500`}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-black/10 pointer-events-none"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent pointer-events-none z-10"></div>
 
                 {/* Arrow Controls */}
                 <button
                   onClick={prevSlide}
-                  className="absolute left-2.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/40 hover:bg-black/80 text-white flex items-center justify-center backdrop-blur-sm transition-all border border-white/20 shadow"
+                  className="absolute left-2.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/50 hover:bg-black/80 text-white flex items-center justify-center backdrop-blur-sm transition-all border border-white/20 shadow z-20"
                   title="Foto Sebelumnya"
                 >
                   <ChevronLeft className="w-5 h-5" />
                 </button>
                 <button
                   onClick={nextSlide}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/40 hover:bg-black/80 text-white flex items-center justify-center backdrop-blur-sm transition-all border border-white/20 shadow"
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/50 hover:bg-black/80 text-white flex items-center justify-center backdrop-blur-sm transition-all border border-white/20 shadow z-20"
                   title="Foto Selanjutnya"
                 >
                   <ChevronRight className="w-5 h-5" />
                 </button>
 
-                <div className="absolute bottom-3.5 left-3 right-3 text-white">
-                  <span className="bg-amber-400 text-slate-900 text-[9px] font-extrabold px-2 py-1 rounded-md mb-1 inline-block uppercase shadow-sm">
+                <div className="absolute bottom-3 left-3.5 right-3.5 text-white z-20 pointer-events-none">
+                  <span className="bg-amber-400 text-slate-950 text-[10px] font-extrabold px-2.5 py-0.5 rounded-md mb-1 inline-block uppercase shadow-sm">
                     {currentSlide.photoTag}
                   </span>
-                  <p className="text-xs font-bold text-amber-200">{currentSlide.name}</p>
-                  <p className="text-[11px] text-slate-200">{currentSlide.role}</p>
+                  <p className="text-xs sm:text-sm font-bold text-amber-200 drop-shadow-sm">{currentSlide.name}</p>
+                  <p className="text-[10px] sm:text-[11px] text-slate-200 drop-shadow-sm">{currentSlide.role}</p>
                 </div>
               </div>
 
