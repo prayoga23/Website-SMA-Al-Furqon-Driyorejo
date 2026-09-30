@@ -21,7 +21,7 @@ export default function SejarahPage() {
     },
     {
       year: "2016",
-      title: "Raihan Akreditasi A (Unggulan)",
+      title: "Raihan Akreditasi A (Unggul)",
       desc: "Mendapatkan predikat Akreditasi A dari Badan Akreditasi Nasional Sekolah/Madrasah (BAN-SM) dengan nilai sangat memuaskan.",
     },
     {

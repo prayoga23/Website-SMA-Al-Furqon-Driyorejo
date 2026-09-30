@@ -31,6 +31,7 @@ async function initSchema() {
       is_featured BOOLEAN DEFAULT false,
       tags JSONB DEFAULT '[]'::jsonb,
       youtube_url TEXT,
+      status VARCHAR(50) DEFAULT 'published',
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
   `;

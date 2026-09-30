@@ -17,7 +17,7 @@ export const initialSchoolInfo: SchoolInfo = {
   name: "SMA AL-FURQON DRIYOREJO",
   tagline: "Dzikir - Fikir - Ikhtiar - Tawakal",
   npsn: "20500660",
-  accreditation: "A (Unggulan)",
+  accreditation: "A (Unggul)",
   foundation: "Pondok Pesantren Al-Furqon (Diasuh KH. Mashuri Abdurrohim)",
   address: "Jl. KH. Abdurrohim No.01, Wedoroanom RT.12 RW.04",
   subdistrict: "Driyorejo",

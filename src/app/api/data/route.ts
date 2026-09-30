@@ -67,6 +67,7 @@ export async function GET() {
         isFeatured: Boolean(n.is_featured ?? n.isFeatured),
         tags: Array.isArray(n.tags) ? n.tags : typeof n.tags === "string" ? JSON.parse(n.tags || "[]") : [],
         youtubeUrl: n.youtube_url || n.youtubeUrl || "",
+        status: n.status || "published",
       })),
       agendas: (bundle.agendas || []).map((a: any) => ({
         id: a.id,
@@ -165,11 +166,15 @@ export async function GET() {
       })),
       kesiswaanActivities:
         bundle.kesiswaan && bundle.kesiswaan.length > 0
-          ? bundle.kesiswaan.map((k: any) => ({
-              id: k.id,
-              slug: k.slug,
-              ...(typeof k.data === "object" ? k.data : JSON.parse(k.data || "{}")),
-            }))
+          ? bundle.kesiswaan.map((k: any) => {
+              const dataObj = typeof k.data === "object" ? k.data : JSON.parse(k.data || "{}");
+              return {
+                id: k.id,
+                slug: k.slug,
+                status: dataObj.status || "published",
+                ...dataObj,
+              };
+            })
           : initialKesiswaanActivities,
     });
   } catch (error) {
@@ -212,9 +217,14 @@ export async function POST(request: Request) {
 
     if (action === "save" && item) {
       if (table === "news") {
+        try {
+          await sql`ALTER TABLE news ADD COLUMN IF NOT EXISTS status VARCHAR(50) DEFAULT 'published';`;
+        } catch {
+          // Column may already exist or ALTER not permitted
+        }
         await sql`
-          INSERT INTO news (id, title, slug, excerpt, content, category, date, author, image, is_featured, tags, youtube_url)
-          VALUES (${item.id}, ${item.title}, ${item.slug || item.id}, ${item.excerpt || ''}, ${item.content || ''}, ${item.category || ''}, ${item.date || ''}, ${item.author || ''}, ${item.image || ''}, ${Boolean(item.isFeatured)}, ${JSON.stringify(item.tags || [])}::jsonb, ${item.youtubeUrl || ''})
+          INSERT INTO news (id, title, slug, excerpt, content, category, date, author, image, is_featured, tags, youtube_url, status)
+          VALUES (${item.id}, ${item.title}, ${item.slug || item.id}, ${item.excerpt || ''}, ${item.content || ''}, ${item.category || ''}, ${item.date || ''}, ${item.author || ''}, ${item.image || ''}, ${Boolean(item.isFeatured)}, ${JSON.stringify(item.tags || [])}::jsonb, ${item.youtubeUrl || ''}, ${item.status || 'published'})
           ON CONFLICT (id) DO UPDATE SET
             title = ${item.title},
             slug = ${item.slug || item.id},
@@ -226,7 +236,8 @@ export async function POST(request: Request) {
             image = ${item.image || ''},
             is_featured = ${Boolean(item.isFeatured)},
             tags = ${JSON.stringify(item.tags || [])}::jsonb,
-            youtube_url = ${item.youtubeUrl || ''};
+            youtube_url = ${item.youtubeUrl || ''},
+            status = ${item.status || 'published'};
         `;
       } else if (table === "kesiswaan_activities") {
         await sql`

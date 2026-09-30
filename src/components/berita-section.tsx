@@ -17,7 +17,9 @@ export const BeritaSection: React.FC = () => {
 
   const categories = ["Semua", "Berita", "Agenda", "Kegiatan", "Prestasi"];
 
-  const filteredNews = news.filter((item) => {
+  const publishedNews = news.filter((item) => (item.status || "published") === "published");
+
+  const filteredNews = publishedNews.filter((item) => {
     const matchesSearch =
       item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.excerpt.toLowerCase().includes(searchTerm.toLowerCase());

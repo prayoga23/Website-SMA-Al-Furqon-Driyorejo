@@ -69,7 +69,7 @@ export const AboutSection: React.FC = () => {
   const statCards = [
     {
       title: "Akreditasi",
-      value: schoolInfo?.accreditation || "A (Unggulan)",
+      value: schoolInfo?.accreditation || "A (Unggul)",
       icon: Award,
       desc: "Status Unggulan BAN-SM",
     },

@@ -41,6 +41,7 @@ export interface NewsItem {
   isFeatured?: boolean;
   tags?: string[];
   youtubeUrl?: string;
+  status?: "published" | "draft";
 }
 
 export interface AgendaItem {

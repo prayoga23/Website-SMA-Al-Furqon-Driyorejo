@@ -16,6 +16,7 @@ export interface KesiswaanActivity {
   target: string;
   tags: string[];
   youtubeUrl?: string;
+  status?: "published" | "draft";
 }
 
 export const kesiswaanActivities: KesiswaanActivity[] = [

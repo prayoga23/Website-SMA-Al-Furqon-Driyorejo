@@ -11,6 +11,7 @@ async function runSync() {
 
   // 1. Ensure columns
   await sql`ALTER TABLE news ADD COLUMN IF NOT EXISTS youtube_url TEXT;`;
+  await sql`ALTER TABLE news ADD COLUMN IF NOT EXISTS status VARCHAR(50) DEFAULT 'published';`;
   await sql`ALTER TABLE teachers ADD COLUMN IF NOT EXISTS bio TEXT;`;
   await sql`ALTER TABLE teachers ADD COLUMN IF NOT EXISTS photo TEXT;`;
   await sql`ALTER TABLE teachers ADD COLUMN IF NOT EXISTS subject TEXT;`;

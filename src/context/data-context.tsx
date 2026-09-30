@@ -223,6 +223,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const addNews = (item: Omit<NewsItem, "id">) => {
     const newItem: NewsItem = {
       ...item,
+      status: item.status || "published",
       id: "news-" + Date.now(),
     };
     const updated = [newItem, ...news];
@@ -401,6 +402,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const addKesiswaanActivity = (item: Omit<KesiswaanActivity, "id">) => {
     const newItem: KesiswaanActivity = {
       ...item,
+      status: item.status || "published",
       id: "kesiswaan-" + Date.now(),
     };
     const updated = [newItem, ...kesiswaanActivities];

@@ -9,13 +9,19 @@ import { PageHeader } from "@/components/page-header";
 import { FloatingWidgets } from "@/components/floating-widgets";
 import { useData } from "@/context/data-context";
 import { kesiswaanActivities as initialKesiswaanActivities } from "@/lib/kesiswaan-data";
-import { Calendar, User, Tag, ArrowLeft, Check, Sparkles, MessageCircle } from "lucide-react";
+import { Calendar, User, Tag, ArrowLeft, Check, Sparkles, MessageCircle, AlertCircle, Eye } from "lucide-react";
 import { YouTubePlayer } from "@/components/youtube-player";
 
 export default function KesiswaanActivityDetailPage() {
   const params = useParams();
   const slug = params?.slug as string;
-  const { kesiswaanActivities } = useData();
+  const { kesiswaanActivities, currentUser } = useData();
+  const [isAdmin, setIsAdmin] = React.useState(false);
+
+  React.useEffect(() => {
+    const token = typeof window !== "undefined" ? localStorage.getItem("sma_admin_token") : null;
+    setIsAdmin(Boolean(token || currentUser));
+  }, [currentUser]);
 
   const activityList = kesiswaanActivities && kesiswaanActivities.length > 0 ? kesiswaanActivities : initialKesiswaanActivities;
   const activity = activityList.find((item) => item.slug === slug);
@@ -43,9 +49,51 @@ export default function KesiswaanActivityDetailPage() {
     );
   }
 
+  const isDraft = activity.status === "draft";
+
+  if (isDraft && !isAdmin) {
+    return (
+      <div className="min-h-screen flex flex-col bg-[#FDFBF7] dark:bg-[#091512] text-slate-800 dark:text-slate-100">
+        <Navbar />
+        <div className="flex-1 flex flex-col items-center justify-center py-24 text-center px-4 max-w-lg mx-auto">
+          <div className="w-14 h-14 rounded-2xl bg-amber-100 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center mb-4 shadow-sm">
+            <AlertCircle className="w-7 h-7" />
+          </div>
+          <h2 className="text-2xl font-bold font-heading mb-2">Program Berstatus Draf</h2>
+          <p className="text-xs text-slate-500 mb-6 leading-relaxed">
+            Program atau artikel kegiatan santri ini saat ini masih dalam proses penyusunan (Draft) dan belum dipublikasikan untuk umum.
+          </p>
+          <Link href="/kesiswaan" className="px-5 py-2.5 rounded-xl bg-[#064E3B] text-amber-300 font-bold text-xs shadow hover:bg-[#047857] transition-colors">
+            Kembali ke Menu Kesiswaan
+          </Link>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen flex flex-col bg-[#FDFBF7] dark:bg-[#091512] text-slate-800 dark:text-slate-100">
       <Navbar />
+
+      {isDraft && (
+        <div className="bg-amber-500 text-slate-950 py-2.5 px-4 text-xs font-bold shadow-md sticky top-16 z-30">
+          <div className="max-w-4xl mx-auto flex items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <Eye className="w-4 h-4 shrink-0" />
+              <span>
+                <strong>Mode Pratinjau Draf:</strong> Program kegiatan ini berstatus DRAFT dan belum tampil untuk publik umum.
+              </span>
+            </div>
+            <Link
+              href="/admin/kesiswaan"
+              className="px-3 py-1 bg-slate-950 text-amber-300 rounded-lg text-[11px] font-bold hover:bg-slate-800 shrink-0"
+            >
+              Kelola di Admin
+            </Link>
+          </div>
+        </div>
+      )}
 
       <PageHeader
         title={activity.title}

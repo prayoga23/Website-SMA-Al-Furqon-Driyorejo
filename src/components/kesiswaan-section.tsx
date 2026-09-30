@@ -38,7 +38,8 @@ export const KesiswaanSection: React.FC = () => {
   const pathname = usePathname();
   const isHomePage = pathname === "/";
   const { extracurriculars, kesiswaanActivities: dynamicActivities } = useData();
-  const activitiesList = dynamicActivities && dynamicActivities.length > 0 ? dynamicActivities : kesiswaanActivities;
+  const rawList = dynamicActivities && dynamicActivities.length > 0 ? dynamicActivities : kesiswaanActivities;
+  const activitiesList = rawList.filter((feature) => (feature.status || "published") === "published");
 
   return (
     <section id="kesiswaan-overview" className="py-20 bg-[#FDFBF7] dark:bg-[#081612] transition-colors relative overflow-hidden">
