@@ -78,72 +78,79 @@ export const BeritaSection: React.FC = () => {
         </div>
 
         {/* News Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredNews.slice(0, 6).map((item, idx) => {
-            const bgImages = ["/bg-al-furqon2.jpg", "/bg-al-furqon3.jpg", "/bg-al-furqon4.jpg"];
-            const cardImg = bgImages[idx % bgImages.length];
+        {filteredNews.length === 0 ? (
+          <div className="text-center py-16 bg-white dark:bg-[#0E241E] rounded-3xl border border-slate-200 dark:border-emerald-900/40 max-w-xl mx-auto shadow-sm">
+            <Sparkles className="w-12 h-12 text-slate-400 mx-auto mb-3 opacity-60" />
+            <p className="text-slate-600 dark:text-slate-300 font-medium text-sm">Belum ada berita atau informasi yang dipublikasikan saat ini.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filteredNews.slice(0, 6).map((item, idx) => {
+              const bgImages = ["/bg-al-furqon2.jpg", "/bg-al-furqon3.jpg", "/bg-al-furqon4.jpg"];
+              const cardImg = bgImages[idx % bgImages.length];
 
-            return (
-              <article
-                key={item.id}
-                className="bg-white dark:bg-[#0E241E] rounded-3xl overflow-hidden border border-slate-200 dark:border-emerald-900/40 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group"
-              >
-                <div>
-                  {/* Image & Category Tag */}
-                  <div className="relative h-48 overflow-hidden">
-                    <img
-                      src={item.image || cardImg}
-                      alt={item.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-                    <span className="absolute top-3 left-3 bg-[#064E3B] text-amber-300 text-[10px] font-bold px-2.5 py-1 rounded-md uppercase border border-amber-400/30 shadow">
-                      {item.category}
-                    </span>
-                    {item.youtubeUrl && (
-                      <span className="absolute top-3 right-3 bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-md flex items-center gap-1 shadow">
-                        <YoutubeIcon className="w-3 h-3 text-white" />
-                        <span>Video</span>
+              return (
+                <article
+                  key={item.id}
+                  className="bg-white dark:bg-[#0E241E] rounded-3xl overflow-hidden border border-slate-200 dark:border-emerald-900/40 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group"
+                >
+                  <div>
+                    {/* Image & Category Tag */}
+                    <div className="relative h-48 overflow-hidden">
+                      <img
+                        src={item.image || cardImg}
+                        alt={item.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                      <span className="absolute top-3 left-3 bg-[#064E3B] text-amber-300 text-[10px] font-bold px-2.5 py-1 rounded-md uppercase border border-amber-400/30 shadow">
+                        {item.category}
                       </span>
-                    )}
-                  </div>
-
-                  {/* Article Content */}
-                  <div className="p-6">
-                    <div className="flex items-center gap-4 text-[11px] text-slate-400 mb-3">
-                      <span className="flex items-center gap-1">
-                        <Calendar className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                        {formatDate(item.date)}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <User className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                        {item.author}
-                      </span>
+                      {item.youtubeUrl && (
+                        <span className="absolute top-3 right-3 bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-md flex items-center gap-1 shadow">
+                          <YoutubeIcon className="w-3 h-3 text-white" />
+                          <span>Video</span>
+                        </span>
+                      )}
                     </div>
 
-                    <h3 className="text-base font-bold text-slate-900 dark:text-white font-heading mb-2 group-hover:text-[#047857] dark:group-hover:text-emerald-400 transition-colors line-clamp-2">
-                      <Link href={`/berita/${item.slug}`}>{item.title}</Link>
-                    </h3>
+                    {/* Article Content */}
+                    <div className="p-6">
+                      <div className="flex items-center gap-4 text-[11px] text-slate-400 mb-3">
+                        <span className="flex items-center gap-1">
+                          <Calendar className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                          {formatDate(item.date)}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <User className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                          {item.author}
+                        </span>
+                      </div>
 
-                    <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed line-clamp-3 mb-4">
-                      {item.excerpt}
-                    </p>
+                      <h3 className="text-base font-bold text-slate-900 dark:text-white font-heading mb-2 group-hover:text-[#047857] dark:group-hover:text-emerald-400 transition-colors line-clamp-2">
+                        <Link href={`/berita/${item.slug}`}>{item.title}</Link>
+                      </h3>
+
+                      <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed line-clamp-3 mb-4">
+                        {item.excerpt}
+                      </p>
+                    </div>
                   </div>
-                </div>
 
-                <div className="px-6 pb-6 pt-0">
-                  <Link
-                    href={`/berita/${item.slug}`}
-                    className="inline-flex items-center gap-1.5 text-xs font-bold text-[#047857] dark:text-emerald-400 hover:text-[#064E3B] group/link"
-                  >
-                    <span>Baca Selengkapnya</span>
-                    <ArrowRight className="w-3.5 h-3.5 group-hover/link:translate-x-1 transition-transform" />
-                  </Link>
-                </div>
-              </article>
-            ); 
-          })}
-        </div>
+                  <div className="px-6 pb-6 pt-0">
+                    <Link
+                      href={`/berita/${item.slug}`}
+                      className="inline-flex items-center gap-1.5 text-xs font-bold text-[#047857] dark:text-emerald-400 hover:text-[#064E3B] group/link"
+                    >
+                      <span>Baca Selengkapnya</span>
+                      <ArrowRight className="w-3.5 h-3.5 group-hover/link:translate-x-1 transition-transform" />
+                    </Link>
+                  </div>
+                </article>
+              ); 
+            })}
+          </div>
+        )}
 
         {/* View All Button - Only on Homepage */}
         {isHomePage && (

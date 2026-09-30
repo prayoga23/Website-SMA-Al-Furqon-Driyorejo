@@ -7,12 +7,14 @@ interface ImageUploadInputProps {
   value: string;
   onChange: (base64: string) => void;
   label?: string;
+  aspect?: "video" | "portrait" | "square";
 }
 
 export const ImageUploadInput: React.FC<ImageUploadInputProps> = ({
   value,
   onChange,
   label = "Upload File Foto / Gambar",
+  aspect = "video",
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -20,19 +22,62 @@ export const ImageUploadInput: React.FC<ImageUploadInputProps> = ({
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (file.size > 5 * 1024 * 1024) {
-      alert("Ukuran file gambar terlalu besar. Maksimal 5MB.");
+    if (file.size > 10 * 1024 * 1024) {
+      alert("Ukuran file gambar terlalu besar. Maksimal 10MB.");
       return;
     }
 
     const reader = new FileReader();
-    reader.onloadend = () => {
-      if (typeof reader.result === "string") {
-        onChange(reader.result);
-      }
+    reader.onload = (event) => {
+      const resultStr = event.target?.result as string;
+      if (!resultStr) return;
+
+      const img = new Image();
+      img.onload = () => {
+        try {
+          const canvas = document.createElement("canvas");
+          let width = img.width;
+          let height = img.height;
+          const maxDim = 1200;
+
+          if (width > maxDim || height > maxDim) {
+            if (width > height) {
+              height = Math.round((height * maxDim) / width);
+              width = maxDim;
+            } else {
+              width = Math.round((width * maxDim) / height);
+              height = maxDim;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext("2d");
+          if (ctx) {
+            ctx.drawImage(img, 0, 0, width, height);
+            const compressed = canvas.toDataURL("image/jpeg", 0.85);
+            onChange(compressed);
+            return;
+          }
+        } catch (e) {
+          console.warn("Canvas compression fallback:", e);
+        }
+        onChange(resultStr);
+      };
+      img.onerror = () => {
+        onChange(resultStr);
+      };
+      img.src = resultStr;
     };
     reader.readAsDataURL(file);
   };
+
+  const containerClasses =
+    aspect === "portrait"
+      ? "relative group rounded-2xl overflow-hidden border border-slate-200 dark:border-emerald-900/60 bg-slate-900 w-44 h-56 flex items-center justify-center mx-auto sm:mx-0 shadow-md"
+      : aspect === "square"
+      ? "relative group rounded-2xl overflow-hidden border border-slate-200 dark:border-emerald-900/60 bg-slate-900 w-36 h-36 flex items-center justify-center mx-auto sm:mx-0 shadow-md"
+      : "relative group rounded-2xl overflow-hidden border border-slate-200 dark:border-emerald-900/60 bg-slate-900 aspect-video max-h-36 flex items-center justify-center shadow-md";
 
   return (
     <div className="space-y-1.5">
@@ -46,8 +91,12 @@ export const ImageUploadInput: React.FC<ImageUploadInputProps> = ({
       />
 
       {value ? (
-        <div className="relative group rounded-2xl overflow-hidden border border-slate-200 dark:border-emerald-900/60 bg-slate-900 aspect-video max-h-36 flex items-center justify-center">
-          <img src={value} alt="Preview" className="w-full h-full object-cover" />
+        <div className={containerClasses}>
+          <img
+            src={value}
+            alt="Preview"
+            className={`w-full h-full ${aspect === "portrait" ? "object-cover object-[center_15%]" : "object-cover"}`}
+          />
           <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
             <button
               type="button"
@@ -77,7 +126,7 @@ export const ImageUploadInput: React.FC<ImageUploadInputProps> = ({
           <p className="text-xs font-bold text-slate-700 dark:text-slate-200">
             Klik untuk Upload Gambar dari Komputer
           </p>
-          <p className="text-[10px] text-slate-400">Pilih file JPG, PNG, atau WEBP (Maksimal 5MB)</p>
+          <p className="text-[10px] text-slate-400">Pilih file JPG, PNG, atau WEBP (Maksimal 10MB)</p>
         </div>
       )}
     </div>

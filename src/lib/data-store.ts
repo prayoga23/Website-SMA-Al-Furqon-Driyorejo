@@ -44,7 +44,7 @@ export const initialSchoolInfo: SchoolInfo = {
     "Mewujudkan ekosistem pendidikan berwawasan teknologi digital yang aman, nyaman, dan peduli lingkungan sosial.",
   ],
   headmasterName: "Dr. Suryanto, S.Pd., M.Pd.",
-  headmasterPhoto: "/foto-kepala-sekolah.png",
+  headmasterPhoto: "/Pak Sur.jpeg",
   headmasterWelcome:
     "Assalamu'alaikum Warahmatullahi Wabarakatuh. Puji syukur kepada Allah SWT, Tuhan Yang Maha Esa yang telah memberikan rahmat dan anugerah-Nya. SMA AL-FURQON merupakan salah satu unit pendidikan dengan penyelenggara Pondok Pesantren AL-FURQON. Kami berharap masyarakat bisa mengakses website ini sebagai sarana informasi dan komunikasi terutama yang berhubungan dengan pendidikan, ilmu pengetahuan dan informasi seputar SMA AL-FURQON Driyorejo.",
   stats: {
@@ -57,56 +57,7 @@ export const initialSchoolInfo: SchoolInfo = {
   },
 };
 
-export const initialNews: NewsItem[] = [
-  {
-    id: "news-1790224407534",
-    title: "Matangkan Persiapan Kelulusan, Siswa Kelas XII SMA Al Furqon Driyorejo Ikuti Simulasi TKA",
-    slug: "matangkan-persiapan-kelulusan-siswa-kelas-xii-sma-al-furqon-driyorejo-ikuti-simulasi-tka",
-    excerpt:
-      "Matangkan Persiapan Kelulusan, Siswa Kelas XII SMA Al Furqon Driyorejo Ikuti Simulasi TKA guna memperkuat kesiapan akademik serta mental menghadapi ujian.",
-    content:
-      "SMA Al Furqon Driyorejo menggelar kegiatan Simulasi Tes Kemampuan Akademik (TKA) bagi seluruh siswa kelas XII. Kegiatan ini dirancang secara terstruktur dan terukur guna mematangkan kesiapan akademik, membiasakan ritme manajemen waktu ujian berbasis komputer, serta melatih kesiapan psikologis para santri dan siswa dalam menghadapi ujian kelulusan serta seleksi masuk perguruan tinggi negeri impian.",
-    category: "Berita",
-    date: "2026-09-24",
-    author: "Admin SMA Al-Furqon",
-    image: "/bg-al-furqon4.jpg",
-    isFeatured: false,
-    tags: ["Akademik", "Kelas XII", "Simulasi TKA"],
-    youtubeUrl: "",
-  },
-  {
-    id: "news-1",
-    title: "Allah Ku Ajukan Proposal Perubahanku",
-    slug: "allah-ku-ajukan-proposal-perubahanku",
-    excerpt:
-      "Sukses sendiri itu biasa, Sukses bersama itu luar biasa. Langkah inspiratif santri SMA Al-Furqon dalam menyusun target impian hidup dan ibadah mandiri.",
-    content:
-      "Setiap manusia memiliki kesempatan emas untuk memproposalkan perubahan hidupnya di hadapan Allah SWT. Di SMA Al-Furqon Driyorejo, para siswa diajak merumuskan 'Proposal Hidup' yang memuat target spiritual, hafalan Al-Qur'an, dan impian studi lanjut. Pembiasaan shalat dhuha, tahajud, dan dzikir pagi menjadi bahan bakar utama dalam menggapai cita-cita tinggi.",
-    category: "Berita",
-    date: "2026-01-15",
-    author: "Tim Humas SMA Al-Furqon",
-    image: "/bg-al-furqon2.jpg",
-    isFeatured: true,
-    tags: ["Pendidikan Karakter", "Spiritual", "Al-Furqon"],
-    youtubeUrl: "https://www.youtube.com/watch?v=aqz-KE-bpKQ",
-  },
-  {
-    id: "news-2",
-    title: "Saatnya Memetik Buah Ilmu: Sertifikasi Al-Qur'an Metode UMMI 2026",
-    slug: "saatnya-memetik-buah-ilmu",
-    excerpt:
-      "Pelaksanaan Munaqosyah dan Sertifikasi Tajwid & Tartil Al-Qur'an Metode UMMI berjalan khidmat dengan tingkat kelulusan 100%.",
-    content:
-      "Setelah menempuh proses panjang pembelajaran Al-Qur'an dengan metode UMMI, puluhan santri SMA Al-Furqon Driyorejo mengikuti ujian Munaqosyah resmi dari Ummi Foundation. Kegiatan ini disaksikan langsung oleh para orang tua wali murid yang terharu menyaksikan kualitas makhraj dan tajwid putra-putrinya.",
-    category: "Prestasi",
-    date: "2025-11-20",
-    author: "Koordinator Keagamaan",
-    image: "/bg-al-furqon3.jpg",
-    isFeatured: true,
-    tags: ["UMMI", "Al-Qur'an", "Sertifikasi"],
-    youtubeUrl: "",
-  },
-];
+export const initialNews: NewsItem[] = [];
 
 export const initialAgenda: AgendaItem[] = [];
 
@@ -127,7 +78,7 @@ export const initialTeachers: TeacherItem[] = [
     name: "Dr. Suryanto, S.Pd., M.Pd.",
     position: "Kepala Sekolah",
     subject: "Manajemen Sekolah",
-    photo: "/foto-guru/suryanto.png",
+    photo: "/Pak Sur.jpeg",
     education: "S2 Magister Pendidikan",
     bio: "Kepala Sekolah SMA Al-Furqon Driyorejo.",
   },

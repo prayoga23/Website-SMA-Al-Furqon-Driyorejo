@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { AdminSidebar } from "@/components/admin-sidebar";
 import { useData } from "@/context/data-context";
 import { Settings, Save, CheckCircle } from "lucide-react";
@@ -26,11 +26,42 @@ export default function AdminSettingsPage() {
         ? schoolInfo.headmasterName
         : "Dr. Suryanto, S.Pd., M.Pd.",
     headmasterPhoto:
-      schoolInfo.headmasterPhoto && !schoolInfo.headmasterPhoto.includes("unsplash.com")
+      schoolInfo.headmasterPhoto &&
+      !schoolInfo.headmasterPhoto.includes("unsplash.com") &&
+      schoolInfo.headmasterPhoto !== "/foto-kepala-sekolah.png"
         ? schoolInfo.headmasterPhoto
-        : "/foto-kepala-sekolah.png",
+        : "/Pak Sur.jpeg",
     headmasterWelcome: schoolInfo.headmasterWelcome,
   });
+
+  useEffect(() => {
+    if (schoolInfo) {
+      setForm({
+        name: schoolInfo.name || "",
+        tagline: schoolInfo.tagline || "",
+        accreditation: schoolInfo.accreditation || "",
+        npsn: schoolInfo.npsn || "",
+        foundation: schoolInfo.foundation || "",
+        address: schoolInfo.address || "",
+        email: schoolInfo.email || "",
+        whatsapp: schoolInfo.whatsapp || "",
+        vision: schoolInfo.vision || "",
+        missionsText: schoolInfo.missions ? schoolInfo.missions.join("\n") : "",
+        goalsText: schoolInfo.goals ? schoolInfo.goals.join("\n") : "",
+        headmasterName:
+          schoolInfo.headmasterName && schoolInfo.headmasterName !== "Suryanto, S.Pd., M.Pd."
+            ? schoolInfo.headmasterName
+            : "Dr. Suryanto, S.Pd., M.Pd.",
+        headmasterPhoto:
+          schoolInfo.headmasterPhoto &&
+          !schoolInfo.headmasterPhoto.includes("unsplash.com") &&
+          schoolInfo.headmasterPhoto !== "/foto-kepala-sekolah.png"
+            ? schoolInfo.headmasterPhoto
+            : "/Pak Sur.jpeg",
+        headmasterWelcome: schoolInfo.headmasterWelcome || "",
+      });
+    }
+  }, [schoolInfo]);
 
   const [saved, setSaved] = useState(false);
 
@@ -167,11 +198,32 @@ export default function AdminSettingsPage() {
           </div>
 
           {/* Local Image Upload for Headmaster Photo */}
-          <ImageUploadInput
-            value={form.headmasterPhoto}
-            onChange={(imgData) => setForm({ ...form, headmasterPhoto: imgData })}
-            label="Upload Foto Profil Kepala Sekolah *"
-          />
+          <div className="space-y-3 p-4 sm:p-5 rounded-2xl bg-slate-50 dark:bg-[#081612] border border-slate-200 dark:border-emerald-900/60">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <label className="block font-bold text-slate-800 dark:text-slate-100 text-xs sm:text-sm">
+                  Foto Profil Kepala Sekolah (Dr. Suryanto, S.Pd., M.Pd.) *
+                </label>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                  Foto ini otomatis terhubung ke Beranda (Selayang Pandang & Sambutan), Halaman Profil, Struktur Organisasi, dan Dewan Guru.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setForm((prev) => ({ ...prev, headmasterPhoto: "/Pak Sur.jpeg" }))}
+                className="self-start sm:self-auto px-3 py-1.5 rounded-lg bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 font-bold text-[11px] border border-emerald-300 dark:border-emerald-700/60 hover:bg-emerald-200 dark:hover:bg-emerald-900 transition-colors shrink-0 shadow-sm"
+              >
+                Gunakan Foto Asli (Pak Sur.jpeg)
+              </button>
+            </div>
+
+            <ImageUploadInput
+              value={form.headmasterPhoto}
+              onChange={(imgData) => setForm({ ...form, headmasterPhoto: imgData })}
+              label=""
+              aspect="portrait"
+            />
+          </div>
 
           <div>
             <label className="block font-bold text-slate-700 dark:text-slate-200 mb-1">Tagline Sekolah *</label>

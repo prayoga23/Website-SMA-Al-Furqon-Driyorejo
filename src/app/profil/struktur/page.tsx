@@ -29,7 +29,7 @@ import {
 import { useData } from "@/context/data-context";
 
 export default function StrukturPage() {
-  const { teachers } = useData();
+  const { teachers, schoolInfo } = useData();
   const [activeView, setActiveView] = useState<"interactive" | "original">("interactive");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedRole, setSelectedRole] = useState<any | null>(null);
@@ -68,13 +68,13 @@ export default function StrukturPage() {
   const schoolPrincipals = [
     {
       role: "Kepala Sekolah SMA Al-Furqon",
-      name: "Dr. Suryanto, S.Pd., M.Pd.",
+      name: schoolInfo?.headmasterName || "Dr. Suryanto, S.Pd., M.Pd.",
       category: "Pimpinan Sekolah",
       level: 4,
       isMain: true,
       desc: "Penanggung Jawab Utama Manajemen & Pembelajaran SMA Al-Furqon Driyorejo.",
       badgeColor: "bg-emerald-700 text-white dark:bg-emerald-600",
-      photo: "/foto-guru/suryanto.png",
+      photo: schoolInfo?.headmasterPhoto || "/Pak Sur.jpeg",
     },
     {
       role: "Kepala TU / Bendahara SMA Al-Furqon",

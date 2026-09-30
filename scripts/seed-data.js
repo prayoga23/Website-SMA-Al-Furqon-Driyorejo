@@ -32,7 +32,7 @@ async function seedData() {
     email: "sma.alfurqon.driyorejo1@gmail.com",
     website: "https://smaalfurqondriyorejo.sch.id",
     headmasterName: "Dr. Suryanto, S.Pd., M.Pd.",
-    headmasterPhoto: "/foto-kepala-sekolah.png",
+    headmasterPhoto: "/Pak Sur.jpeg",
   };
 
   await sql`
@@ -57,7 +57,7 @@ async function seedData() {
       name: "Dr. Suryanto, S.Pd., M.Pd.",
       position: "Kepala Sekolah",
       subject: "Manajemen Sekolah",
-      photo: "/foto-guru/suryanto.png",
+      photo: "/Pak Sur.jpeg",
       education: "S2 Magister Pendidikan",
       bio: "Kepala Sekolah SMA Al-Furqon Driyorejo."
     },

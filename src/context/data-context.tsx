@@ -102,18 +102,18 @@ export const DataProvider: React.FC<{
 }> = ({ children, initialData }) => {
   const [darkMode, setDarkModeState] = useState<boolean>(false);
   const [schoolInfo, setSchoolInfo] = useState<SchoolInfo>(initialData?.schoolInfo || initialSchoolInfo);
-  const [news, setNews] = useState<NewsItem[]>(initialData?.news || initialNews);
-  const [agendas, setAgendas] = useState<AgendaItem[]>(initialData?.agendas || initialAgenda);
-  const [achievements, setAchievements] = useState<AchievementItem[]>(initialData?.achievements || initialAchievements);
-  const [teachers, setTeachers] = useState<TeacherItem[]>(initialData?.teachers || initialTeachers);
-  const [extracurriculars, setExtracurriculars] = useState<ExtracurricularItem[]>(initialData?.extracurriculars || initialExtracurriculars);
-  const [gallery, setGallery] = useState<GalleryItem[]>(initialData?.gallery || initialGallery);
-  const [applicants, setApplicants] = useState<PPDBApplicant[]>(initialData?.applicants || initialApplicants);
-  const [faqs, setFaqs] = useState<FAQItem[]>(initialData?.faqs || initialFAQs);
-  const [testimonials, setTestimonials] = useState<TestimonialItem[]>(initialData?.testimonials || initialTestimonials);
-  const [facilities, setFacilities] = useState<FacilityItem[]>(initialData?.facilities || initialFacilities);
-  const [users, setUsers] = useState<UserItem[]>(initialData?.users || initialUsers);
-  const [kesiswaanActivities, setKesiswaanActivities] = useState<KesiswaanActivity[]>(initialData?.kesiswaanActivities || initialKesiswaanActivities);
+  const [news, setNews] = useState<NewsItem[]>(initialData?.news ?? []);
+  const [agendas, setAgendas] = useState<AgendaItem[]>(initialData?.agendas ?? []);
+  const [achievements, setAchievements] = useState<AchievementItem[]>(initialData?.achievements ?? []);
+  const [teachers, setTeachers] = useState<TeacherItem[]>(initialData?.teachers ?? initialTeachers);
+  const [extracurriculars, setExtracurriculars] = useState<ExtracurricularItem[]>(initialData?.extracurriculars ?? initialExtracurriculars);
+  const [gallery, setGallery] = useState<GalleryItem[]>(initialData?.gallery ?? []);
+  const [applicants, setApplicants] = useState<PPDBApplicant[]>(initialData?.applicants ?? []);
+  const [faqs, setFaqs] = useState<FAQItem[]>(initialData?.faqs ?? initialFAQs);
+  const [testimonials, setTestimonials] = useState<TestimonialItem[]>(initialData?.testimonials ?? []);
+  const [facilities, setFacilities] = useState<FacilityItem[]>(initialData?.facilities ?? initialFacilities);
+  const [users, setUsers] = useState<UserItem[]>(initialData?.users ?? initialUsers);
+  const [kesiswaanActivities, setKesiswaanActivities] = useState<KesiswaanActivity[]>(initialData?.kesiswaanActivities ?? initialKesiswaanActivities);
   const [currentUser, setCurrentUser] = useState<UserItem | null>(null);
 
   // Synchronize state directly to Neon PostgreSQL DB
@@ -156,27 +156,29 @@ export const DataProvider: React.FC<{
               ? data.schoolInfo.headmasterName
               : "Dr. Suryanto, S.Pd., M.Pd.",
           headmasterPhoto:
-            data.schoolInfo.headmasterPhoto && !data.schoolInfo.headmasterPhoto.includes("unsplash.com")
+            data.schoolInfo.headmasterPhoto &&
+            !data.schoolInfo.headmasterPhoto.includes("unsplash.com") &&
+            data.schoolInfo.headmasterPhoto !== "/foto-kepala-sekolah.png"
               ? data.schoolInfo.headmasterPhoto
-              : "/foto-kepala-sekolah.png",
+              : "/Pak Sur.jpeg",
           stats: {
             ...initialSchoolInfo.stats,
             ...(data.schoolInfo.stats || {}),
           },
         });
       }
-      if (Array.isArray(data.news) && data.news.length > 0) setNews(data.news);
-      if (Array.isArray(data.agendas) && data.agendas.length > 0) setAgendas(data.agendas);
-      if (Array.isArray(data.achievements) && data.achievements.length > 0) setAchievements(data.achievements);
-      if (Array.isArray(data.teachers) && data.teachers.length > 0) setTeachers(data.teachers);
-      if (Array.isArray(data.extracurriculars) && data.extracurriculars.length > 0) setExtracurriculars(data.extracurriculars);
-      if (Array.isArray(data.gallery) && data.gallery.length > 0) setGallery(data.gallery);
+      if (Array.isArray(data.news)) setNews(data.news);
+      if (Array.isArray(data.agendas)) setAgendas(data.agendas);
+      if (Array.isArray(data.achievements)) setAchievements(data.achievements);
+      if (Array.isArray(data.teachers)) setTeachers(data.teachers);
+      if (Array.isArray(data.extracurriculars)) setExtracurriculars(data.extracurriculars);
+      if (Array.isArray(data.gallery)) setGallery(data.gallery);
       if (Array.isArray(data.applicants)) setApplicants(data.applicants);
-      if (Array.isArray(data.facilities) && data.facilities.length > 0) setFacilities(data.facilities);
-      if (Array.isArray(data.testimonials) && data.testimonials.length > 0) setTestimonials(data.testimonials);
-      if (Array.isArray(data.users) && data.users.length > 0) setUsers(data.users);
-      if (Array.isArray(data.kesiswaanActivities) && data.kesiswaanActivities.length > 0) setKesiswaanActivities(data.kesiswaanActivities);
-      if (Array.isArray(data.faqs) && data.faqs.length > 0) setFaqs(data.faqs);
+      if (Array.isArray(data.facilities)) setFacilities(data.facilities);
+      if (Array.isArray(data.testimonials)) setTestimonials(data.testimonials);
+      if (Array.isArray(data.users)) setUsers(data.users);
+      if (Array.isArray(data.kesiswaanActivities)) setKesiswaanActivities(data.kesiswaanActivities);
+      if (Array.isArray(data.faqs)) setFaqs(data.faqs);
     } catch (err) {
       console.error("Error refreshing from Neon DB:", err);
     }
@@ -250,6 +252,29 @@ export const DataProvider: React.FC<{
     };
     setSchoolInfo(updated);
     syncToApi("school_info", "save", updated);
+
+    // Also automatically synchronize teacher entry for Kepala Sekolah if name or photo is modified
+    if (info.headmasterName || info.headmasterPhoto) {
+      const kepsekIdx = teachers.findIndex(
+        (t) =>
+          t.position?.toLowerCase().includes("kepala sekolah") ||
+          t.position?.toLowerCase().includes("kepsek") ||
+          t.id === "t-2" ||
+          t.name.toLowerCase().includes("suryanto")
+      );
+      if (kepsekIdx !== -1) {
+        const currentT = teachers[kepsekIdx];
+        const updatedTeacher: TeacherItem = {
+          ...currentT,
+          name: info.headmasterName || currentT.name,
+          photo: info.headmasterPhoto || currentT.photo,
+        };
+        const newTeachers = [...teachers];
+        newTeachers[kepsekIdx] = updatedTeacher;
+        setTeachers(newTeachers);
+        syncToApi("teachers", "save", updatedTeacher);
+      }
+    }
   };
 
   // --- NEWS ---

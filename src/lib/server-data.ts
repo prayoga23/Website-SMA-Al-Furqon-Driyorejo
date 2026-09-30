@@ -82,7 +82,7 @@ export async function getServerDataBundle(): Promise<ServerDataBundle> {
 
     const bundle = result[0]?.bundle || {};
 
-    const rawNews = bundle.news && bundle.news.length > 0 ? bundle.news : initialNews;
+    const rawNews = Array.isArray(bundle.news) ? bundle.news : [];
     const rawAgendas = Array.isArray(bundle.agendas) ? bundle.agendas : initialAgenda;
     const rawAchievements = Array.isArray(bundle.achievements) ? bundle.achievements : initialAchievements;
     const rawTeachers = bundle.teachers && bundle.teachers.length > 0 ? bundle.teachers : initialTeachers;

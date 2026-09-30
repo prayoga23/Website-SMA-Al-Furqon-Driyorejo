@@ -20,7 +20,7 @@ import { TeacherItem } from "@/lib/types";
 import { sortTeachersByPriority } from "@/lib/data-store";
 
 export default function GuruStafPage() {
-  const { teachers } = useData();
+  const { teachers, schoolInfo } = useData();
   const [searchTerm, setSearchTerm] = useState("");
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [selectedTeacher, setSelectedTeacher] = useState<TeacherItem | null>(null);
@@ -168,35 +168,44 @@ export default function GuruStafPage() {
         {/* Teachers Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {sortedTeachers.map((t) => {
+            const isKepsek =
+              t.position?.toLowerCase().includes("kepala sekolah") ||
+              t.position?.toLowerCase().includes("kepsek") ||
+              t.id === "t-2" ||
+              t.name.toLowerCase().includes("suryanto");
+
+            const displayName = isKepsek && schoolInfo?.headmasterName ? schoolInfo.headmasterName : t.name;
+            const displayPhoto = isKepsek && schoolInfo?.headmasterPhoto ? schoolInfo.headmasterPhoto : (t.photo || "/Pak Sur.jpeg");
+
             const hasError = imgErrors[t.id];
-            const isUnsplash = Boolean(t.photo && t.photo.includes("unsplash.com"));
-            const showFallback = !t.photo || isUnsplash || hasError;
+            const isUnsplash = Boolean(displayPhoto && displayPhoto.includes("unsplash.com"));
+            const showFallback = !displayPhoto || isUnsplash || hasError;
 
             return (
               <div
                 key={t.id}
-                onClick={() => setSelectedTeacher(t)}
+                onClick={() => setSelectedTeacher({ ...t, name: displayName, photo: displayPhoto })}
                 className="bg-white dark:bg-[#0E241E] rounded-3xl p-6 border border-slate-200 dark:border-emerald-900/40 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between group text-center cursor-pointer relative"
               >
                 <div>
                   {/* Photo Container with Fallback Badge */}
                   <div className="w-24 h-24 rounded-full overflow-hidden mx-auto mb-4 border-4 border-[#064E3B] dark:border-emerald-500 shadow-md group-hover:scale-105 transition-transform duration-300 relative bg-emerald-900 flex items-center justify-center">
-                    {t.photo && !showFallback ? (
+                    {displayPhoto && !showFallback ? (
                       <img
-                        src={t.photo}
-                        alt={t.name}
+                        src={displayPhoto}
+                        alt={displayName}
                         className="w-full h-full object-cover"
                         onError={() => handleImgError(t.id)}
                       />
                     ) : (
                       <div className="w-full h-full bg-gradient-to-br from-emerald-800 to-emerald-950 text-white font-extrabold text-2xl flex items-center justify-center font-heading">
-                        {t.name.split(" ").slice(0, 2).map(n => n[0]).join("")}
+                        {displayName.split(" ").slice(0, 2).map(n => n[0]).join("")}
                       </div>
                     )}
                   </div>
 
                   <h3 className="font-bold text-base text-slate-900 dark:text-white font-heading mb-1 group-hover:text-[#047857] dark:group-hover:text-emerald-400 transition-colors">
-                    {t.name}
+                    {displayName}
                   </h3>
                   <p className="text-xs font-semibold text-[#047857] dark:text-emerald-400 mb-2">
                     {t.position}
