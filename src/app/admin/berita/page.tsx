@@ -142,9 +142,7 @@ export default function AdminBeritaPage() {
   const saveArticle = (forcedStatus?: "published" | "draft") => {
     const finalStatus = forcedStatus || status;
     const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, "-");
-    const imageValue =
-      image ||
-      "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80";
+    const imageValue = image ? image.trim() : "";
 
     if (editingItem) {
       updateNews(editingItem.id, {
@@ -594,7 +592,7 @@ export default function AdminBeritaPage() {
                   <tr key={item.id} className="hover:bg-slate-50/50 dark:hover:bg-emerald-950/30 transition-colors">
                     <td className="p-3 font-bold text-slate-900 dark:text-white max-w-xs">
                       <div className="flex items-center gap-2">
-                        {item.image && (
+                        {item.image && item.image.trim() !== "" && (
                           <img src={item.image} alt="" className="w-8 h-8 rounded-lg object-cover shrink-0" />
                         )}
                         <span className="truncate" title={item.title}>

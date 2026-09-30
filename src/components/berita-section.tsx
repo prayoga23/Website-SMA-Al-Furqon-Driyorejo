@@ -85,9 +85,8 @@ export const BeritaSection: React.FC = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredNews.slice(0, 6).map((item, idx) => {
-              const bgImages = ["/bg-al-furqon2.jpg", "/bg-al-furqon3.jpg", "/bg-al-furqon4.jpg"];
-              const cardImg = bgImages[idx % bgImages.length];
+            {filteredNews.slice(0, 6).map((item) => {
+              const hasImage = Boolean(item.image && item.image.trim() !== "");
 
               return (
                 <article
@@ -95,46 +94,83 @@ export const BeritaSection: React.FC = () => {
                   className="bg-white dark:bg-[#0E241E] rounded-3xl overflow-hidden border border-slate-200 dark:border-emerald-900/40 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group"
                 >
                   <div>
-                    {/* Image & Category Tag */}
-                    <div className="relative h-48 overflow-hidden">
-                      <img
-                        src={item.image || cardImg}
-                        alt={item.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-                      <span className="absolute top-3 left-3 bg-[#064E3B] text-amber-300 text-[10px] font-bold px-2.5 py-1 rounded-md uppercase border border-amber-400/30 shadow">
-                        {item.category}
-                      </span>
-                      {item.youtubeUrl && (
-                        <span className="absolute top-3 right-3 bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-md flex items-center gap-1 shadow">
-                          <YoutubeIcon className="w-3 h-3 text-white" />
-                          <span>Video</span>
-                        </span>
-                      )}
-                    </div>
+                    {hasImage ? (
+                      <>
+                        {/* Image & Category Tag */}
+                        <div className="relative h-48 overflow-hidden">
+                          <img
+                            src={item.image}
+                            alt={item.title}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                          <span className="absolute top-3 left-3 bg-[#064E3B] text-amber-300 text-[10px] font-bold px-2.5 py-1 rounded-md uppercase border border-amber-400/30 shadow">
+                            {item.category}
+                          </span>
+                          {item.youtubeUrl && (
+                            <span className="absolute top-3 right-3 bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-md flex items-center gap-1 shadow">
+                              <YoutubeIcon className="w-3 h-3 text-white" />
+                              <span>Video</span>
+                            </span>
+                          )}
+                        </div>
 
-                    {/* Article Content */}
-                    <div className="p-6">
-                      <div className="flex items-center gap-4 text-[11px] text-slate-400 mb-3">
-                        <span className="flex items-center gap-1">
-                          <Calendar className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                          {formatDate(item.date)}
-                        </span>
-                        <span className="flex items-center gap-1">
-                          <User className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                          {item.author}
-                        </span>
+                        {/* Article Content */}
+                        <div className="p-6">
+                          <div className="flex items-center gap-4 text-[11px] text-slate-400 mb-3">
+                            <span className="flex items-center gap-1">
+                              <Calendar className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                              {formatDate(item.date)}
+                            </span>
+                            <span className="flex items-center gap-1">
+                              <User className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                              {item.author}
+                            </span>
+                          </div>
+
+                          <h3 className="text-base font-bold text-slate-900 dark:text-white font-heading mb-2 group-hover:text-[#047857] dark:group-hover:text-emerald-400 transition-colors line-clamp-2">
+                            <Link href={`/berita/${item.slug}`}>{item.title}</Link>
+                          </h3>
+
+                          <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed line-clamp-3 mb-4">
+                            {item.excerpt}
+                          </p>
+                        </div>
+                      </>
+                    ) : (
+                      <div className="p-6">
+                        <div className="flex items-center justify-between mb-4">
+                          <span className="bg-[#064E3B] text-amber-300 text-[10px] font-bold px-2.5 py-1 rounded-md uppercase border border-amber-400/30 shadow">
+                            {item.category}
+                          </span>
+                          {item.youtubeUrl && (
+                            <span className="bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-md flex items-center gap-1 shadow">
+                              <YoutubeIcon className="w-3 h-3 text-white" />
+                              <span>Video</span>
+                            </span>
+                          )}
+                        </div>
+
+                        <div className="flex items-center gap-4 text-[11px] text-slate-400 mb-3">
+                          <span className="flex items-center gap-1">
+                            <Calendar className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                            {formatDate(item.date)}
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <User className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                            {item.author}
+                          </span>
+                        </div>
+
+                        <h3 className="text-base font-bold text-slate-900 dark:text-white font-heading mb-2 group-hover:text-[#047857] dark:group-hover:text-emerald-400 transition-colors line-clamp-2">
+                          <Link href={`/berita/${item.slug}`}>{item.title}</Link>
+                        </h3>
+
+                        <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed line-clamp-3 mb-4">
+                          {item.excerpt}
+                        </p>
                       </div>
-
-                      <h3 className="text-base font-bold text-slate-900 dark:text-white font-heading mb-2 group-hover:text-[#047857] dark:group-hover:text-emerald-400 transition-colors line-clamp-2">
-                        <Link href={`/berita/${item.slug}`}>{item.title}</Link>
-                      </h3>
-
-                      <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed line-clamp-3 mb-4">
-                        {item.excerpt}
-                      </p>
-                    </div>
+                    )}
                   </div>
 
                   <div className="px-6 pb-6 pt-0">

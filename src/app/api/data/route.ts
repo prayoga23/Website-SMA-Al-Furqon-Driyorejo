@@ -85,7 +85,7 @@ export async function GET() {
           category: n.category || "Berita",
           date: n.date || "",
           author: n.author || "Admin SMA Al-Furqon",
-          image: n.image || "/bg-al-furqon2.jpg",
+          image: n.image || "",
           isFeatured: Boolean(n.is_featured ?? n.isFeatured),
           tags: Array.isArray(n.tags) ? n.tags : typeof n.tags === "string" ? JSON.parse(n.tags || "[]") : [],
           youtubeUrl: n.youtube_url || n.youtubeUrl || "",

@@ -103,9 +103,11 @@ export default function BeritaDetailPage() {
         </Link>
 
         {/* Featured Image */}
-        <div className="rounded-3xl overflow-hidden shadow-xl border border-slate-200 dark:border-emerald-900/40 aspect-[16/9]">
-          <img src={article.image} alt={article.title} className="w-full h-full object-cover" />
-        </div>
+        {article.image && article.image.trim() !== "" && (
+          <div className="rounded-3xl overflow-hidden shadow-xl border border-slate-200 dark:border-emerald-900/40 aspect-[16/9]">
+            <img src={article.image} alt={article.title} className="w-full h-full object-cover" />
+          </div>
+        )}
 
         {/* Article Content Container */}
         <div className="bg-white dark:bg-[#0E241E] p-8 sm:p-12 rounded-3xl border border-slate-200 dark:border-emerald-900/40 shadow-sm space-y-6">
