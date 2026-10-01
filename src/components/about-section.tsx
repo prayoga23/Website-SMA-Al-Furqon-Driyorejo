@@ -291,7 +291,7 @@ export const AboutSection: React.FC = () => {
               </Link>
 
               <Link
-                href="/ppdb"
+                href="/psb"
                 className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-xs shadow-md transition-all"
               >
                 <span>Penerimaan Santri Baru (PSB)</span>

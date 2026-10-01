@@ -60,10 +60,10 @@ export const HeroSection: React.FC = () => {
             {/* Call to Actions */}
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
               <Link
-                href="/ppdb"
+                href="/psb"
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-xl font-bold text-sm text-slate-900 bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 hover:from-amber-300 hover:to-amber-400 shadow-lg shadow-amber-500/20 active:scale-95 transition-all duration-200 group"
               >
-                <span>Daftar PPDB Sekarang</span>
+                <span>Daftar PSB Sekarang</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform text-slate-950" />
               </Link>
 

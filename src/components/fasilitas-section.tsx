@@ -338,11 +338,11 @@ export const FasilitasSection: React.FC = () => {
                 </a>
 
                 <Link
-                  href="/ppdb"
+                  href="/psb"
                   onClick={() => setShowBrochureModal(false)}
                   className="flex-1 sm:flex-none px-6 py-2.5 rounded-xl bg-[#064E3B] hover:bg-[#047857] text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow"
                 >
-                  <span>Daftar PPDB</span>
+                  <span>Daftar PSB</span>
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>

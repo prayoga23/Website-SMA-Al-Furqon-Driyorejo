@@ -156,11 +156,13 @@ export interface PPDBApplicant {
   selectedMajor?: "MIPA / IPA" | "IPS" | "Kurikulum Merdeka Unggulan";
 }
 
+export type PSBApplicant = PPDBApplicant;
+
 export interface FAQItem {
   id: string;
   question: string;
   answer: string;
-  category: "PPDB" | "Kurikulum" | "Kehidupan Santri" | "Fasilitas" | "Umum";
+  category: "PSB" | "PPDB" | "Kurikulum" | "Kehidupan Santri" | "Fasilitas" | "Umum";
 }
 
 export interface TestimonialItem {
@@ -188,7 +190,7 @@ export interface UserItem {
   name: string;
   username: string;
   password: string;
-  role: "Super Admin" | "Administrator" | "Admin" | "Editor Berita" | "Petugas PPDB";
+  role: "Super Admin" | "Administrator" | "Admin" | "Editor Berita" | "Petugas PSB" | "Petugas PPDB";
   status: "Aktif" | "Nonaktif";
   email: string;
   lastLogin?: string;

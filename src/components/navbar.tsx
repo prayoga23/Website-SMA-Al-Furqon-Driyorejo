@@ -76,7 +76,7 @@ export const Navbar: React.FC = () => {
     { name: "Prestasi", href: "/prestasi" },
     { name: "Berita", href: "/berita" },
     { name: "Agenda", href: "/agenda" },
-    { name: "PPDB", href: "/ppdb" },
+    { name: "PSB", href: "/psb" },
     { name: "Kontak", href: "/kontak" },
   ];
 
@@ -98,7 +98,7 @@ export const Navbar: React.FC = () => {
 
             <div className="flex items-center gap-2.5 shrink-2">
               <a
-                href={`https://wa.me/${schoolInfo.whatsapp}?text=Halo%20Admin%20SMA%20Al-Furqon,%20saya%20ingin%20bertanya%20informasi%20PPDB`}
+                href={`https://wa.me/${schoolInfo.whatsapp}?text=Halo%20Admin%20SMA%20Al-Furqon,%20saya%20ingin%20bertanya%20informasi%20PSB`}
                 target="_blank"
                 rel="noreferrer"
                 className="text-[#064E3B] hover:bg-amber-200 transition-colors flex items-center gap-1.5 font-bold bg-amber-300 px-2.5 py-1 rounded-lg border border-amber-400/60 shadow-xs"
@@ -116,7 +116,7 @@ export const Navbar: React.FC = () => {
               <span className="truncate">NPSN: {schoolInfo.npsn} | Akreditasi: {schoolInfo.accreditation}</span>
             </span>
             <a
-              href={`https://wa.me/${schoolInfo.whatsapp}?text=Halo%20Admin%20SMA%20Al-Furqon,%20saya%20ingin%20bertanya%20informasi%20PPDB`}
+              href={`https://wa.me/${schoolInfo.whatsapp}?text=Halo%20Admin%20SMA%20Al-Furqon,%20saya%20ingin%20bertanya%20informasi%20PSB`}
               target="_blank"
               rel="noreferrer"
               className="flex items-center gap-1 font-bold shrink-0 bg-amber-300 px-2.5 py-1 rounded-lg border border-amber-400/60 text-[#064E3B] hover:bg-amber-200 transition-colors shadow-xs"
@@ -210,13 +210,13 @@ export const Navbar: React.FC = () => {
 
           {/* Desktop Right Action Buttons */}
           <div className="hidden lg:flex items-center gap-1 shrink-0">
-            {/* PPDB Button */}
+            {/* PSB Button */}
             <Link
-              href="/ppdb"
+              href="/psb"
               className="relative inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs text-white bg-gradient-to-r from-[#064E3B] via-[#047857] to-[#0D9488] hover:from-[#047857] hover:to-[#059669] shadow-md active:scale-95 transition-all duration-200 group overflow-hidden border border-emerald-400/20"
             >
               <UserRoundPlus className="w-4 h-4 text-amber-300" />
-              <span>PPDB 2026/2027</span>
+              <span>PSB 2026/2027</span>
             </Link>
           </div>
 
@@ -315,11 +315,11 @@ export const Navbar: React.FC = () => {
             {/* Mobile Footer CTAs */}
             <div className="pt-6 border-t border-slate-100 space-y-3">
               <Link
-                href="/ppdb"
+                href="/psb"
                 onClick={() => setMobileMenuOpen(false)}
                 className="w-full py-3 px-4 rounded-xl text-center font-bold text-sm text-white bg-[#064E3B] hover:bg-[#047857] shadow-md block"
               >
-                Daftar PPDB 2026/2027
+                Daftar PSB 2026/2027
               </Link>
               <div className="text-center text-xs text-slate-400">
                 SMA Al-Furqon Driyorejo &copy; 2026

@@ -43,7 +43,7 @@ export const AdminSidebar: React.FC = () => {
     { name: "Kelola Agenda & Kalender", href: "/admin/agenda", icon: Calendar },
     { name: "Kelola Guru & Staf", href: "/admin/guru", icon: GraduationCap },
     { name: "Kelola Galeri Dokumentasi", href: "/admin/galeri", icon: ImageIcon },
-    { name: "Kelola Pendaftar PPDB", href: "/admin/ppdb", icon: Users },
+    { name: "Kelola Pendaftar PSB", href: "/admin/psb", icon: Users },
   ];
 
   const handleLogout = () => {

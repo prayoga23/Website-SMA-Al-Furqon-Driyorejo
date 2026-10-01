@@ -26,7 +26,7 @@ export default function AdminPPDBPage() {
         <div className="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-emerald-900/40">
           <div>
             <h1 className="text-xl font-bold font-heading text-slate-900 dark:text-white">
-              Data Pendaftar PPDB 2026/2027
+              Data Pendaftar PSB 2026/2027
             </h1>
             <p className="text-xs text-slate-500">
               Kelola, lihat detail 4-step, dan verifikasi status penerimaan calon santri baru.
@@ -128,7 +128,7 @@ export default function AdminPPDBPage() {
           </table>
           {applicants.length === 0 && (
             <div className="p-8 text-center text-xs text-slate-400">
-              Belum ada data pendaftar PPDB yang masuk.
+              Belum ada data pendaftar PSB yang masuk.
             </div>
           )}
         </div>

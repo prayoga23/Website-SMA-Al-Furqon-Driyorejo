@@ -147,21 +147,21 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Column 3: Information & PPDB */}
+          {/* Column 3: Information & PSB */}
           <div>
             <h4 className="font-bold text-sm text-white font-heading uppercase tracking-wider mb-4 pb-2 border-b border-emerald-800/60 flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-amber-400"></span>
-              Informasi PPDB & Layanan
+              Informasi PSB & Layanan
             </h4>
             <ul className="space-y-2 text-xs">
               {[
-                { name: "Penerimaan Siswa Baru (PPDB 2026)", href: "/ppdb" },
-                { name: "Formulir Pendaftaran Online", href: "/ppdb#form" },
-                { name: "Jadwal & Gelombang Seleksi", href: "/ppdb#jadwal" },
+                { name: "Penerimaan Santri Baru (PSB 2026)", href: "/psb" },
+                { name: "Formulir Pendaftaran Online", href: "/psb#form" },
+                { name: "Jadwal & Gelombang Seleksi", href: "/psb#jadwal" },
                 { name: "Kalender Akademik 2026/2027", href: "/akademik/kalender" },
                 { name: "Berita & Pengumuman Terbaru", href: "/berita" },
                 { name: "Agenda Kegiatan Sekolah", href: "/agenda" },
-                { name: "Hubungi Sekretariat PPDB", href: "/kontak" },
+                { name: "Hubungi Sekretariat PSB", href: "/kontak" },
               ].map((item) => (
                 <li key={item.name}>
                   <Link
@@ -237,8 +237,8 @@ export const Footer: React.FC = () => {
             <Link href="/profil" className="hover:text-slate-200 transition-colors">
               Profil Sekolah
             </Link>
-            <Link href="/ppdb" className="hover:text-slate-200 transition-colors">
-              PPDB Online
+            <Link href="/psb" className="hover:text-slate-200 transition-colors">
+              PSB Online
             </Link>
           </div>
         </div>

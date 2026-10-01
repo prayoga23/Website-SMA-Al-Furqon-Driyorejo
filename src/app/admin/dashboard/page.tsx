@@ -39,7 +39,7 @@ export default function AdminDashboardPage() {
     { title: "Prestasi Terdaftar", count: achievements.length, icon: Trophy, color: "bg-amber-500" },
     { title: "Guru & Staf", count: teachers.length, icon: GraduationCap, color: "bg-emerald-700" },
     { title: "Dokumentasi Galeri", count: gallery.length, icon: ImageIcon, color: "bg-sky-600" },
-    { title: "Pendaftar PPDB", count: applicants.length, icon: Users, color: "bg-purple-600" },
+    { title: "Pendaftar PSB", count: applicants.length, icon: Users, color: "bg-purple-600" },
   ];
 
   return (
@@ -93,13 +93,13 @@ export default function AdminDashboardPage() {
           })}
         </div>
 
-        {/* PPDB Submissions Recent Table */}
+        {/* PSB Submissions Recent Table */}
         <div className="bg-white dark:bg-[#0E241E] p-6 rounded-2xl border border-slate-200 dark:border-emerald-900/40 shadow-sm space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="text-base font-bold font-heading text-slate-900 dark:text-white">
-              Data Pendaftar PPDB 2026 Terbaru
+              Data Pendaftar PSB 2026 Terbaru
             </h3>
-            <Link href="/admin/ppdb" className="text-xs font-bold text-[#047857] dark:text-emerald-400 hover:underline">
+            <Link href="/admin/psb" className="text-xs font-bold text-[#047857] dark:text-emerald-400 hover:underline">
               Lihat Semua ({applicants.length})
             </Link>
           </div>

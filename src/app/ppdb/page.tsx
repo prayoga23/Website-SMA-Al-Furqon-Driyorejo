@@ -352,9 +352,9 @@ export default function PPDBPage() {
       <Navbar />
 
       <PageHeader
-        title="PPDB Online T.A. 2026/2027"
-        subtitle="Pendaftaran Peserta Didik Baru SMA Al-Furqon Driyorejo, Gresik."
-        breadcrumb={[{ name: "PPDB 2026" }]}
+        title="PSB Online T.A. 2026/2027"
+        subtitle="Pendaftaran Santri Baru (Siswa Baru) SMA Al-Furqon Driyorejo, Gresik."
+        breadcrumb={[{ name: "PSB 2026" }]}
       />
 
       <main className="flex-1 space-y-16 py-12">
@@ -444,7 +444,7 @@ export default function PPDBPage() {
 
                 <div className="pt-4 flex flex-col sm:flex-row justify-center gap-3">
                   <a
-                    href={`https://wa.me/628990703408?text=Halo%20Admin%20PPDB,%20saya%20sudah%20mendaftar%20dengan%20No.%20${submittedResult.registrationNumber}%20atas%20nama%20${submittedResult.fullName}`}
+                    href={`https://wa.me/628990703408?text=Halo%20Admin%20PSB,%20saya%20sudah%20mendaftar%20dengan%20No.%20${submittedResult.registrationNumber}%20atas%20nama%20${submittedResult.fullName}`}
                     target="_blank"
                     rel="noreferrer"
                     className="px-6 py-3 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs flex items-center justify-center gap-2"
@@ -1310,7 +1310,7 @@ export default function PPDBPage() {
                       className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-[#064E3B] via-[#047857] to-[#0D9488] hover:from-[#047857] hover:to-[#059669] text-white font-extrabold text-xs shadow-xl flex items-center gap-2 transition-all active:scale-95 disabled:opacity-50"
                     >
                       <Send className="w-4 h-4" />
-                      <span>{loading ? "Mengirim Data..." : "Kirim Formulir Pendaftaran PPDB"}</span>
+                      <span>{loading ? "Mengirim Data..." : "Kirim Formulir Pendaftaran PSB"}</span>
                     </button>
                   )}
                 </div>

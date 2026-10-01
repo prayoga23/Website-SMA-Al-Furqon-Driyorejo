@@ -89,6 +89,7 @@ interface DataContextType {
   loginUser: (username: string, password: string) => { success: boolean; message?: string; user?: UserItem };
   logoutUser: () => void;
   submitPPDB: (applicant: Omit<PPDBApplicant, "id" | "registrationNumber" | "registrationDate" | "status">) => PPDBApplicant;
+  submitPSB: (applicant: Omit<PPDBApplicant, "id" | "registrationNumber" | "registrationDate" | "status">) => PPDBApplicant;
   updateApplicantStatus: (id: string, status: PPDBApplicant["status"]) => void;
 }
 
@@ -594,7 +595,7 @@ export const DataProvider: React.FC<{
     localStorage.removeItem("sma_admin_token");
   };
 
-  // --- PPDB APPLICANTS ---
+  // --- PSB / PPDB APPLICANTS ---
   const submitPPDB = (
     data: Omit<PPDBApplicant, "id" | "registrationNumber" | "registrationDate" | "status">
   ): PPDBApplicant => {
@@ -602,8 +603,8 @@ export const DataProvider: React.FC<{
     const pad = count < 10 ? "00" + count : count < 100 ? "0" + count : count;
     const newApplicant: PPDBApplicant = {
       ...data,
-      id: "ppdb-" + Date.now(),
-      registrationNumber: `PPDB-2026-${pad}`,
+      id: "psb-" + Date.now(),
+      registrationNumber: `PSB-2026-${pad}`,
       registrationDate: new Date().toISOString().split("T")[0],
       status: "Menunggu Verifikasi",
     };
@@ -612,6 +613,8 @@ export const DataProvider: React.FC<{
     syncToApi("ppdb_applicants", "save", newApplicant);
     return newApplicant;
   };
+
+  const submitPSB = submitPPDB;
 
   const updateApplicantStatus = (id: string, status: PPDBApplicant["status"]) => {
     const updated = applicants.map((app) => (app.id === id ? { ...app, status } : app));
@@ -679,6 +682,7 @@ export const DataProvider: React.FC<{
         loginUser,
         logoutUser,
         submitPPDB,
+        submitPSB,
         updateApplicantStatus,
       }}
     >

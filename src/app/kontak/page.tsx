@@ -160,7 +160,7 @@ export default function KontakPage() {
                   <input
                     type="text"
                     required
-                    placeholder="Contoh: Pertanyaan Syarat PPDB"
+                    placeholder="Contoh: Pertanyaan Syarat PSB"
                     value={msgData.subject}
                     onChange={(e) => setMsgData({ ...msgData, subject: e.target.value })}
                     className="w-full p-3 rounded-xl bg-slate-50 dark:bg-[#081612] border border-slate-200 dark:border-emerald-900/60 text-xs focus:outline-none focus:ring-2 focus:ring-[#047857] dark:text-white"

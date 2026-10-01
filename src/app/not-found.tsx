@@ -34,11 +34,11 @@ export default function NotFound() {
           </Link>
 
           <Link
-            href="/ppdb"
+            href="/psb"
             className="px-6 py-3 rounded-xl bg-slate-100 dark:bg-emerald-950 text-slate-800 dark:text-slate-200 font-bold text-xs flex items-center gap-2"
           >
             <GraduationCap className="w-4 h-4 text-emerald-600" />
-            <span>Informasi PPDB</span>
+            <span>Informasi PSB</span>
           </Link>
         </div>
       </main>

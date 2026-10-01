@@ -146,6 +146,7 @@ export default function AdminUsersPage() {
               <option value="Super Admin">Super Admin</option>
               <option value="Administrator">Administrator</option>
               <option value="Editor Berita">Editor Berita</option>
+              <option value="Petugas PSB">Petugas PSB</option>
               <option value="Petugas PPDB">Petugas PPDB</option>
             </select>
           </div>
@@ -237,6 +238,7 @@ export default function AdminUsersPage() {
                       <option value="Super Admin">Super Admin</option>
                       <option value="Administrator">Administrator</option>
                       <option value="Editor Berita">Editor Berita</option>
+                      <option value="Petugas PSB">Petugas PSB</option>
                       <option value="Petugas PPDB">Petugas PPDB</option>
                     </select>
                   </div>

@@ -336,17 +336,17 @@ export const initialApplicants: PPDBApplicant[] = [];
 export const initialFAQs: FAQItem[] = [
   {
     id: "faq-1",
-    question: "Kapan pendaftaran PPDB SMA Al-Furqon Driyorejo T.A. 2026/2027 dibuka?",
+    question: "Kapan pendaftaran PSB SMA Al-Furqon Driyorejo T.A. 2026/2027 dibuka?",
     answer:
       "Pendaftaran Gelombang 1 dibuka mulai 2 Januari 2026 s.d. 30 April 2026. Gelombang 2 dibuka 1 Mei 2026 s.d. 10 Juli 2026 (selama kuota masih tersedia).",
-    category: "PPDB",
+    category: "PSB",
   },
   {
     id: "faq-2",
-    question: "Apa saja syarat utama mendaftar sebagai calon peserta didik baru?",
+    question: "Apa saja syarat utama mendaftar sebagai calon santri baru?",
     answer:
       "Syarat utama: FC Ijazah/SKL SMP/MTs, FC Akta Kelahiran, FC Kartu Keluarga, Pasfoto 3x4 (3 lembar), dan mengisi Form Pendaftaran Online/Offline.",
-    category: "PPDB",
+    category: "PSB",
   },
   {
     id: "faq-3",
@@ -367,7 +367,7 @@ export const initialFAQs: FAQItem[] = [
     question: "Apakah ada beasiswa bagi siswa berprestasi?",
     answer:
       "Kami menyediakan Beasiswa Tahfidz Al-Qur'an (bebas SPP), Beasiswa Juara Olimpiade Sains/Seni, serta beasiswa khusus alumni MTs Al-Furqon.",
-    category: "PPDB",
+    category: "PSB",
   },
 ];
 

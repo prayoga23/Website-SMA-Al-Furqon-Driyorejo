@@ -186,9 +186,11 @@ async function runAllTests() {
     { url: "http://localhost:3000/prestasi", name: "Prestasi Siswa" },
     { url: "http://localhost:3000/galeri", name: "Galeri Dokumentasi" },
     { url: "http://localhost:3000/ppdb", name: "PPDB Online" },
+    { url: "http://localhost:3000/psb", name: "PSB Online" },
     { url: "http://localhost:3000/profil/guru-staf", name: "Profil Guru & Staf" },
     { url: "http://localhost:3000/admin/ekstrakurikuler", name: "Admin Ekstrakurikuler CMS" },
     { url: "http://localhost:3000/admin/dashboard", name: "Admin Dashboard CMS" },
+    { url: "http://localhost:3000/admin/psb", name: "Admin PSB CMS" },
   ];
 
   for (const p of pages) {

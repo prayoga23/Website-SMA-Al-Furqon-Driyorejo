@@ -5,10 +5,10 @@ import Link from "next/link";
 import { Sparkles, ArrowRight, CheckCircle2, Clock, UserCheck, FileCheck, Award, FileText } from "lucide-react";
 import { useData } from "@/context/data-context";
 
-export const PPDBSection: React.FC = () => {
+export const PSBSection: React.FC = () => {
   const { schoolInfo } = useData();
 
-  // Target date for PPDB countdown: April 30, 2026
+  // Target date for PSB countdown: April 30, 2026
   const [timeLeft, setTimeLeft] = useState({ days: 45, hours: 12, minutes: 30, seconds: 0 });
 
   useEffect(() => {
@@ -62,7 +62,8 @@ export const PPDBSection: React.FC = () => {
   ];
 
   return (
-    <section id="ppdb-section" className="py-20 bg-gradient-to-b from-[#032B21] via-[#064E3B] to-[#047857] text-white relative overflow-hidden">
+    <section id="psb-section" className="py-20 bg-gradient-to-b from-[#032B21] via-[#064E3B] to-[#047857] text-white relative overflow-hidden">
+      <div id="ppdb-section" className="absolute top-0"></div>
       {/* Glow Ornaments */}
       <div className="absolute top-0 right-1/4 w-96 h-96 bg-amber-400/10 rounded-full blur-3xl pointer-events-none"></div>
 
@@ -85,7 +86,7 @@ export const PPDBSection: React.FC = () => {
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
             <Link
-              href="/ppdb#form"
+              href="/psb#form"
               className="w-full sm:w-auto px-8 py-4 rounded-xl font-bold text-sm text-slate-950 bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 hover:from-amber-300 hover:to-amber-400 shadow-xl shadow-amber-500/20 active:scale-95 transition-all group flex items-center justify-center gap-2"
             >
               <span>Daftar Inden / Online Sekarang</span>
@@ -169,7 +170,7 @@ export const PPDBSection: React.FC = () => {
               PROMO POTONGAN BIAYA PENDAFTARAN
             </span>
             <h3 className="text-xl sm:text-2xl font-extrabold font-heading text-white">
-              Timeline Gelombang & Diskon PPDB 2026/2027
+              Timeline Gelombang & Diskon PSB 2026/2027
             </h3>
           </div>
 
@@ -251,3 +252,5 @@ export const PPDBSection: React.FC = () => {
     </section>
   );
 };
+
+export const PPDBSection = PSBSection;

@@ -24,7 +24,7 @@ export const FAQSection: React.FC = () => {
             Pertanyaan Sering Diajukan
           </h2>
           <p className="text-sm text-slate-600 dark:text-slate-300">
-            Temukan jawaban cepat seputar pendaftaran PPDB, program pengajaran, dan fasilitas sekolah.
+            Temukan jawaban cepat seputar pendaftaran PSB, program pengajaran, dan fasilitas sekolah.
           </p>
         </div>
 

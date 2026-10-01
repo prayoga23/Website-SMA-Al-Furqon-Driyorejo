@@ -29,7 +29,7 @@ export const FloatingWidgets: React.FC = () => {
   const handleSendWA = (e: React.FormEvent) => {
     e.preventDefault();
     const text = encodeURIComponent(
-      customMsg || "Halo Panitia PPDB SMA Al-Furqon Driyorejo, saya ingin menanyakan informasi pendaftaran."
+      customMsg || "Halo Panitia PSB SMA Al-Furqon Driyorejo, saya ingin menanyakan informasi pendaftaran."
     );
     window.open(`https://wa.me/${schoolInfo.whatsapp}?text=${text}`, "_blank");
     setWaOpen(false);
@@ -47,7 +47,7 @@ export const FloatingWidgets: React.FC = () => {
                 AF
               </div>
               <div>
-                <h4 className="font-bold text-xs font-heading">Panitia PPDB Al-Furqon</h4>
+                <h4 className="font-bold text-xs font-heading">Panitia PSB Al-Furqon</h4>
                 <p className="text-[10px] text-emerald-200 flex items-center gap-1">
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                   Online • Siap Membantu
@@ -106,7 +106,7 @@ export const FloatingWidgets: React.FC = () => {
           title="Chat WhatsApp Admin"
         >
           <MessageCircle className="w-6 h-6 fill-current" />
-          <span className="text-xs font-bold hidden sm:inline">Chat PPDB</span>
+          <span className="text-xs font-bold hidden sm:inline">Chat PSB</span>
         </button>
       </div>
     </div>
