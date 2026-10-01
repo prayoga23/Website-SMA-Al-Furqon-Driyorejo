@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Lock, User, ArrowLeft, ShieldCheck, KeyRound } from "lucide-react";
+import { Lock, User, ArrowLeft, ShieldCheck, KeyRound, Eye, EyeOff } from "lucide-react";
 import { useData } from "@/context/data-context";
 
 export default function AdminLoginPage() {
@@ -11,6 +11,7 @@ export default function AdminLoginPage() {
   const { loginUser, users } = useData();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -49,7 +50,8 @@ export default function AdminLoginPage() {
         <div className="text-center space-y-2">
           <img src="/logo.png" alt="Logo SMA Al-Furqon Driyorejo" className="w-20 h-20 mx-auto" />
           <h2 className="text-2xl font-extrabold font-heading text-slate-900 dark:text-white">
-            Portal CMS Admin Website          </h2>
+            Portal CMS Admin Website
+          </h2>
           <p className="text-xs text-slate-500 dark:text-slate-400">
             SMA Al-Furqon Driyorejo, Gresik
           </p>
@@ -70,6 +72,7 @@ export default function AdminLoginPage() {
               <input
                 type="text"
                 required
+                autoComplete="username"
                 placeholder="Masukkan username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
@@ -85,14 +88,28 @@ export default function AdminLoginPage() {
             </label>
             <div className="relative">
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 required
+                autoComplete="current-password"
                 placeholder="Masukkan password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-50 dark:bg-[#081612] border border-slate-200 dark:border-emerald-900/60 text-xs focus:outline-none focus:ring-2 focus:ring-[#047857] dark:text-white"
+                className="w-full pl-10 pr-11 py-3 rounded-xl bg-slate-50 dark:bg-[#081612] border border-slate-200 dark:border-emerald-900/60 text-xs focus:outline-none focus:ring-2 focus:ring-[#047857] dark:text-white"
               />
               <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" />
+              <button
+                type="button"
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="absolute right-3.5 top-3.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors p-0.5 rounded-lg focus:outline-none"
+                title={showPassword ? "Sembunyikan password" : "Lihat password"}
+                aria-label={showPassword ? "Sembunyikan password" : "Lihat password"}
+              >
+                {showPassword ? (
+                  <EyeOff className="w-4 h-4 text-slate-500 hover:text-slate-700 dark:hover:text-white" />
+                ) : (
+                  <Eye className="w-4 h-4 text-slate-400 hover:text-slate-700 dark:hover:text-white" />
+                )}
+              </button>
             </div>
           </div>
 

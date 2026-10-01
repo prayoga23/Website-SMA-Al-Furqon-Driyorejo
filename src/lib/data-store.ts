@@ -425,12 +425,12 @@ export const initialUsers: UserItem[] = [
   },
   {
     id: "user-1790261921861",
-    name: "Khoirum Umala, S.pd.",
-    username: "umala",
-    password: "admin123",
+    name: "Dian purwanti",
+    username: "dian",
+    password: "dian123",
     role: "Editor Berita",
     status: "Aktif",
-    email: "khoirumumala@gmail.com",
+    email: "dianpurwanti@gmail.com",
     lastLogin: "2026-09-24 15:00 WIB",
   },
 ];
