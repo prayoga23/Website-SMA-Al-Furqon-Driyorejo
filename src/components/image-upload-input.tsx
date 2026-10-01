@@ -91,42 +91,77 @@ export const ImageUploadInput: React.FC<ImageUploadInputProps> = ({
       />
 
       {value ? (
-        <div className={containerClasses}>
-          <img
-            src={value}
-            alt="Preview"
-            className={`w-full h-full ${aspect === "portrait" ? "object-cover object-[center_15%]" : "object-cover"}`}
-          />
-          <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+        <div className="space-y-2">
+          <div
+            onClick={() => fileInputRef.current?.click()}
+            className={`${containerClasses} cursor-pointer`}
+            title="Ketuk untuk ganti foto"
+          >
+            <img
+              src={value}
+              alt="Preview"
+              className={`w-full h-full ${aspect === "portrait" ? "object-cover object-[center_15%]" : "object-cover"}`}
+            />
+            {/* Desktop hover overlay */}
+            <div className="hidden sm:flex absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity items-center justify-center gap-2">
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  fileInputRef.current?.click();
+                }}
+                className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center gap-1 shadow"
+              >
+                <Upload className="w-3.5 h-3.5" /> Ganti Gambar
+              </button>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onChange("");
+                }}
+                className="p-1.5 rounded-lg bg-red-600 hover:bg-red-500 text-white font-bold text-xs shadow"
+                title="Hapus Gambar"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+
+          {/* Mobile direct touch controls (visible on touch screens) */}
+          <div className="flex sm:hidden items-center gap-2 w-full">
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
-              className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center gap-1 shadow"
+              className="flex-1 py-2 px-3 rounded-xl bg-emerald-700 active:bg-emerald-800 text-amber-300 font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm"
             >
-              <Upload className="w-3.5 h-3.5" /> Ganti Gambar
+              <Upload className="w-3.5 h-3.5" />
+              <span>Ganti Foto / Kamera</span>
             </button>
             <button
               type="button"
               onClick={() => onChange("")}
-              className="p-1.5 rounded-lg bg-red-600 hover:bg-red-500 text-white font-bold text-xs shadow"
-              title="Hapus Gambar"
+              className="py-2 px-3 rounded-xl bg-red-100 dark:bg-red-950/70 border border-red-300 dark:border-red-900/60 text-red-600 dark:text-red-300 font-bold text-xs flex items-center justify-center gap-1"
             >
-              <X className="w-4 h-4" />
+              <X className="w-3.5 h-3.5" />
+              <span>Hapus</span>
             </button>
           </div>
         </div>
       ) : (
         <div
           onClick={() => fileInputRef.current?.click()}
-          className="border-2 border-dashed border-slate-300 dark:border-emerald-900/60 hover:border-emerald-500 rounded-2xl p-4 text-center cursor-pointer bg-slate-50 dark:bg-[#081612] transition-colors group"
+          className="border-2 border-dashed border-slate-300 dark:border-emerald-900/60 hover:border-emerald-500 active:bg-slate-100 dark:active:bg-[#07130f] rounded-2xl p-4 text-center cursor-pointer bg-slate-50 dark:bg-[#081612] transition-all group active:scale-[0.99]"
         >
-          <div className="w-9 h-9 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 mx-auto flex items-center justify-center mb-1.5 group-hover:scale-110 transition-transform">
-            <Upload className="w-4 h-4" />
+          <div className="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 mx-auto flex items-center justify-center mb-1.5 group-hover:scale-110 transition-transform shadow-xs">
+            <Upload className="w-5 h-5" />
           </div>
-          <p className="text-xs font-bold text-slate-700 dark:text-slate-200">
-            Klik untuk Upload Gambar dari Komputer
+          <p className="text-xs font-bold text-slate-800 dark:text-slate-200">
+            Ketuk untuk Upload Foto / Gambar
           </p>
-          <p className="text-[10px] text-slate-400">Pilih file JPG, PNG, atau WEBP (Maksimal 10MB)</p>
+          <p className="text-[10px] text-slate-400 mt-0.5">
+            Pilih dari Galeri atau Kamera HP (JPG, PNG, WEBP maks 10MB)
+          </p>
         </div>
       )}
     </div>

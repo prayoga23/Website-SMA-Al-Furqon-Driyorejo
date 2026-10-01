@@ -40,13 +40,13 @@ export const YouTubeInput: React.FC<YouTubeInputProps> = ({
         )}
       </div>
 
-      <div className="relative">
+      <div className="relative flex items-center">
         <input
           type="url"
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
-          className={`w-full p-2.5 pl-9 rounded-xl bg-slate-50 dark:bg-[#081612] border text-xs transition-colors ${
+          className={`w-full py-2.5 pl-9 pr-9 rounded-xl bg-slate-50 dark:bg-[#081612] border text-sm sm:text-xs transition-colors ${
             value.trim()
               ? isValid
                 ? "border-emerald-500 focus:border-emerald-600 focus:ring-1 focus:ring-emerald-500"
@@ -54,7 +54,35 @@ export const YouTubeInput: React.FC<YouTubeInputProps> = ({
               : "border-slate-200 dark:border-emerald-900/50"
           }`}
         />
-        <YoutubeIcon className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+        <YoutubeIcon className="w-4 h-4 text-slate-400 absolute left-3 top-3.5 pointer-events-none" />
+        {value.trim() ? (
+          <button
+            type="button"
+            onClick={() => onChange("")}
+            className="absolute right-2.5 p-1 rounded-lg text-slate-400 hover:text-red-500 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors"
+            title="Hapus Link"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        ) : (
+          <button
+            type="button"
+            onClick={async () => {
+              try {
+                if (navigator.clipboard) {
+                  const text = await navigator.clipboard.readText();
+                  if (text) onChange(text);
+                }
+              } catch {
+                // Clipboard permission or api not available
+              }
+            }}
+            className="absolute right-2.5 px-2 py-0.5 rounded-md bg-slate-200 dark:bg-emerald-950/80 text-[10px] font-bold text-slate-600 dark:text-slate-300 hover:text-emerald-500"
+            title="Tempel link dari clipboard"
+          >
+            Tempel
+          </button>
+        )}
       </div>
 
       {/* Validation status & thumbnail preview */}
