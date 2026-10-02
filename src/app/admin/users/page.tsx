@@ -147,7 +147,7 @@ export default function AdminUsersPage() {
               <option value="Administrator">Administrator</option>
               <option value="Editor Berita">Editor Berita</option>
               <option value="Petugas PSB">Petugas PSB</option>
-              <option value="Petugas PPDB">Petugas PPDB</option>
+              <option value="Petugas PSB">Petugas PSB</option>
             </select>
           </div>
         </div>
@@ -239,7 +239,7 @@ export default function AdminUsersPage() {
                       <option value="Administrator">Administrator</option>
                       <option value="Editor Berita">Editor Berita</option>
                       <option value="Petugas PSB">Petugas PSB</option>
-                      <option value="Petugas PPDB">Petugas PPDB</option>
+                      <option value="Petugas PSB">Petugas PSB</option>
                     </select>
                   </div>
 
@@ -333,13 +333,12 @@ export default function AdminUsersPage() {
                     </td>
                     <td className="p-3">
                       <span
-                        className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                          u.role === "Super Admin"
+                        className={`px-2 py-0.5 rounded text-[10px] font-bold ${u.role === "Super Admin"
                             ? "bg-purple-100 text-purple-900 dark:bg-purple-950 dark:text-purple-300 border border-purple-300/40"
                             : u.role === "Administrator"
-                            ? "bg-emerald-100 text-emerald-900 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-300/40"
-                            : "bg-blue-100 text-blue-900 dark:bg-blue-950 dark:text-blue-300 border border-blue-300/40"
-                        }`}
+                              ? "bg-emerald-100 text-emerald-900 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-300/40"
+                              : "bg-blue-100 text-blue-900 dark:bg-blue-950 dark:text-blue-300 border border-blue-300/40"
+                          }`}
                       >
                         {u.role}
                       </span>
@@ -348,11 +347,10 @@ export default function AdminUsersPage() {
                       <button
                         onClick={() => toggleUserStatus(u)}
                         title="Klik untuk mengubah status akun"
-                        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold transition-transform active:scale-95 ${
-                          u.status === "Aktif"
+                        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold transition-transform active:scale-95 ${u.status === "Aktif"
                             ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 hover:bg-emerald-200"
                             : "bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-300 hover:bg-red-200"
-                        }`}
+                          }`}
                       >
                         {u.status === "Aktif" ? (
                           <CheckCircle2 className="w-3 h-3 text-emerald-600" />

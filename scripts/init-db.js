@@ -114,7 +114,7 @@ async function initSchema() {
   `;
 
   await sql`
-    CREATE TABLE IF NOT EXISTS ppdb_applicants (
+    CREATE TABLE IF NOT EXISTS PSB_applicants (
       id VARCHAR(100) PRIMARY KEY,
       registration_number VARCHAR(100) UNIQUE,
       full_name VARCHAR(255) NOT NULL,

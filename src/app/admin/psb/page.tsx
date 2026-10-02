@@ -1,7 +1,7 @@
 "use client";
 
-import AdminPPDBPage from "@/app/admin/ppdb/page";
+import AdminPSBPage from "@/app/admin/PSB/page";
 
 export default function AdminPSBPage() {
-  return <AdminPPDBPage />;
+  return <AdminPSBPage />;
 }

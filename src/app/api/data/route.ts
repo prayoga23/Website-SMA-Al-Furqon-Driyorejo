@@ -43,7 +43,7 @@ export async function GET() {
         'teachers', COALESCE((SELECT json_agg(t.*) FROM (SELECT * FROM teachers ORDER BY created_at ASC) t), '[]'::json),
         'extracurriculars', COALESCE((SELECT json_agg(e.*) FROM (SELECT * FROM extracurriculars ORDER BY id ASC) e), '[]'::json),
         'gallery', COALESCE((SELECT json_agg(g.*) FROM (SELECT * FROM gallery ORDER BY created_at DESC) g), '[]'::json),
-        'applicants', COALESCE((SELECT json_agg(app.*) FROM (SELECT * FROM ppdb_applicants ORDER BY created_at DESC) app), '[]'::json),
+        'applicants', COALESCE((SELECT json_agg(app.*) FROM (SELECT * FROM PSB_applicants ORDER BY created_at DESC) app), '[]'::json),
         'faqs', COALESCE((SELECT json_agg(f.*) FROM (SELECT * FROM faqs ORDER BY id ASC) f), '[]'::json),
         'testimonials', COALESCE((SELECT json_agg(tm.*) FROM (SELECT * FROM testimonials ORDER BY created_at DESC) tm), '[]'::json),
         'facilities', COALESCE((SELECT json_agg(fac.*) FROM (SELECT * FROM facilities ORDER BY name ASC) fac), '[]'::json),
@@ -202,14 +202,14 @@ export async function GET() {
         kesiswaanActivities:
           bundle.kesiswaan && bundle.kesiswaan.length > 0
             ? bundle.kesiswaan.map((k: any) => {
-                const dataObj = typeof k.data === "object" ? k.data : JSON.parse(k.data || "{}");
-                return {
-                  id: k.id,
-                  slug: k.slug,
-                  status: dataObj.status || "published",
-                  ...dataObj,
-                };
-              })
+              const dataObj = typeof k.data === "object" ? k.data : JSON.parse(k.data || "{}");
+              return {
+                id: k.id,
+                slug: k.slug,
+                status: dataObj.status || "published",
+                ...dataObj,
+              };
+            })
             : initialKesiswaanActivities,
       },
       { headers: NO_CACHE_HEADERS }
@@ -253,7 +253,7 @@ export async function POST(request: Request) {
         ON CONFLICT (id) DO UPDATE SET data = ${JSON.stringify(item)}::jsonb, updated_at = NOW();
       `;
       invalidateServerDataCache();
-      try { revalidatePath("/", "layout"); } catch {}
+      try { revalidatePath("/", "layout"); } catch { }
       return NextResponse.json({ success: true }, { headers: NO_CACHE_HEADERS });
     }
 
@@ -363,9 +363,9 @@ export async function POST(request: Request) {
             date = ${item.date || ''},
             description = ${item.description || ''};
         `;
-      } else if (table === "ppdb_applicants") {
+      } else if (table === "PSB_applicants") {
         await sql`
-          INSERT INTO ppdb_applicants (id, registration_number, full_name, nisn, gender, birth_place, birth_date, address, previous_school, parent_name, parent_phone, chosen_major, registration_date, status, notes)
+          INSERT INTO PSB_applicants (id, registration_number, full_name, nisn, gender, birth_place, birth_date, address, previous_school, parent_name, parent_phone, chosen_major, registration_date, status, notes)
           VALUES (
             ${item.id},
             ${item.registrationNumber || ''},
@@ -481,7 +481,7 @@ export async function POST(request: Request) {
       }
 
       invalidateServerDataCache();
-      try { revalidatePath("/", "layout"); } catch {}
+      try { revalidatePath("/", "layout"); } catch { }
       return NextResponse.json({ success: true }, { headers: NO_CACHE_HEADERS });
     }
 
@@ -491,7 +491,7 @@ export async function POST(request: Request) {
       else if (table === "teachers") await sql`DELETE FROM teachers WHERE id = ${id}`;
       else if (table === "facilities") await sql`DELETE FROM facilities WHERE id = ${id}`;
       else if (table === "gallery") await sql`DELETE FROM gallery WHERE id = ${id}`;
-      else if (table === "ppdb_applicants") await sql`DELETE FROM ppdb_applicants WHERE id = ${id}`;
+      else if (table === "PSB_applicants") await sql`DELETE FROM PSB_applicants WHERE id = ${id}`;
       else if (table === "achievements") await sql`DELETE FROM achievements WHERE id = ${id}`;
       else if (table === "extracurriculars") await sql`DELETE FROM extracurriculars WHERE id = ${id}`;
       else if (table === "testimonials") await sql`DELETE FROM testimonials WHERE id = ${id}`;
@@ -500,7 +500,7 @@ export async function POST(request: Request) {
       else if (table === "faqs") await sql`DELETE FROM faqs WHERE id = ${id}`;
 
       invalidateServerDataCache();
-      try { revalidatePath("/", "layout"); } catch {}
+      try { revalidatePath("/", "layout"); } catch { }
       return NextResponse.json({ success: true }, { headers: NO_CACHE_HEADERS });
     }
 

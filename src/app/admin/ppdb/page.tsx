@@ -3,13 +3,13 @@
 import React, { useState } from "react";
 import { AdminSidebar } from "@/components/admin-sidebar";
 import { useData } from "@/context/data-context";
-import { PPDBApplicant } from "@/lib/types";
+import { PSBApplicant } from "@/lib/types";
 import { Users, PhoneCall, CheckCircle, Eye, X, User, School, ShieldCheck } from "lucide-react";
 import { Pagination } from "@/components/pagination";
 
-export default function AdminPPDBPage() {
+export default function AdminPSBPage() {
   const { applicants, updateApplicantStatus } = useData();
-  const [selectedApplicant, setSelectedApplicant] = useState<PPDBApplicant | null>(null);
+  const [selectedApplicant, setSelectedApplicant] = useState<PSBApplicant | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
 
@@ -87,15 +87,14 @@ export default function AdminPPDBPage() {
                   </td>
                   <td className="p-3">
                     <span
-                      className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${
-                        app.status === "Diterima"
+                      className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${app.status === "Diterima"
                           ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200"
                           : app.status === "Terverifikasi"
-                          ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
-                          : app.status === "Ditolak"
-                          ? "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
-                          : "bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200"
-                      }`}
+                            ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+                            : app.status === "Ditolak"
+                              ? "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
+                              : "bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200"
+                        }`}
                     >
                       {app.status}
                     </span>
@@ -348,7 +347,7 @@ export default function AdminPPDBPage() {
                 <select
                   value={selectedApplicant.status}
                   onChange={(e) => {
-                    const newStatus = e.target.value as PPDBApplicant["status"];
+                    const newStatus = e.target.value as PSBApplicant["status"];
                     updateApplicantStatus(selectedApplicant.id, newStatus);
                     setSelectedApplicant({ ...selectedApplicant, status: newStatus });
                   }}

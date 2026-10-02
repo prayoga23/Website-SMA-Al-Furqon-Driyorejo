@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     "Pondok Pesantren Al-Furqon",
     "Sekolah Islam Gresik",
     "PSB SMA Al-Furqon 2026",
-    "PPDB SMA Al-Furqon 2026",
+    "PSB SMA Al-Furqon 2026",
     "SMA Akreditasi A Driyorejo",
     "Tahfidz Al-Qur'an Gresik",
   ],

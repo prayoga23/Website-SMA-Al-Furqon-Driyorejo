@@ -185,7 +185,7 @@ async function runAllTests() {
     { url: "http://localhost:3000/agenda", name: "Agenda Kegiatan" },
     { url: "http://localhost:3000/prestasi", name: "Prestasi Siswa" },
     { url: "http://localhost:3000/galeri", name: "Galeri Dokumentasi" },
-    { url: "http://localhost:3000/ppdb", name: "PPDB Online" },
+    { url: "http://localhost:3000/PSB", name: "PSB Online" },
     { url: "http://localhost:3000/psb", name: "PSB Online" },
     { url: "http://localhost:3000/profil/guru-staf", name: "Profil Guru & Staf" },
     { url: "http://localhost:3000/admin/ekstrakurikuler", name: "Admin Ekstrakurikuler CMS" },

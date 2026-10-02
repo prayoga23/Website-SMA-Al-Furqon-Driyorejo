@@ -11,7 +11,7 @@ import { AkademikSection } from "@/components/akademik-section";
 import { KesiswaanSection } from "@/components/kesiswaan-section";
 import { PrestasiSection } from "@/components/prestasi-section";
 import { BeritaSection } from "@/components/berita-section";
-import { PSBSection } from "@/components/ppdb-section";
+import { PSBSection } from "@/components/PSB-section";
 import { GaleriSection } from "@/components/galeri-section";
 import { VideoSection } from "@/components/video-section";
 import { TestimoniSection } from "@/components/testimoni-section";

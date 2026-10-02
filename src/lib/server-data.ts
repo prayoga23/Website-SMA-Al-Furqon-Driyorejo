@@ -7,7 +7,7 @@ import {
   TeacherItem,
   ExtracurricularItem,
   GalleryItem,
-  PPDBApplicant,
+  PSBApplicant,
   FAQItem,
   TestimonialItem,
   FacilityItem,
@@ -38,7 +38,7 @@ export interface ServerDataBundle {
   teachers: TeacherItem[];
   extracurriculars: ExtracurricularItem[];
   gallery: GalleryItem[];
-  applicants: PPDBApplicant[];
+  applicants: PSBApplicant[];
   faqs: FAQItem[];
   testimonials: TestimonialItem[];
   facilities: FacilityItem[];
@@ -71,7 +71,7 @@ export async function getServerDataBundle(): Promise<ServerDataBundle> {
         'teachers', COALESCE((SELECT json_agg(t.*) FROM (SELECT * FROM teachers ORDER BY created_at ASC) t), '[]'::json),
         'extracurriculars', COALESCE((SELECT json_agg(e.*) FROM (SELECT * FROM extracurriculars ORDER BY id ASC) e), '[]'::json),
         'gallery', COALESCE((SELECT json_agg(g.*) FROM (SELECT * FROM gallery ORDER BY created_at DESC) g), '[]'::json),
-        'applicants', COALESCE((SELECT json_agg(app.*) FROM (SELECT * FROM ppdb_applicants ORDER BY created_at DESC) app), '[]'::json),
+        'applicants', COALESCE((SELECT json_agg(app.*) FROM (SELECT * FROM PSB_applicants ORDER BY created_at DESC) app), '[]'::json),
         'faqs', COALESCE((SELECT json_agg(f.*) FROM (SELECT * FROM faqs ORDER BY id ASC) f), '[]'::json),
         'testimonials', COALESCE((SELECT json_agg(tm.*) FROM (SELECT * FROM testimonials ORDER BY created_at DESC) tm), '[]'::json),
         'facilities', COALESCE((SELECT json_agg(fac.*) FROM (SELECT * FROM facilities ORDER BY name ASC) fac), '[]'::json),
@@ -229,14 +229,14 @@ export async function getServerDataBundle(): Promise<ServerDataBundle> {
       kesiswaanActivities:
         bundle.kesiswaan && bundle.kesiswaan.length > 0
           ? bundle.kesiswaan.map((k: any) => {
-              const dataObj = typeof k.data === "object" ? k.data : JSON.parse(k.data || "{}");
-              return {
-                id: k.id,
-                slug: k.slug,
-                status: dataObj.status || "published",
-                ...dataObj,
-              };
-            })
+            const dataObj = typeof k.data === "object" ? k.data : JSON.parse(k.data || "{}");
+            return {
+              id: k.id,
+              slug: k.slug,
+              status: dataObj.status || "published",
+              ...dataObj,
+            };
+          })
           : initialKesiswaanActivities,
     };
 

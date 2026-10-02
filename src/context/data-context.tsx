@@ -9,7 +9,7 @@ import {
   TeacherItem,
   ExtracurricularItem,
   GalleryItem,
-  PPDBApplicant,
+  PSBApplicant,
   FAQItem,
   TestimonialItem,
   FacilityItem,
@@ -39,7 +39,7 @@ interface DataContextType {
   teachers: TeacherItem[];
   extracurriculars: ExtracurricularItem[];
   gallery: GalleryItem[];
-  applicants: PPDBApplicant[];
+  applicants: PSBApplicant[];
   faqs: FAQItem[];
   testimonials: TestimonialItem[];
   facilities: FacilityItem[];
@@ -88,9 +88,9 @@ interface DataContextType {
   deleteUser: (id: string) => void;
   loginUser: (username: string, password: string) => { success: boolean; message?: string; user?: UserItem };
   logoutUser: () => void;
-  submitPPDB: (applicant: Omit<PPDBApplicant, "id" | "registrationNumber" | "registrationDate" | "status">) => PPDBApplicant;
-  submitPSB: (applicant: Omit<PPDBApplicant, "id" | "registrationNumber" | "registrationDate" | "status">) => PPDBApplicant;
-  updateApplicantStatus: (id: string, status: PPDBApplicant["status"]) => void;
+  submitPSB: (applicant: Omit<PSBApplicant, "id" | "registrationNumber" | "registrationDate" | "status">) => PSBApplicant;
+  submitPSB: (applicant: Omit<PSBApplicant, "id" | "registrationNumber" | "registrationDate" | "status">) => PSBApplicant;
+  updateApplicantStatus: (id: string, status: PSBApplicant["status"]) => void;
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
@@ -109,7 +109,7 @@ export const DataProvider: React.FC<{
   const [teachers, setTeachers] = useState<TeacherItem[]>(initialData?.teachers ?? initialTeachers);
   const [extracurriculars, setExtracurriculars] = useState<ExtracurricularItem[]>(initialData?.extracurriculars ?? initialExtracurriculars);
   const [gallery, setGallery] = useState<GalleryItem[]>(initialData?.gallery ?? []);
-  const [applicants, setApplicants] = useState<PPDBApplicant[]>(initialData?.applicants ?? []);
+  const [applicants, setApplicants] = useState<PSBApplicant[]>(initialData?.applicants ?? []);
   const [faqs, setFaqs] = useState<FAQItem[]>(initialData?.faqs ?? initialFAQs);
   const [testimonials, setTestimonials] = useState<TestimonialItem[]>(initialData?.testimonials ?? []);
   const [facilities, setFacilities] = useState<FacilityItem[]>(initialData?.facilities ?? initialFacilities);
@@ -158,8 +158,8 @@ export const DataProvider: React.FC<{
               : "Dr. Suryanto, S.Pd., M.Pd.",
           headmasterPhoto:
             data.schoolInfo.headmasterPhoto &&
-            !data.schoolInfo.headmasterPhoto.includes("unsplash.com") &&
-            data.schoolInfo.headmasterPhoto !== "/foto-kepala-sekolah.png"
+              !data.schoolInfo.headmasterPhoto.includes("unsplash.com") &&
+              data.schoolInfo.headmasterPhoto !== "/foto-kepala-sekolah.png"
               ? data.schoolInfo.headmasterPhoto
               : "/Pak Sur.jpeg",
           stats: {
@@ -205,7 +205,7 @@ export const DataProvider: React.FC<{
         "sma_alfurqon_kesiswaan_activities",
       ];
       staleKeys.forEach((key) => {
-        try { localStorage.removeItem(key); } catch {}
+        try { localStorage.removeItem(key); } catch { }
       });
 
       // Always execute background refresh on client mount
@@ -222,7 +222,7 @@ export const DataProvider: React.FC<{
 
       const savedActiveUser = localStorage.getItem(STORAGE_KEY_PREFIX + "admin_user");
       if (savedActiveUser) {
-        try { setCurrentUser(JSON.parse(savedActiveUser)); } catch {}
+        try { setCurrentUser(JSON.parse(savedActiveUser)); } catch { }
       }
 
       return () => {
@@ -595,13 +595,13 @@ export const DataProvider: React.FC<{
     localStorage.removeItem("sma_admin_token");
   };
 
-  // --- PSB / PPDB APPLICANTS ---
-  const submitPPDB = (
-    data: Omit<PPDBApplicant, "id" | "registrationNumber" | "registrationDate" | "status">
-  ): PPDBApplicant => {
+  // --- PSB / PSB APPLICANTS ---
+  const submitPSB = (
+    data: Omit<PSBApplicant, "id" | "registrationNumber" | "registrationDate" | "status">
+  ): PSBApplicant => {
     const count = applicants.length + 1;
     const pad = count < 10 ? "00" + count : count < 100 ? "0" + count : count;
-    const newApplicant: PPDBApplicant = {
+    const newApplicant: PSBApplicant = {
       ...data,
       id: "psb-" + Date.now(),
       registrationNumber: `PSB-2026-${pad}`,
@@ -610,17 +610,17 @@ export const DataProvider: React.FC<{
     };
     const updated = [newApplicant, ...applicants];
     setApplicants(updated);
-    syncToApi("ppdb_applicants", "save", newApplicant);
+    syncToApi("PSB_applicants", "save", newApplicant);
     return newApplicant;
   };
 
-  const submitPSB = submitPPDB;
+  const submitPSB = submitPSB;
 
-  const updateApplicantStatus = (id: string, status: PPDBApplicant["status"]) => {
+  const updateApplicantStatus = (id: string, status: PSBApplicant["status"]) => {
     const updated = applicants.map((app) => (app.id === id ? { ...app, status } : app));
     setApplicants(updated);
     const target = updated.find((app) => app.id === id);
-    if (target) syncToApi("ppdb_applicants", "save", target);
+    if (target) syncToApi("PSB_applicants", "save", target);
   };
 
   return (
@@ -681,7 +681,7 @@ export const DataProvider: React.FC<{
         deleteUser,
         loginUser,
         logoutUser,
-        submitPPDB,
+        submitPSB,
         submitPSB,
         updateApplicantStatus,
       }}

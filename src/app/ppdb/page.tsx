@@ -6,9 +6,9 @@ import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { PageHeader } from "@/components/page-header";
 import { FloatingWidgets } from "@/components/floating-widgets";
-import { PPDBSection } from "@/components/ppdb-section";
+import { PSBSection } from "@/components/PSB-section";
 import { useData } from "@/context/data-context";
-import { PPDBApplicant } from "@/lib/types";
+import { PSBApplicant } from "@/lib/types";
 import {
   CheckCircle,
   PhoneCall,
@@ -22,8 +22,8 @@ import {
   AlertCircle,
 } from "lucide-react";
 
-export default function PPDBPage() {
-  const { submitPPDB } = useData();
+export default function PSBPage() {
+  const { submitPSB } = useData();
 
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3 | 4>(1);
 
@@ -76,7 +76,7 @@ export default function PPDBPage() {
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [submittedResult, setSubmittedResult] = useState<PPDBApplicant | null>(null);
+  const [submittedResult, setSubmittedResult] = useState<PSBApplicant | null>(null);
   const [loading, setLoading] = useState(false);
 
   // Helper for numeric inputs
@@ -274,7 +274,7 @@ export default function PPDBPage() {
     setLoading(true);
 
     setTimeout(() => {
-      // Create payload matching PPDBApplicant
+      // Create payload matching PSBApplicant
       const finalSchoolLevel =
         formData.schoolLevel === "Lainnya"
           ? formData.customSchoolLevel || "Lainnya"
@@ -310,7 +310,7 @@ export default function PPDBPage() {
         phoneWhatsapp: formData.fatherPhone || formData.motherPhone || formData.guardianPhone || "",
       };
 
-      const result = submitPPDB(payload as any);
+      const result = submitPSB(payload as any);
       setSubmittedResult(result);
       setLoading(false);
 
@@ -358,7 +358,7 @@ export default function PPDBPage() {
       />
 
       <main className="flex-1 space-y-16 py-12">
-        <PPDBSection />
+        <PSBSection />
 
         {/* Form Container */}
         <section id="form" className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -387,22 +387,20 @@ export default function PPDBPage() {
                     return (
                       <div
                         key={step.num}
-                        className={`flex flex-col items-center p-3 rounded-2xl border transition-all ${
-                          isActive
+                        className={`flex flex-col items-center p-3 rounded-2xl border transition-all ${isActive
                             ? "bg-emerald-50 dark:bg-emerald-950/80 border-emerald-500 text-emerald-800 dark:text-emerald-300 font-bold shadow-sm"
                             : isCompleted
-                            ? "bg-slate-100 dark:bg-emerald-900/30 border-slate-300 dark:border-emerald-800/50 text-emerald-600 dark:text-emerald-400"
-                            : "bg-slate-50 dark:bg-[#081612] border-slate-200 dark:border-slate-800 text-slate-400"
-                        }`}
+                              ? "bg-slate-100 dark:bg-emerald-900/30 border-slate-300 dark:border-emerald-800/50 text-emerald-600 dark:text-emerald-400"
+                              : "bg-slate-50 dark:bg-[#081612] border-slate-200 dark:border-slate-800 text-slate-400"
+                          }`}
                       >
                         <div
-                          className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-extrabold mb-1.5 ${
-                            isActive
+                          className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-extrabold mb-1.5 ${isActive
                               ? "bg-emerald-600 text-white"
                               : isCompleted
-                              ? "bg-emerald-700 text-amber-300"
-                              : "bg-slate-200 dark:bg-slate-800 text-slate-500 dark:text-slate-400"
-                          }`}
+                                ? "bg-emerald-700 text-amber-300"
+                                : "bg-slate-200 dark:bg-slate-800 text-slate-500 dark:text-slate-400"
+                            }`}
                         >
                           {isCompleted ? <CheckCircle className="w-4 h-4" /> : <Icon className="w-4 h-4" />}
                         </div>
@@ -526,9 +524,8 @@ export default function PPDBPage() {
                           placeholder="Contoh: Muhammad Hafiz Ar-Rasyid"
                           value={formData.fullName}
                           onChange={(e) => handleChange("fullName", e.target.value)}
-                          className={`w-full p-3 rounded-xl bg-slate-50 dark:bg-[#081612] border text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#047857] ${
-                            errors.fullName ? "border-red-500" : "border-slate-200 dark:border-emerald-900/60"
-                          }`}
+                          className={`w-full p-3 rounded-xl bg-slate-50 dark:bg-[#081612] border text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#047857] ${errors.fullName ? "border-red-500" : "border-slate-200 dark:border-emerald-900/60"
+                            }`}
                         />
                         {errors.fullName && (
                           <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
@@ -547,9 +544,8 @@ export default function PPDBPage() {
                           placeholder="Contoh: Gresik"
                           value={formData.birthPlace}
                           onChange={(e) => handleChange("birthPlace", e.target.value)}
-                          className={`w-full p-3 rounded-xl bg-slate-50 dark:bg-[#081612] border text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#047857] ${
-                            errors.birthPlace ? "border-red-500" : "border-slate-200 dark:border-emerald-900/60"
-                          }`}
+                          className={`w-full p-3 rounded-xl bg-slate-50 dark:bg-[#081612] border text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#047857] ${errors.birthPlace ? "border-red-500" : "border-slate-200 dark:border-emerald-900/60"
+                            }`}
                         />
                         {errors.birthPlace && (
                           <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
@@ -567,9 +563,8 @@ export default function PPDBPage() {
                           type="date"
                           value={formData.birthDate}
                           onChange={(e) => handleChange("birthDate", e.target.value)}
-                          className={`w-full p-3 rounded-xl bg-slate-50 dark:bg-[#081612] border text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#047857] ${
-                            errors.birthDate ? "border-red-500" : "border-slate-200 dark:border-emerald-900/60"
-                          }`}
+                          className={`w-full p-3 rounded-xl bg-slate-50 dark:bg-[#081612] border text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#047857] ${errors.birthDate ? "border-red-500" : "border-slate-200 dark:border-emerald-900/60"
+                            }`}
                         />
                         {errors.birthDate && (
                           <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
@@ -604,9 +599,8 @@ export default function PPDBPage() {
                           placeholder="Contoh: 3525011405100001"
                           value={formData.nik}
                           onChange={(e) => handleNumericInput("nik", e.target.value)}
-                          className={`w-full p-3 rounded-xl bg-slate-50 dark:bg-[#081612] border text-xs font-mono text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#047857] ${
-                            errors.nik ? "border-red-500" : "border-slate-200 dark:border-emerald-900/60"
-                          }`}
+                          className={`w-full p-3 rounded-xl bg-slate-50 dark:bg-[#081612] border text-xs font-mono text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#047857] ${errors.nik ? "border-red-500" : "border-slate-200 dark:border-emerald-900/60"
+                            }`}
                         />
                         {errors.nik && (
                           <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
@@ -626,9 +620,8 @@ export default function PPDBPage() {
                           placeholder="Contoh: 0089123456"
                           value={formData.nisn}
                           onChange={(e) => handleNumericInput("nisn", e.target.value)}
-                          className={`w-full p-3 rounded-xl bg-slate-50 dark:bg-[#081612] border text-xs font-mono text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#047857] ${
-                            errors.nisn ? "border-red-500" : "border-slate-200 dark:border-emerald-900/60"
-                          }`}
+                          className={`w-full p-3 rounded-xl bg-slate-50 dark:bg-[#081612] border text-xs font-mono text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#047857] ${errors.nisn ? "border-red-500" : "border-slate-200 dark:border-emerald-900/60"
+                            }`}
                         />
                         {errors.nisn && (
                           <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
@@ -647,9 +640,8 @@ export default function PPDBPage() {
                           placeholder="Contoh: 2"
                           value={formData.siblingsCount}
                           onChange={(e) => handleNumericInput("siblingsCount", e.target.value)}
-                          className={`w-full p-3 rounded-xl bg-slate-50 dark:bg-[#081612] border text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#047857] ${
-                            errors.siblingsCount ? "border-red-500" : "border-slate-200 dark:border-emerald-900/60"
-                          }`}
+                          className={`w-full p-3 rounded-xl bg-slate-50 dark:bg-[#081612] border text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#047857] ${errors.siblingsCount ? "border-red-500" : "border-slate-200 dark:border-emerald-900/60"
+                            }`}
                         />
                         {errors.siblingsCount && (
                           <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
@@ -668,9 +660,8 @@ export default function PPDBPage() {
                           placeholder="Contoh: 1"
                           value={formData.childNumber}
                           onChange={(e) => handleNumericInput("childNumber", e.target.value)}
-                          className={`w-full p-3 rounded-xl bg-slate-50 dark:bg-[#081612] border text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#047857] ${
-                            errors.childNumber ? "border-red-500" : "border-slate-200 dark:border-emerald-900/60"
-                          }`}
+                          className={`w-full p-3 rounded-xl bg-slate-50 dark:bg-[#081612] border text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#047857] ${errors.childNumber ? "border-red-500" : "border-slate-200 dark:border-emerald-900/60"
+                            }`}
                         />
                         {errors.childNumber && (
                           <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
@@ -689,9 +680,8 @@ export default function PPDBPage() {
                           placeholder="Jl. / Dusun / RT / RW, Desa, Kecamatan, Kabupaten/Kota"
                           value={formData.address}
                           onChange={(e) => handleChange("address", e.target.value)}
-                          className={`w-full p-3 rounded-xl bg-slate-50 dark:bg-[#081612] border text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#047857] ${
-                            errors.address ? "border-red-500" : "border-slate-200 dark:border-emerald-900/60"
-                          }`}
+                          className={`w-full p-3 rounded-xl bg-slate-50 dark:bg-[#081612] border text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#047857] ${errors.address ? "border-red-500" : "border-slate-200 dark:border-emerald-900/60"
+                            }`}
                         />
                         {errors.address && (
                           <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
@@ -744,9 +734,8 @@ export default function PPDBPage() {
                             placeholder="Sebutkan jenjang sekolah asal..."
                             value={formData.customSchoolLevel}
                             onChange={(e) => handleChange("customSchoolLevel", e.target.value)}
-                            className={`w-full p-3 rounded-xl bg-amber-50/50 dark:bg-amber-950/20 border text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500 ${
-                              errors.customSchoolLevel ? "border-red-500" : "border-amber-300 dark:border-amber-800"
-                            }`}
+                            className={`w-full p-3 rounded-xl bg-amber-50/50 dark:bg-amber-950/20 border text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500 ${errors.customSchoolLevel ? "border-red-500" : "border-amber-300 dark:border-amber-800"
+                              }`}
                           />
                           {errors.customSchoolLevel && (
                             <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
@@ -766,9 +755,8 @@ export default function PPDBPage() {
                           placeholder="Contoh: SMP Negeri 1 Driyorejo / MTs Al-Furqon"
                           value={formData.originSchool}
                           onChange={(e) => handleChange("originSchool", e.target.value)}
-                          className={`w-full p-3 rounded-xl bg-slate-50 dark:bg-[#081612] border text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#047857] ${
-                            errors.originSchool ? "border-red-500" : "border-slate-200 dark:border-emerald-900/60"
-                          }`}
+                          className={`w-full p-3 rounded-xl bg-slate-50 dark:bg-[#081612] border text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#047857] ${errors.originSchool ? "border-red-500" : "border-slate-200 dark:border-emerald-900/60"
+                            }`}
                         />
                         {errors.originSchool && (
                           <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
@@ -787,9 +775,8 @@ export default function PPDBPage() {
                           placeholder="Contoh: 20501234 (Angka)"
                           value={formData.npsnSchool}
                           onChange={(e) => handleNumericInput("npsnSchool", e.target.value)}
-                          className={`w-full p-3 rounded-xl bg-slate-50 dark:bg-[#081612] border text-xs font-mono text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#047857] ${
-                            errors.npsnSchool ? "border-red-500" : "border-slate-200 dark:border-emerald-900/60"
-                          }`}
+                          className={`w-full p-3 rounded-xl bg-slate-50 dark:bg-[#081612] border text-xs font-mono text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#047857] ${errors.npsnSchool ? "border-red-500" : "border-slate-200 dark:border-emerald-900/60"
+                            }`}
                         />
                         {errors.npsnSchool && (
                           <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
@@ -809,9 +796,8 @@ export default function PPDBPage() {
                           placeholder="Contoh: 2026"
                           value={formData.graduationYear}
                           onChange={(e) => handleNumericInput("graduationYear", e.target.value)}
-                          className={`w-full p-3 rounded-xl bg-slate-50 dark:bg-[#081612] border text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#047857] ${
-                            errors.graduationYear ? "border-red-500" : "border-slate-200 dark:border-emerald-900/60"
-                          }`}
+                          className={`w-full p-3 rounded-xl bg-slate-50 dark:bg-[#081612] border text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#047857] ${errors.graduationYear ? "border-red-500" : "border-slate-200 dark:border-emerald-900/60"
+                            }`}
                         />
                         {errors.graduationYear && (
                           <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
@@ -830,9 +816,8 @@ export default function PPDBPage() {
                           placeholder="Alamat sekolah asal lengkap..."
                           value={formData.originSchoolAddress}
                           onChange={(e) => handleChange("originSchoolAddress", e.target.value)}
-                          className={`w-full p-3 rounded-xl bg-slate-50 dark:bg-[#081612] border text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#047857] ${
-                            errors.originSchoolAddress ? "border-red-500" : "border-slate-200 dark:border-emerald-900/60"
-                          }`}
+                          className={`w-full p-3 rounded-xl bg-slate-50 dark:bg-[#081612] border text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#047857] ${errors.originSchoolAddress ? "border-red-500" : "border-slate-200 dark:border-emerald-900/60"
+                            }`}
                         />
                         {errors.originSchoolAddress && (
                           <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
@@ -874,9 +859,8 @@ export default function PPDBPage() {
                             placeholder="Nama lengkap bapak..."
                             value={formData.fatherName}
                             onChange={(e) => handleChange("fatherName", e.target.value)}
-                            className={`w-full p-3 rounded-xl bg-white dark:bg-[#0E241E] border text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#047857] ${
-                              errors.fatherName ? "border-red-500" : "border-slate-200 dark:border-emerald-900/60"
-                            }`}
+                            className={`w-full p-3 rounded-xl bg-white dark:bg-[#0E241E] border text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#047857] ${errors.fatherName ? "border-red-500" : "border-slate-200 dark:border-emerald-900/60"
+                              }`}
                           />
                           {errors.fatherName && (
                             <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
@@ -895,9 +879,8 @@ export default function PPDBPage() {
                             placeholder="Contoh: 081234567890"
                             value={formData.fatherPhone}
                             onChange={(e) => handleNumericInput("fatherPhone", e.target.value)}
-                            className={`w-full p-3 rounded-xl bg-white dark:bg-[#0E241E] border text-xs font-mono text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#047857] ${
-                              errors.fatherPhone ? "border-red-500" : "border-slate-200 dark:border-emerald-900/60"
-                            }`}
+                            className={`w-full p-3 rounded-xl bg-white dark:bg-[#0E241E] border text-xs font-mono text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#047857] ${errors.fatherPhone ? "border-red-500" : "border-slate-200 dark:border-emerald-900/60"
+                              }`}
                           />
                           {errors.fatherPhone && (
                             <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
@@ -956,9 +939,8 @@ export default function PPDBPage() {
                               placeholder="Tuliskan pekerjaan bapak..."
                               value={formData.customFatherOccupation}
                               onChange={(e) => handleChange("customFatherOccupation", e.target.value)}
-                              className={`w-full p-3 rounded-xl bg-amber-50/50 dark:bg-amber-950/20 border text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500 ${
-                                errors.customFatherOccupation ? "border-red-500" : "border-amber-300 dark:border-amber-800"
-                              }`}
+                              className={`w-full p-3 rounded-xl bg-amber-50/50 dark:bg-amber-950/20 border text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500 ${errors.customFatherOccupation ? "border-red-500" : "border-amber-300 dark:border-amber-800"
+                                }`}
                             />
                             {errors.customFatherOccupation && (
                               <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
@@ -978,9 +960,8 @@ export default function PPDBPage() {
                             placeholder="Alamat domisili bapak..."
                             value={formData.fatherAddress}
                             onChange={(e) => handleChange("fatherAddress", e.target.value)}
-                            className={`w-full p-3 rounded-xl bg-white dark:bg-[#0E241E] border text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#047857] ${
-                              errors.fatherAddress ? "border-red-500" : "border-slate-200 dark:border-emerald-900/60"
-                            }`}
+                            className={`w-full p-3 rounded-xl bg-white dark:bg-[#0E241E] border text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#047857] ${errors.fatherAddress ? "border-red-500" : "border-slate-200 dark:border-emerald-900/60"
+                              }`}
                           />
                           {errors.fatherAddress && (
                             <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
@@ -1008,9 +989,8 @@ export default function PPDBPage() {
                             placeholder="Nama lengkap ibu..."
                             value={formData.motherName}
                             onChange={(e) => handleChange("motherName", e.target.value)}
-                            className={`w-full p-3 rounded-xl bg-white dark:bg-[#0E241E] border text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#047857] ${
-                              errors.motherName ? "border-red-500" : "border-slate-200 dark:border-emerald-900/60"
-                            }`}
+                            className={`w-full p-3 rounded-xl bg-white dark:bg-[#0E241E] border text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#047857] ${errors.motherName ? "border-red-500" : "border-slate-200 dark:border-emerald-900/60"
+                              }`}
                           />
                           {errors.motherName && (
                             <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
@@ -1029,9 +1009,8 @@ export default function PPDBPage() {
                             placeholder="Contoh: 081234567891"
                             value={formData.motherPhone}
                             onChange={(e) => handleNumericInput("motherPhone", e.target.value)}
-                            className={`w-full p-3 rounded-xl bg-white dark:bg-[#0E241E] border text-xs font-mono text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#047857] ${
-                              errors.motherPhone ? "border-red-500" : "border-slate-200 dark:border-emerald-900/60"
-                            }`}
+                            className={`w-full p-3 rounded-xl bg-white dark:bg-[#0E241E] border text-xs font-mono text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#047857] ${errors.motherPhone ? "border-red-500" : "border-slate-200 dark:border-emerald-900/60"
+                              }`}
                           />
                           {errors.motherPhone && (
                             <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
@@ -1088,9 +1067,8 @@ export default function PPDBPage() {
                               placeholder="Tuliskan pekerjaan ibu..."
                               value={formData.customMotherOccupation}
                               onChange={(e) => handleChange("customMotherOccupation", e.target.value)}
-                              className={`w-full p-3 rounded-xl bg-amber-50/50 dark:bg-amber-950/20 border text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500 ${
-                                errors.customMotherOccupation ? "border-red-500" : "border-amber-300 dark:border-amber-800"
-                              }`}
+                              className={`w-full p-3 rounded-xl bg-amber-50/50 dark:bg-amber-950/20 border text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500 ${errors.customMotherOccupation ? "border-red-500" : "border-amber-300 dark:border-amber-800"
+                                }`}
                             />
                             {errors.customMotherOccupation && (
                               <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
@@ -1110,9 +1088,8 @@ export default function PPDBPage() {
                             placeholder="Alamat domisili ibu..."
                             value={formData.motherAddress}
                             onChange={(e) => handleChange("motherAddress", e.target.value)}
-                            className={`w-full p-3 rounded-xl bg-white dark:bg-[#0E241E] border text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#047857] ${
-                              errors.motherAddress ? "border-red-500" : "border-slate-200 dark:border-emerald-900/60"
-                            }`}
+                            className={`w-full p-3 rounded-xl bg-white dark:bg-[#0E241E] border text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#047857] ${errors.motherAddress ? "border-red-500" : "border-slate-200 dark:border-emerald-900/60"
+                              }`}
                           />
                           {errors.motherAddress && (
                             <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
@@ -1182,9 +1159,8 @@ export default function PPDBPage() {
                             placeholder="Nama lengkap wali..."
                             value={formData.guardianName}
                             onChange={(e) => handleChange("guardianName", e.target.value)}
-                            className={`w-full p-3 rounded-xl bg-white dark:bg-[#0E241E] border text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#047857] ${
-                              errors.guardianName ? "border-red-500" : "border-slate-200 dark:border-emerald-900/60"
-                            }`}
+                            className={`w-full p-3 rounded-xl bg-white dark:bg-[#0E241E] border text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#047857] ${errors.guardianName ? "border-red-500" : "border-slate-200 dark:border-emerald-900/60"
+                              }`}
                           />
                           {errors.guardianName && (
                             <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
@@ -1203,9 +1179,8 @@ export default function PPDBPage() {
                             placeholder="Contoh: 081234567899"
                             value={formData.guardianPhone}
                             onChange={(e) => handleNumericInput("guardianPhone", e.target.value)}
-                            className={`w-full p-3 rounded-xl bg-white dark:bg-[#0E241E] border text-xs font-mono text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#047857] ${
-                              errors.guardianPhone ? "border-red-500" : "border-slate-200 dark:border-emerald-900/60"
-                            }`}
+                            className={`w-full p-3 rounded-xl bg-white dark:bg-[#0E241E] border text-xs font-mono text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#047857] ${errors.guardianPhone ? "border-red-500" : "border-slate-200 dark:border-emerald-900/60"
+                              }`}
                           />
                           {errors.guardianPhone && (
                             <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
@@ -1242,9 +1217,8 @@ export default function PPDBPage() {
                               placeholder="Contoh: Paman / Kakek"
                               value={formData.customGuardianRelation}
                               onChange={(e) => handleChange("customGuardianRelation", e.target.value)}
-                              className={`w-full p-3 rounded-xl bg-amber-50/80 dark:bg-amber-950/30 border text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500 ${
-                                errors.customGuardianRelation ? "border-red-500" : "border-amber-300 dark:border-amber-800"
-                              }`}
+                              className={`w-full p-3 rounded-xl bg-amber-50/80 dark:bg-amber-950/30 border text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500 ${errors.customGuardianRelation ? "border-red-500" : "border-amber-300 dark:border-amber-800"
+                                }`}
                             />
                             {errors.customGuardianRelation && (
                               <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
@@ -1264,9 +1238,8 @@ export default function PPDBPage() {
                             placeholder="Alamat domisili wali..."
                             value={formData.guardianAddress}
                             onChange={(e) => handleChange("guardianAddress", e.target.value)}
-                            className={`w-full p-3 rounded-xl bg-white dark:bg-[#0E241E] border text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#047857] ${
-                              errors.guardianAddress ? "border-red-500" : "border-slate-200 dark:border-emerald-900/60"
-                            }`}
+                            className={`w-full p-3 rounded-xl bg-white dark:bg-[#0E241E] border text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#047857] ${errors.guardianAddress ? "border-red-500" : "border-slate-200 dark:border-emerald-900/60"
+                              }`}
                           />
                           {errors.guardianAddress && (
                             <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">

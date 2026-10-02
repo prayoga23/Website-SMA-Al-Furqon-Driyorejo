@@ -6,7 +6,7 @@ import {
   TeacherItem,
   ExtracurricularItem,
   GalleryItem,
-  PPDBApplicant,
+  PSBApplicant,
   FAQItem,
   TestimonialItem,
   FacilityItem,
@@ -331,7 +331,7 @@ export const initialExtracurriculars: ExtracurricularItem[] = [
 
 export const initialGallery: GalleryItem[] = [];
 
-export const initialApplicants: PPDBApplicant[] = [];
+export const initialApplicants: PSBApplicant[] = [];
 
 export const initialFAQs: FAQItem[] = [
   {

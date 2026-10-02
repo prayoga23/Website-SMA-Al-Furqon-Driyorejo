@@ -1,7 +1,7 @@
 "use client";
 
-import PPDBPage from "@/app/ppdb/page";
+import PSBPage from "@/app/PSB/page";
 
 export default function PSBPage() {
-  return <PPDBPage />;
+  return <PSBPage />;
 }

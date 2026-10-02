@@ -63,7 +63,7 @@ export const PSBSection: React.FC = () => {
 
   return (
     <section id="psb-section" className="py-20 bg-gradient-to-b from-[#032B21] via-[#064E3B] to-[#047857] text-white relative overflow-hidden">
-      <div id="ppdb-section" className="absolute top-0"></div>
+      <div id="PSB-section" className="absolute top-0"></div>
       {/* Glow Ornaments */}
       <div className="absolute top-0 right-1/4 w-96 h-96 bg-amber-400/10 rounded-full blur-3xl pointer-events-none"></div>
 
@@ -127,7 +127,7 @@ export const PSBSection: React.FC = () => {
             <div className="inline-block bg-amber-400 text-slate-950 text-xs font-extrabold px-3 py-1 rounded-md uppercase">
               Informasi Resmi Brosur PSB
             </div>
-            
+
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="bg-emerald-950/60 p-4 rounded-2xl border border-emerald-500/30 space-y-1.5">
                 <h4 className="font-extrabold text-amber-300 text-sm flex items-center gap-2 font-heading">
@@ -253,4 +253,4 @@ export const PSBSection: React.FC = () => {
   );
 };
 
-export const PPDBSection = PSBSection;
+export const PSBSection = PSBSection;

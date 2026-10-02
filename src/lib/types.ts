@@ -100,7 +100,7 @@ export interface GalleryItem {
   description: string;
 }
 
-export interface PPDBApplicant {
+export interface PSBApplicant {
   id: string;
   registrationNumber: string;
   registrationDate: string;
@@ -156,13 +156,13 @@ export interface PPDBApplicant {
   selectedMajor?: "MIPA / IPA" | "IPS" | "Kurikulum Merdeka Unggulan";
 }
 
-export type PSBApplicant = PPDBApplicant;
+export type PSBApplicant = PSBApplicant;
 
 export interface FAQItem {
   id: string;
   question: string;
   answer: string;
-  category: "PSB" | "PPDB" | "Kurikulum" | "Kehidupan Santri" | "Fasilitas" | "Umum";
+  category: "PSB" | "PSB" | "Kurikulum" | "Kehidupan Santri" | "Fasilitas" | "Umum";
 }
 
 export interface TestimonialItem {
@@ -190,7 +190,7 @@ export interface UserItem {
   name: string;
   username: string;
   password: string;
-  role: "Super Admin" | "Administrator" | "Admin" | "Editor Berita" | "Petugas PSB" | "Petugas PPDB";
+  role: "Super Admin" | "Administrator" | "Admin" | "Editor Berita" | "Petugas PSB" | "Petugas PSB";
   status: "Aktif" | "Nonaktif";
   email: string;
   lastLogin?: string;
