@@ -252,5 +252,3 @@ export const PSBSection: React.FC = () => {
     </section>
   );
 };
-
-export const PSBSection = PSBSection;

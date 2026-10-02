@@ -3,6 +3,20 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   output: "standalone",
   devIndicators: false,
+  async redirects() {
+    return [
+      {
+        source: "/ppdb",
+        destination: "/psb",
+        permanent: true,
+      },
+      {
+        source: "/admin/ppdb",
+        destination: "/admin/psb",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {

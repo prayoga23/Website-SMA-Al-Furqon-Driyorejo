@@ -156,13 +156,11 @@ export interface PSBApplicant {
   selectedMajor?: "MIPA / IPA" | "IPS" | "Kurikulum Merdeka Unggulan";
 }
 
-export type PSBApplicant = PSBApplicant;
-
 export interface FAQItem {
   id: string;
   question: string;
   answer: string;
-  category: "PSB" | "PSB" | "Kurikulum" | "Kehidupan Santri" | "Fasilitas" | "Umum";
+  category: "PSB" | "Kurikulum" | "Kehidupan Santri" | "Fasilitas" | "Umum";
 }
 
 export interface TestimonialItem {
@@ -190,7 +188,7 @@ export interface UserItem {
   name: string;
   username: string;
   password: string;
-  role: "Super Admin" | "Administrator" | "Admin" | "Editor Berita" | "Petugas PSB" | "Petugas PSB";
+  role: "Super Admin" | "Administrator" | "Admin" | "Editor Berita" | "Petugas PSB";
   status: "Aktif" | "Nonaktif";
   email: string;
   lastLogin?: string;

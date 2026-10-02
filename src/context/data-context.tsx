@@ -89,7 +89,6 @@ interface DataContextType {
   loginUser: (username: string, password: string) => { success: boolean; message?: string; user?: UserItem };
   logoutUser: () => void;
   submitPSB: (applicant: Omit<PSBApplicant, "id" | "registrationNumber" | "registrationDate" | "status">) => PSBApplicant;
-  submitPSB: (applicant: Omit<PSBApplicant, "id" | "registrationNumber" | "registrationDate" | "status">) => PSBApplicant;
   updateApplicantStatus: (id: string, status: PSBApplicant["status"]) => void;
 }
 
@@ -595,7 +594,7 @@ export const DataProvider: React.FC<{
     localStorage.removeItem("sma_admin_token");
   };
 
-  // --- PSB / PSB APPLICANTS ---
+  // --- PSB APPLICANTS ---
   const submitPSB = (
     data: Omit<PSBApplicant, "id" | "registrationNumber" | "registrationDate" | "status">
   ): PSBApplicant => {
@@ -613,8 +612,6 @@ export const DataProvider: React.FC<{
     syncToApi("PSB_applicants", "save", newApplicant);
     return newApplicant;
   };
-
-  const submitPSB = submitPSB;
 
   const updateApplicantStatus = (id: string, status: PSBApplicant["status"]) => {
     const updated = applicants.map((app) => (app.id === id ? { ...app, status } : app));
@@ -681,7 +678,6 @@ export const DataProvider: React.FC<{
         deleteUser,
         loginUser,
         logoutUser,
-        submitPSB,
         submitPSB,
         updateApplicantStatus,
       }}
