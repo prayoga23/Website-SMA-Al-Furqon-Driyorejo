@@ -7,7 +7,7 @@ export function getPool(): Pool {
     const host = process.env.MYSQL_HOST || process.env.DB_HOST || "mysql-server";
     const port = Number(process.env.MYSQL_PORT || process.env.DB_PORT || 3306);
     const user = process.env.MYSQL_USER || process.env.DB_USER || "prayoga";
-    const password = process.env.MYSQL_PASSWORD ?? process.env.DB_PASSWORD ?? "Pr4y0g@@";
+    const password = process.env.MYSQL_PASSWORD ?? process.env.DB_PASSWORD ?? "Pr4y0g@";
     const database = process.env.MYSQL_DATABASE || process.env.DB_NAME || "website_alfurqon";
     const databaseUrl = process.env.DATABASE_URL;
 

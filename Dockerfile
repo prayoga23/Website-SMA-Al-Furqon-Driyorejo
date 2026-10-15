@@ -22,7 +22,7 @@ ENV DATABASE_URL="mysql://prayoga:Pr4y0g%40%40@mysql-server:3306/website_alfurqo
 ENV MYSQL_HOST="mysql-server"
 ENV MYSQL_PORT="3306"
 ENV MYSQL_USER="prayoga"
-ENV MYSQL_PASSWORD="Pr4y0g@@"
+ENV MYSQL_PASSWORD="Pr4y0g@"
 ENV MYSQL_DATABASE="website_alfurqon"
 
 RUN \
@@ -42,7 +42,7 @@ ENV DATABASE_URL="mysql://prayoga:Pr4y0g%40%40@mysql-server:3306/website_alfurqo
 ENV MYSQL_HOST="mysql-server"
 ENV MYSQL_PORT="3306"
 ENV MYSQL_USER="prayoga"
-ENV MYSQL_PASSWORD="Pr4y0g@@"
+ENV MYSQL_PASSWORD="Pr4y0g@"
 ENV MYSQL_DATABASE="website_alfurqon"
 
 RUN addgroup --system --gid 1001 nodejs
