@@ -1,4 +1,4 @@
-import { sql } from "./db";
+import { query } from "./db";
 import {
   SchoolInfo,
   NewsItem,
@@ -62,35 +62,60 @@ export async function getServerDataBundle(): Promise<ServerDataBundle> {
   }
 
   try {
-    const result = await sql`
-      SELECT json_build_object(
-        'schoolInfo', (SELECT data FROM school_info WHERE id = 'default' LIMIT 1),
-        'news', COALESCE((SELECT json_agg(n.*) FROM (SELECT * FROM news ORDER BY created_at DESC) n), '[]'::json),
-        'agendas', COALESCE((SELECT json_agg(a.*) FROM (SELECT * FROM agendas ORDER BY date ASC) a), '[]'::json),
-        'achievements', COALESCE((SELECT json_agg(ach.*) FROM (SELECT * FROM achievements ORDER BY year DESC) ach), '[]'::json),
-        'teachers', COALESCE((SELECT json_agg(t.*) FROM (SELECT * FROM teachers ORDER BY created_at ASC) t), '[]'::json),
-        'extracurriculars', COALESCE((SELECT json_agg(e.*) FROM (SELECT * FROM extracurriculars ORDER BY id ASC) e), '[]'::json),
-        'gallery', COALESCE((SELECT json_agg(g.*) FROM (SELECT * FROM gallery ORDER BY created_at DESC) g), '[]'::json),
-        'applicants', COALESCE((SELECT json_agg(app.*) FROM (SELECT * FROM PSB_applicants ORDER BY created_at DESC) app), '[]'::json),
-        'faqs', COALESCE((SELECT json_agg(f.*) FROM (SELECT * FROM faqs ORDER BY id ASC) f), '[]'::json),
-        'testimonials', COALESCE((SELECT json_agg(tm.*) FROM (SELECT * FROM testimonials ORDER BY created_at DESC) tm), '[]'::json),
-        'facilities', COALESCE((SELECT json_agg(fac.*) FROM (SELECT * FROM facilities ORDER BY name ASC) fac), '[]'::json),
-        'users', COALESCE((SELECT json_agg(u.*) FROM (SELECT * FROM users ORDER BY created_at ASC) u), '[]'::json),
-        'kesiswaan', COALESCE((SELECT json_agg(k.*) FROM (SELECT * FROM kesiswaan_activities ORDER BY created_at ASC) k), '[]'::json)
-      ) as bundle;
-    `;
+    const [
+      schoolInfoRows,
+      newsRows,
+      agendasRows,
+      achievementsRows,
+      teachersRows,
+      extracurricularsRows,
+      galleryRows,
+      applicantsRows,
+      faqsRows,
+      testimonialsRows,
+      facilitiesRows,
+      usersRows,
+      kesiswaanRows,
+    ] = await Promise.all([
+      query<any>("SELECT data FROM school_info WHERE id = 'default' LIMIT 1").catch(() => []),
+      query<any>("SELECT * FROM news ORDER BY created_at DESC").catch(() => []),
+      query<any>("SELECT * FROM agendas ORDER BY date ASC").catch(() => []),
+      query<any>("SELECT * FROM achievements ORDER BY year DESC").catch(() => []),
+      query<any>("SELECT * FROM teachers ORDER BY created_at ASC").catch(() => []),
+      query<any>("SELECT * FROM extracurriculars ORDER BY id ASC").catch(() => []),
+      query<any>("SELECT * FROM gallery ORDER BY created_at DESC").catch(() => []),
+      query<any>("SELECT * FROM psb_applicants ORDER BY created_at DESC").catch(() => []),
+      query<any>("SELECT * FROM faqs ORDER BY id ASC").catch(() => []),
+      query<any>("SELECT * FROM testimonials ORDER BY created_at DESC").catch(() => []),
+      query<any>("SELECT * FROM facilities ORDER BY name ASC").catch(() => []),
+      query<any>("SELECT * FROM users ORDER BY created_at ASC").catch(() => []),
+      query<any>("SELECT * FROM kesiswaan_activities ORDER BY created_at ASC").catch(() => []),
+    ]);
 
-    const bundle = result[0]?.bundle || {};
+    const rawSchoolInfo = schoolInfoRows[0]?.data;
+    let parsedSchoolInfo = initialSchoolInfo;
+    if (rawSchoolInfo) {
+      if (typeof rawSchoolInfo === "object") {
+        parsedSchoolInfo = rawSchoolInfo;
+      } else if (typeof rawSchoolInfo === "string") {
+        try {
+          parsedSchoolInfo = JSON.parse(rawSchoolInfo);
+        } catch {
+          parsedSchoolInfo = initialSchoolInfo;
+        }
+      }
+    }
 
-    const rawNews = Array.isArray(bundle.news) ? bundle.news : [];
-    const rawAgendas = Array.isArray(bundle.agendas) ? bundle.agendas : initialAgenda;
-    const rawAchievements = Array.isArray(bundle.achievements) ? bundle.achievements : initialAchievements;
-    const rawTeachers = bundle.teachers && bundle.teachers.length > 0 ? bundle.teachers : initialTeachers;
-    const rawExtracurriculars = bundle.extracurriculars && bundle.extracurriculars.length > 0 ? bundle.extracurriculars : initialExtracurriculars;
-    const rawGallery = Array.isArray(bundle.gallery) ? bundle.gallery : initialGallery;
-    const rawFaqs = bundle.faqs && bundle.faqs.length > 0 ? bundle.faqs : initialFAQs;
-    const rawTestimonials = Array.isArray(bundle.testimonials) ? bundle.testimonials : initialTestimonials;
-    const rawFacilities = bundle.facilities && bundle.facilities.length > 0 ? bundle.facilities : initialFacilities;
+    const rawNews = Array.isArray(newsRows) ? newsRows : [];
+    const rawAgendas = agendasRows && agendasRows.length > 0 ? agendasRows : initialAgenda;
+    const rawAchievements = achievementsRows && achievementsRows.length > 0 ? achievementsRows : initialAchievements;
+    const rawTeachers = teachersRows && teachersRows.length > 0 ? teachersRows : initialTeachers;
+    const rawExtracurriculars = extracurricularsRows && extracurricularsRows.length > 0 ? extracurricularsRows : initialExtracurriculars;
+    const rawGallery = Array.isArray(galleryRows) ? galleryRows : initialGallery;
+    const rawFaqs = faqsRows && faqsRows.length > 0 ? faqsRows : initialFAQs;
+    const rawTestimonials = Array.isArray(testimonialsRows) ? testimonialsRows : initialTestimonials;
+    const rawFacilities = facilitiesRows && facilitiesRows.length > 0 ? facilitiesRows : initialFacilities;
+    const rawUsers = usersRows && usersRows.length > 0 ? usersRows : initialUsers;
 
     const formattedGallery: GalleryItem[] = rawGallery.map((g: any) => ({
       id: g.id,
@@ -102,7 +127,7 @@ export async function getServerDataBundle(): Promise<ServerDataBundle> {
     }));
 
     const freshBundle: ServerDataBundle = {
-      schoolInfo: bundle.schoolInfo || initialSchoolInfo,
+      schoolInfo: parsedSchoolInfo,
       news: rawNews.map((n: any) => ({
         id: n.id,
         title: n.title,
@@ -152,7 +177,7 @@ export async function getServerDataBundle(): Promise<ServerDataBundle> {
           bio: t.bio || "",
           email: t.email || "",
           phone: t.phone || "",
-          isActive: t.is_active !== false,
+          isActive: t.is_active !== 0 && t.is_active !== false,
         }))
       ),
       extracurriculars: rawExtracurriculars.map((e: any) => {
@@ -173,30 +198,40 @@ export async function getServerDataBundle(): Promise<ServerDataBundle> {
           description: e.description || "",
           schedule: e.schedule || "",
           instructor: e.instructor || e.mentor || "",
-          image: "", // Ekstrakurikuler: Hanya Icon saja, tidak ada gambar banner
+          image: "", // Ekstrakurikuler: Hanya Icon saja
           icon: e.icon || "Sparkles",
           iconImage: e.icon_image || e.iconImage || (e.name && e.name.toLowerCase().includes("silat") ? "/pencak-silat2 (1).png" : undefined),
           achievements: achievementsArr,
         };
       }),
       gallery: formattedGallery,
-      applicants: (bundle.applicants || []).map((a: any) => ({
-        id: a.id,
-        registrationNumber: a.registration_number || a.registrationNumber || "",
-        fullName: a.full_name || a.fullName || "",
-        nisn: a.nisn || "",
-        gender: a.gender || "",
-        birthPlace: a.birth_place || a.birthPlace || "",
-        birthDate: a.birth_date || a.birthDate || "",
-        address: a.address || "",
-        previousSchool: a.previous_school || a.previousSchool || "",
-        parentName: a.parent_name || a.parentName || "",
-        parentPhone: a.parent_phone || a.parentPhone || "",
-        chosenMajor: a.chosen_major || a.chosenMajor || "",
-        registrationDate: a.registration_date || a.registrationDate || "",
-        status: a.status || "Menunggu Verifikasi",
-        notes: a.notes || "",
-      })),
+      applicants: (applicantsRows || []).map((a: any) => {
+        const dataObj =
+          typeof a.data === "object" && a.data !== null
+            ? a.data
+            : typeof a.data === "string"
+            ? JSON.parse(a.data || "{}")
+            : {};
+        return {
+          ...dataObj,
+          id: a.id,
+          registrationNumber: a.registration_number || a.registrationNumber || dataObj.registrationNumber || "",
+          fullName: a.full_name || a.fullName || dataObj.fullName || "",
+          nisn: a.nisn || dataObj.nisn || "",
+          gender: a.gender || dataObj.gender || "Laki-laki",
+          birthPlace: a.birth_place || a.birthPlace || dataObj.birthPlace || "",
+          birthDate: a.birth_date || a.birthDate || dataObj.birthDate || "",
+          address: a.address || dataObj.address || "",
+          previousSchool: a.previous_school || a.previousSchool || dataObj.previousSchool || dataObj.originSchool || "",
+          originSchool: a.origin_school || a.originSchool || dataObj.originSchool || a.previous_school || "",
+          parentName: a.parent_name || a.parentName || dataObj.parentName || dataObj.fatherName || "",
+          parentPhone: a.parent_phone || a.parentPhone || dataObj.parentPhone || dataObj.fatherPhone || "",
+          chosenMajor: a.chosen_major || a.chosenMajor || dataObj.chosenMajor || dataObj.selectedMajor || "",
+          registrationDate: a.registration_date || a.registrationDate || dataObj.registrationDate || "",
+          status: a.status || dataObj.status || "Menunggu Verifikasi",
+          notes: a.notes || dataObj.notes || "",
+        };
+      }),
       faqs: rawFaqs,
       testimonials: rawTestimonials.map((tm: any) => ({
         id: tm.id,
@@ -217,7 +252,7 @@ export async function getServerDataBundle(): Promise<ServerDataBundle> {
         desc: f.description || f.desc,
         image: f.image || "",
       })),
-      users: (bundle.users || []).map((u: any) => ({
+      users: rawUsers.map((u: any) => ({
         id: u.id,
         username: u.username,
         password: u.password,
@@ -227,16 +262,21 @@ export async function getServerDataBundle(): Promise<ServerDataBundle> {
         email: u.email || "",
       })),
       kesiswaanActivities:
-        bundle.kesiswaan && bundle.kesiswaan.length > 0
-          ? bundle.kesiswaan.map((k: any) => {
-            const dataObj = typeof k.data === "object" ? k.data : JSON.parse(k.data || "{}");
-            return {
-              id: k.id,
-              slug: k.slug,
-              status: dataObj.status || "published",
-              ...dataObj,
-            };
-          })
+        kesiswaanRows && kesiswaanRows.length > 0
+          ? kesiswaanRows.map((k: any) => {
+              const dataObj =
+                typeof k.data === "object" && k.data !== null
+                  ? k.data
+                  : typeof k.data === "string"
+                  ? JSON.parse(k.data || "{}")
+                  : {};
+              return {
+                id: k.id,
+                slug: k.slug || k.id,
+                status: dataObj.status || "published",
+                ...dataObj,
+              };
+            })
           : initialKesiswaanActivities,
     };
 
@@ -244,7 +284,7 @@ export async function getServerDataBundle(): Promise<ServerDataBundle> {
     lastFetchTime = Date.now();
     return freshBundle;
   } catch (error) {
-    console.error("Error fetching server data bundle from Neon DB:", error);
+    console.error("Error fetching server data bundle from MySQL DB:", error);
     if (cachedBundle) return cachedBundle;
     return {
       schoolInfo: initialSchoolInfo,

@@ -114,7 +114,7 @@ async function initSchema() {
   `;
 
   await sql`
-    CREATE TABLE IF NOT EXISTS PSB_applicants (
+    CREATE TABLE IF NOT EXISTS psb_applicants (
       id VARCHAR(100) PRIMARY KEY,
       registration_number VARCHAR(100) UNIQUE,
       full_name VARCHAR(255) NOT NULL,
@@ -128,11 +128,14 @@ async function initSchema() {
       parent_phone VARCHAR(50),
       chosen_major VARCHAR(100),
       registration_date VARCHAR(50),
-      status VARCHAR(50) DEFAULT 'Pending',
+      status VARCHAR(50) DEFAULT 'Menunggu Verifikasi',
       notes TEXT,
+      data JSONB,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
   `;
+  await sql`ALTER TABLE psb_applicants ADD COLUMN IF NOT EXISTS data JSONB;`;
+  await sql`CREATE OR REPLACE VIEW ppdb_applicants AS SELECT * FROM psb_applicants;`;
 
   await sql`
     CREATE TABLE IF NOT EXISTS faqs (

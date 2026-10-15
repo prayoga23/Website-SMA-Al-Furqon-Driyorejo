@@ -1,21 +1,68 @@
-import { neon } from "@neondatabase/serverless";
+import mysql, { Pool, PoolOptions } from "mysql2/promise";
 
-const databaseUrl =
-  process.env.DATABASE_URL ||
-  "postgresql://neondb_owner:npg_yo2PTxLukc1s@ep-lingering-dew-axy5bekt.c-4.us-east-2.aws.neon.tech/website_alfurqon?sslmode=require";
+let pool: Pool | null = null;
 
-export const sql = neon(databaseUrl, {
-  fetchOptions: {
-    cache: "no-store",
-  },
-});
+export function getPool(): Pool {
+  if (!pool) {
+    const databaseUrl = process.env.DATABASE_URL;
+
+    let poolConfig: PoolOptions;
+
+    if (databaseUrl && (databaseUrl.startsWith("mysql://") || databaseUrl.startsWith("mysqls://"))) {
+      poolConfig = {
+        uri: databaseUrl,
+        waitForConnections: true,
+        connectionLimit: 10,
+        queueLimit: 0,
+        enableKeepAlive: true,
+        keepAliveInitialDelay: 0,
+      };
+    } else {
+      poolConfig = {
+        host: process.env.MYSQL_HOST || process.env.DB_HOST || "127.0.0.1",
+        port: Number(process.env.MYSQL_PORT || process.env.DB_PORT || 3306),
+        user: process.env.MYSQL_USER || process.env.DB_USER || "root",
+        password: process.env.MYSQL_PASSWORD || process.env.DB_PASSWORD || "",
+        database: process.env.MYSQL_DATABASE || process.env.DB_NAME || "website_alfurqon",
+        waitForConnections: true,
+        connectionLimit: 10,
+        queueLimit: 0,
+        enableKeepAlive: true,
+        keepAliveInitialDelay: 0,
+      };
+    }
+
+    pool = mysql.createPool(poolConfig);
+  }
+  return pool;
+}
+
+export async function query<T = any>(sqlQuery: string, params: any[] = []): Promise<T[]> {
+  const p = getPool();
+  const [rows] = await p.query(sqlQuery, params);
+  return rows as T[];
+}
+
+export async function execute(sqlQuery: string, params: any[] = []) {
+  const p = getPool();
+  return await p.execute(sqlQuery, params);
+}
+
+// Tagged template literal helper for backward-compatibility: sql`SELECT * FROM table WHERE id = ${id}`
+export const sql = async (strings: TemplateStringsArray, ...values: any[]): Promise<any[]> => {
+  let queryString = strings[0];
+  for (let i = 0; i < values.length; i++) {
+    queryString += "?" + strings[i + 1];
+  }
+  return await query(queryString, values);
+};
 
 export async function checkDatabaseConnection() {
   try {
-    const result = await sql`SELECT NOW() as current_time`;
-    return { success: true, timestamp: result[0]?.current_time };
+    const rows = await query<any>("SELECT NOW() as current_time");
+    return { success: true, timestamp: rows[0]?.current_time };
   } catch (error) {
-    console.error("Database connection error:", error);
+    console.error("MySQL connection error:", error);
     return { success: false, error: String(error) };
   }
 }
