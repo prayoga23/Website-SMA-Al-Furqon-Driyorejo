@@ -4,6 +4,11 @@ let pool: Pool | null = null;
 
 export function getPool(): Pool {
   if (!pool) {
+    const host = process.env.MYSQL_HOST || process.env.DB_HOST || "mysql-server";
+    const port = Number(process.env.MYSQL_PORT || process.env.DB_PORT || 3306);
+    const user = process.env.MYSQL_USER || process.env.DB_USER || "prayoga";
+    const password = process.env.MYSQL_PASSWORD ?? process.env.DB_PASSWORD ?? "Pr4y0g@@";
+    const database = process.env.MYSQL_DATABASE || process.env.DB_NAME || "website_alfurqon";
     const databaseUrl = process.env.DATABASE_URL;
 
     let poolConfig: PoolOptions;
@@ -19,11 +24,11 @@ export function getPool(): Pool {
       };
     } else {
       poolConfig = {
-        host: process.env.MYSQL_HOST || process.env.DB_HOST || "127.0.0.1",
-        port: Number(process.env.MYSQL_PORT || process.env.DB_PORT || 3306),
-        user: process.env.MYSQL_USER || process.env.DB_USER || "root",
-        password: process.env.MYSQL_PASSWORD || process.env.DB_PASSWORD || "",
-        database: process.env.MYSQL_DATABASE || process.env.DB_NAME || "website_alfurqon",
+        host,
+        port,
+        user,
+        password,
+        database,
         waitForConnections: true,
         connectionLimit: 10,
         queueLimit: 0,

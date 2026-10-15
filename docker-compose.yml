@@ -9,9 +9,16 @@ services:
     restart: unless-stopped
     ports:
       - "3030:3030"
+    env_file:
+      - .env
     environment:
       - NODE_ENV=production
-      - DATABASE_URL=postgresql://neondb_owner:npg_yo2PTxLukc1s@ep-lingering-dew-axy5bekt.c-4.us-east-2.aws.neon.tech/website_alfurqon?sslmode=require
+      - MYSQL_HOST=mysql-server
+      - MYSQL_PORT=3306
+      - MYSQL_USER=prayoga
+      - MYSQL_PASSWORD=Pr4y0g@@
+      - MYSQL_DATABASE=website_alfurqon
+      - DATABASE_URL=mysql://prayoga:Pr4y0g%40%40@mysql-server:3306/website_alfurqon
     networks:
       - proxy-network
 

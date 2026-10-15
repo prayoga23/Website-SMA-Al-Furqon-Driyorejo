@@ -380,10 +380,11 @@ export async function POST(request: Request) {
       { error: "Invalid action or missing parameters" },
       { status: 400, headers: NO_CACHE_HEADERS }
     );
-  } catch (error) {
-    console.error("Error updating MySQL DB:", error);
+  } catch (error: any) {
+    const errorMsg = error?.message || String(error);
+    console.error("Error updating MySQL DB:", errorMsg);
     return NextResponse.json(
-      { success: false, error: String(error) },
+      { success: false, error: errorMsg },
       { status: 500, headers: NO_CACHE_HEADERS }
     );
   }

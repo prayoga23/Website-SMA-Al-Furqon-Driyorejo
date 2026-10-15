@@ -126,9 +126,9 @@ export default function AdminGuruPage() {
 
     setIsSaving(true);
     try {
-      let success = false;
+      let res: { success: boolean; error?: string } = { success: false, error: "" };
       if (editingItem) {
-        success = await updateTeacher(editingItem.id, {
+        res = await updateTeacher(editingItem.id, {
           ...editingItem,
           name,
           position,
@@ -138,7 +138,7 @@ export default function AdminGuruPage() {
           bio,
         });
       } else {
-        success = await addTeacher({
+        res = await addTeacher({
           name,
           position,
           subject,
@@ -148,10 +148,10 @@ export default function AdminGuruPage() {
         });
       }
 
-      if (success) {
+      if (res.success) {
         setModalOpen(false);
       } else {
-        alert("Gagal menyimpan data guru ke database server. Silakan coba kembali.");
+        alert(`Gagal menyimpan data guru ke database server: ${res.error || "Gagal menghubungi database server"}. Silakan coba kembali.`);
       }
     } catch (err) {
       alert("Terjadi kesalahan saat menyimpan: " + String(err));

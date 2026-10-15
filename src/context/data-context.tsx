@@ -60,8 +60,8 @@ interface DataContextType {
   addAchievement: (item: Omit<AchievementItem, "id">) => void;
   updateAchievement: (id: string, item: Partial<AchievementItem>) => void;
   deleteAchievement: (id: string) => void;
-  addTeacher: (item: Omit<TeacherItem, "id">) => Promise<boolean>;
-  updateTeacher: (id: string, item: Partial<TeacherItem>) => Promise<boolean>;
+  addTeacher: (item: Omit<TeacherItem, "id">) => Promise<{ success: boolean; error?: string }>;
+  updateTeacher: (id: string, item: Partial<TeacherItem>) => Promise<{ success: boolean; error?: string }>;
   deleteTeacher: (id: string) => void;
   setTeachersData: (items: TeacherItem[]) => void;
   resetTeachersToDefault: () => void;
@@ -116,8 +116,8 @@ export const DataProvider: React.FC<{
   const [kesiswaanActivities, setKesiswaanActivities] = useState<KesiswaanActivity[]>(initialData?.kesiswaanActivities ?? initialKesiswaanActivities);
   const [currentUser, setCurrentUser] = useState<UserItem | null>(null);
 
-  // Synchronize state directly to Neon PostgreSQL DB
-  const syncToApi = async (table: string, action: "save" | "delete", item?: any, id?: string): Promise<boolean> => {
+  // Synchronize state directly to MySQL DB
+  const syncToApi = async (table: string, action: "save" | "delete", item?: any, id?: string): Promise<{ success: boolean; error?: string }> => {
     try {
       const res = await fetch("/api/data", {
         method: "POST",
@@ -125,13 +125,19 @@ export const DataProvider: React.FC<{
         body: JSON.stringify({ table, action, item, id }),
       });
       if (!res.ok) {
-        console.error(`Failed to sync ${table} (${action}): HTTP ${res.status}`);
-        return false;
+        let errDetails = `HTTP ${res.status}`;
+        try {
+          const errData = await res.json();
+          if (errData?.error) errDetails = errData.error;
+        } catch { }
+        console.error(`Failed to sync ${table} (${action}):`, errDetails);
+        return { success: false, error: errDetails };
       }
-      return true;
-    } catch (e) {
-      console.error(`Error syncing ${table} (${action}) to Neon DB:`, e);
-      return false;
+      return { success: true };
+    } catch (e: any) {
+      const msg = e?.message || String(e);
+      console.error(`Error syncing ${table} (${action}) to DB:`, msg);
+      return { success: false, error: msg };
     }
   };
 
@@ -351,7 +357,7 @@ export const DataProvider: React.FC<{
   };
 
   // --- TEACHERS ---
-  const addTeacher = async (item: Omit<TeacherItem, "id">): Promise<boolean> => {
+  const addTeacher = async (item: Omit<TeacherItem, "id">): Promise<{ success: boolean; error?: string }> => {
     const newItem: TeacherItem = {
       ...item,
       id: "t-" + Date.now(),
@@ -361,14 +367,14 @@ export const DataProvider: React.FC<{
     return await syncToApi("teachers", "save", newItem);
   };
 
-  const updateTeacher = async (id: string, item: Partial<TeacherItem>): Promise<boolean> => {
+  const updateTeacher = async (id: string, item: Partial<TeacherItem>): Promise<{ success: boolean; error?: string }> => {
     const updated = teachers.map((t) => (t.id === id ? { ...t, ...item } : t));
     setTeachers(updated);
     const target = updated.find((t) => t.id === id);
     if (target) {
       return await syncToApi("teachers", "save", target);
     }
-    return false;
+    return { success: false, error: "Teacher item not found" };
   };
 
   const deleteTeacher = (id: string) => {
