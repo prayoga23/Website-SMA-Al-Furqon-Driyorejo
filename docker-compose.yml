@@ -18,7 +18,7 @@ services:
       - MYSQL_USER=prayoga
       - MYSQL_PASSWORD=Pr4y0g@
       - MYSQL_DATABASE=website_alfurqon
-      - DATABASE_URL=mysql://prayoga:Pr4y0g%40%40@mysql-server:3306/website_alfurqon
+      - DATABASE_URL=mysql://prayoga:Pr4y0g%40@mysql-server:3306/website_alfurqon
     networks:
       - proxy-network
 

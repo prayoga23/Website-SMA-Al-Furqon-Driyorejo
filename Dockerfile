@@ -18,7 +18,7 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 ENV NEXT_TELEMETRY_DISABLED=1
-ENV DATABASE_URL="mysql://prayoga:Pr4y0g%40%40@mysql-server:3306/website_alfurqon"
+ENV DATABASE_URL="mysql://prayoga:Pr4y0g%40@mysql-server:3306/website_alfurqon"
 ENV MYSQL_HOST="mysql-server"
 ENV MYSQL_PORT="3306"
 ENV MYSQL_USER="prayoga"
@@ -38,7 +38,7 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
-ENV DATABASE_URL="mysql://prayoga:Pr4y0g%40%40@mysql-server:3306/website_alfurqon"
+ENV DATABASE_URL="mysql://prayoga:Pr4y0g%40@mysql-server:3306/website_alfurqon"
 ENV MYSQL_HOST="mysql-server"
 ENV MYSQL_PORT="3306"
 ENV MYSQL_USER="prayoga"
