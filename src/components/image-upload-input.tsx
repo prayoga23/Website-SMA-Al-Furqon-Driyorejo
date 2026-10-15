@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useRef } from "react";
-import { Upload, X } from "lucide-react";
+import React, { useRef, useState } from "react";
+import { Upload, X, Loader2 } from "lucide-react";
 
 interface ImageUploadInputProps {
   value: string;
@@ -17,20 +17,28 @@ export const ImageUploadInput: React.FC<ImageUploadInputProps> = ({
   aspect = "video",
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (file.size > 10 * 1024 * 1024) {
-      alert("Ukuran file gambar terlalu besar. Maksimal 10MB.");
+    if (file.size > 15 * 1024 * 1024) {
+      alert("Ukuran file gambar terlalu besar. Maksimal 15MB.");
+      if (fileInputRef.current) fileInputRef.current.value = "";
       return;
     }
+
+    setIsProcessing(true);
 
     const reader = new FileReader();
     reader.onload = (event) => {
       const resultStr = event.target?.result as string;
-      if (!resultStr) return;
+      if (!resultStr) {
+        setIsProcessing(false);
+        if (fileInputRef.current) fileInputRef.current.value = "";
+        return;
+      }
 
       const img = new Image();
       img.onload = () => {
@@ -38,7 +46,9 @@ export const ImageUploadInput: React.FC<ImageUploadInputProps> = ({
           const canvas = document.createElement("canvas");
           let width = img.width;
           let height = img.height;
-          const maxDim = 1200;
+
+          // Responsive max dimension based on aspect ratio
+          const maxDim = aspect === "portrait" || aspect === "square" ? 600 : 800;
 
           if (width > maxDim || height > maxDim) {
             if (width > height) {
@@ -55,20 +65,50 @@ export const ImageUploadInput: React.FC<ImageUploadInputProps> = ({
           const ctx = canvas.getContext("2d");
           if (ctx) {
             ctx.drawImage(img, 0, 0, width, height);
-            const compressed = canvas.toDataURL("image/jpeg", 0.85);
+
+            // Progressive compression to ensure payload is always under ~250KB for reliable network sync
+            let quality = 0.82;
+            let compressed = canvas.toDataURL("image/jpeg", quality);
+
+            while (compressed.length > 250 * 1024 && quality > 0.45) {
+              quality -= 0.1;
+              compressed = canvas.toDataURL("image/jpeg", quality);
+            }
+
             onChange(compressed);
+            setIsProcessing(false);
+            if (fileInputRef.current) fileInputRef.current.value = "";
             return;
           }
-        } catch (e) {
-          console.warn("Canvas compression fallback:", e);
+        } catch (err) {
+          console.warn("Canvas compression failed:", err);
         }
-        onChange(resultStr);
+
+        // Fallback if canvas is unavailable: only allow if raw data is reasonably small (<300KB)
+        if (resultStr.length <= 300 * 1024) {
+          onChange(resultStr);
+        } else {
+          alert("Gambar terlalu besar untuk diproses browser. Silakan gunakan format file JPG atau PNG lain.");
+        }
+        setIsProcessing(false);
+        if (fileInputRef.current) fileInputRef.current.value = "";
       };
+
       img.onerror = () => {
-        onChange(resultStr);
+        alert("Gagal memuat file gambar. Format mungkin tidak didukung.");
+        setIsProcessing(false);
+        if (fileInputRef.current) fileInputRef.current.value = "";
       };
+
       img.src = resultStr;
     };
+
+    reader.onerror = () => {
+      alert("Gagal membaca file gambar.");
+      setIsProcessing(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    };
+
     reader.readAsDataURL(file);
   };
 
@@ -90,7 +130,15 @@ export const ImageUploadInput: React.FC<ImageUploadInputProps> = ({
         className="hidden"
       />
 
-      {value ? (
+      {isProcessing ? (
+        <div className="border-2 border-dashed border-emerald-500 rounded-2xl p-6 text-center bg-emerald-50/50 dark:bg-emerald-950/20 flex flex-col items-center justify-center gap-2">
+          <Loader2 className="w-6 h-6 animate-spin text-emerald-600 dark:text-emerald-400" />
+          <p className="text-xs font-bold text-emerald-800 dark:text-emerald-300">
+            Mengompresi & Memproses Foto...
+          </p>
+          <p className="text-[10px] text-slate-400">Menyesuaikan ukuran gambar untuk performa optimal</p>
+        </div>
+      ) : value ? (
         <div className="space-y-2">
           <div
             onClick={() => fileInputRef.current?.click()}
@@ -160,7 +208,7 @@ export const ImageUploadInput: React.FC<ImageUploadInputProps> = ({
             Ketuk untuk Upload Foto / Gambar
           </p>
           <p className="text-[10px] text-slate-400 mt-0.5">
-            Pilih dari Galeri atau Kamera HP (JPG, PNG, WEBP maks 10MB)
+            Pilih dari Galeri atau Kamera HP (JPG, PNG, WEBP maks 15MB)
           </p>
         </div>
       )}

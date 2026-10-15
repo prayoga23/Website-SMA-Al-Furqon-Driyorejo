@@ -60,8 +60,8 @@ interface DataContextType {
   addAchievement: (item: Omit<AchievementItem, "id">) => void;
   updateAchievement: (id: string, item: Partial<AchievementItem>) => void;
   deleteAchievement: (id: string) => void;
-  addTeacher: (item: Omit<TeacherItem, "id">) => void;
-  updateTeacher: (id: string, item: Partial<TeacherItem>) => void;
+  addTeacher: (item: Omit<TeacherItem, "id">) => Promise<boolean>;
+  updateTeacher: (id: string, item: Partial<TeacherItem>) => Promise<boolean>;
   deleteTeacher: (id: string) => void;
   setTeachersData: (items: TeacherItem[]) => void;
   resetTeachersToDefault: () => void;
@@ -351,21 +351,24 @@ export const DataProvider: React.FC<{
   };
 
   // --- TEACHERS ---
-  const addTeacher = (item: Omit<TeacherItem, "id">) => {
+  const addTeacher = async (item: Omit<TeacherItem, "id">): Promise<boolean> => {
     const newItem: TeacherItem = {
       ...item,
       id: "t-" + Date.now(),
     };
     const updated = [...teachers, newItem];
     setTeachers(updated);
-    syncToApi("teachers", "save", newItem);
+    return await syncToApi("teachers", "save", newItem);
   };
 
-  const updateTeacher = (id: string, item: Partial<TeacherItem>) => {
+  const updateTeacher = async (id: string, item: Partial<TeacherItem>): Promise<boolean> => {
     const updated = teachers.map((t) => (t.id === id ? { ...t, ...item } : t));
     setTeachers(updated);
     const target = updated.find((t) => t.id === id);
-    if (target) syncToApi("teachers", "save", target);
+    if (target) {
+      return await syncToApi("teachers", "save", target);
+    }
+    return false;
   };
 
   const deleteTeacher = (id: string) => {

@@ -90,6 +90,7 @@ export default function AdminGuruPage() {
   const [education, setEducation] = useState("");
   const [photo, setPhoto] = useState("");
   const [bio, setBio] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
 
   const excelFileInputRef = useRef<HTMLInputElement>(null);
 
@@ -119,31 +120,44 @@ export default function AdminGuruPage() {
     setModalOpen(true);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !position.trim()) return;
 
-    if (editingItem) {
-      updateTeacher(editingItem.id, {
-        ...editingItem,
-        name,
-        position,
-        subject,
-        education,
-        photo,
-        bio,
-      });
-    } else {
-      addTeacher({
-        name,
-        position,
-        subject,
-        education,
-        photo,
-        bio,
-      });
+    setIsSaving(true);
+    try {
+      let success = false;
+      if (editingItem) {
+        success = await updateTeacher(editingItem.id, {
+          ...editingItem,
+          name,
+          position,
+          subject,
+          education,
+          photo,
+          bio,
+        });
+      } else {
+        success = await addTeacher({
+          name,
+          position,
+          subject,
+          education,
+          photo,
+          bio,
+        });
+      }
+
+      if (success) {
+        setModalOpen(false);
+      } else {
+        alert("Gagal menyimpan data guru ke database server. Silakan coba kembali.");
+      }
+    } catch (err) {
+      alert("Terjadi kesalahan saat menyimpan: " + String(err));
+    } finally {
+      setIsSaving(false);
     }
-    setModalOpen(false);
   };
 
   // Download Excel Template
@@ -458,21 +472,24 @@ export default function AdminGuruPage() {
                   value={photo}
                   onChange={(imgData) => setPhoto(imgData)}
                   label="Upload Pasfoto / Foto Guru"
+                  aspect="portrait"
                 />
 
                 <div className="pt-2 flex justify-end gap-2">
                   <button
                     type="button"
+                    disabled={isSaving}
                     onClick={() => setModalOpen(false)}
-                    className="px-4 py-2 rounded-xl bg-slate-200 dark:bg-emerald-950 font-bold text-slate-700 dark:text-slate-200"
+                    className="px-4 py-2 rounded-xl bg-slate-200 dark:bg-emerald-950 font-bold text-slate-700 dark:text-slate-200 text-xs hover:bg-slate-300 transition-colors disabled:opacity-50"
                   >
                     Batal
                   </button>
                   <button
                     type="submit"
-                    className="px-4 py-2 rounded-xl bg-emerald-700 text-white font-bold hover:bg-emerald-600 transition-colors"
+                    disabled={isSaving}
+                    className="px-5 py-2 rounded-xl bg-emerald-700 text-white font-bold hover:bg-emerald-600 transition-colors disabled:opacity-50 text-xs flex items-center gap-1.5 shadow"
                   >
-                    {editingItem ? "Simpan Perubahan" : "Simpan Guru"}
+                    {isSaving ? "Menyimpan ke Server..." : (editingItem ? "Simpan Perubahan" : "Simpan Guru")}
                   </button>
                 </div>
               </form>

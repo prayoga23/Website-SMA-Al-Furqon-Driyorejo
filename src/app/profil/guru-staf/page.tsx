@@ -175,7 +175,9 @@ export default function GuruStafPage() {
               t.name.toLowerCase().includes("suryanto");
 
             const displayName = isKepsek && schoolInfo?.headmasterName ? schoolInfo.headmasterName : t.name;
-            const displayPhoto = isKepsek && schoolInfo?.headmasterPhoto ? schoolInfo.headmasterPhoto : (t.photo || "/Pak Sur.jpeg");
+            const displayPhoto = isKepsek
+              ? (schoolInfo?.headmasterPhoto || t.photo || "/Pak Sur.jpeg")
+              : (t.photo || "");
 
             const hasError = imgErrors[t.id];
             const isUnsplash = Boolean(displayPhoto && displayPhoto.includes("unsplash.com"));
