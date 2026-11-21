@@ -1,0 +1,48 @@
+{
+  "timestamp": "2026-09-30T18:36:06.710Z",
+  "testimonials": [],
+  "achievements": [],
+  "agendas": [
+    {
+      "id": "agenda-1",
+      "title": "Simulasi TKA & Ujian Sekolah Kelas XII",
+      "date": "2026-09-24",
+      "time": "07:30 - 12:00 WIB",
+      "location": "Lab Komputer & Ruang Kelas XII",
+      "description": "Simulasi Tes Kemampuan Akademik berbasis komputer untuk menguji kesiapan materi dan mental santri menghadapi seleksi PTN.",
+      "category": "Akademik",
+      "created_at": "2026-09-30T11:05:00.660Z"
+    },
+    {
+      "id": "agenda-2",
+      "title": "Munaqosyah Tahfidz Metode UMMI",
+      "date": "2026-10-15",
+      "time": "08:00 - 14:00 WIB",
+      "location": "Masjid Utama Al-Furqon",
+      "description": "Ujian terbuka hafalan Al-Qur'an minimal 3 Juz oleh Tim Penguji Resmi Ummi Foundation Surabaya.",
+      "category": "Keagamaan",
+      "created_at": "2026-09-30T11:05:00.926Z"
+    },
+    {
+      "id": "agenda-3",
+      "title": "Peringatan Isra' Mi'raj & Furqon Festival",
+      "date": "2026-10-28",
+      "time": "08:00 - 15:00 WIB",
+      "location": "Halaman & Aula Pertemuan Sekolah",
+      "description": "Rangkaian lomba keislaman antar-santri, pameran inovasi P5, dan tabligh akbar bersama pengasuh pesantren.",
+      "category": "Kesiswaan",
+      "created_at": "2026-09-30T11:05:01.211Z"
+    },
+    {
+      "id": "agenda-4",
+      "title": "Bakti Sosial & Safari Ramadan Santri",
+      "date": "2026-11-10",
+      "time": "09:00 - 16:00 WIB",
+      "location": "Desa Binaan Driyorejo Gresik",
+      "description": "Penyaluran zakat, infaq, dan sembako serta pengabdian masyarakat oleh Organisasi Santri SMA Al-Furqon.",
+      "category": "Umum",
+      "created_at": "2026-09-30T11:05:01.523Z"
+    }
+  ],
+  "gallery": []
+}

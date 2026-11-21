@@ -1,0 +1,127 @@
+"use client";
+
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { Lock, User, ArrowLeft, ShieldCheck, KeyRound, Eye, EyeOff } from "lucide-react";
+import { useData } from "@/context/data-context";
+
+export default function AdminLoginPage() {
+  const router = useRouter();
+  const { loginUser, users } = useData();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+
+    setTimeout(() => {
+      const res = loginUser(username, password);
+      if (res.success) {
+        router.push("/admin/dashboard");
+      } else {
+        setError(res.message || "Username atau Password salah!");
+        setLoading(false);
+      }
+    }, 400);
+  };
+
+  const fillAccount = (usr: string, pwd: string) => {
+    setUsername(usr);
+    setPassword(pwd);
+  };
+
+  return (
+    <div className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-br from-[#032B21] via-[#064E3B] to-[#047857] text-white p-4 relative">
+      <Link
+        href="/"
+        className="absolute top-6 left-6 inline-flex items-center gap-2 text-xs font-bold text-amber-300 hover:text-amber-200 transition-colors"
+      >
+        <ArrowLeft className="w-4 h-4" />
+        <span>Kembali ke Website</span>
+      </Link>
+
+      <div className="max-w-md w-full bg-white dark:bg-[#0E241E] text-slate-800 dark:text-white rounded-3xl p-8 shadow-2xl border border-white/20 dark:border-emerald-900/60 space-y-6">
+        <div className="text-center space-y-2">
+          <img src="/logo.png" alt="Logo SMA Al-Furqon Driyorejo" className="w-20 h-20 mx-auto" />
+          <h2 className="text-2xl font-extrabold font-heading text-slate-900 dark:text-white">
+            Portal CMS Admin Website
+          </h2>
+          <p className="text-xs text-slate-500 dark:text-slate-400">
+            SMA Al-Furqon Driyorejo, Gresik
+          </p>
+        </div>
+
+        {error && (
+          <div className="p-3 rounded-xl bg-red-50 dark:bg-red-950 text-red-700 dark:text-red-300 text-xs font-medium border border-red-200">
+            {error}
+          </div>
+        )}
+
+        <form onSubmit={handleLogin} className="space-y-4">
+          <div>
+            <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1">
+              Username Admin / User
+            </label>
+            <div className="relative">
+              <input
+                type="text"
+                required
+                autoComplete="username"
+                placeholder="Masukkan username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-50 dark:bg-[#081612] border border-slate-200 dark:border-emerald-900/60 text-xs focus:outline-none focus:ring-2 focus:ring-[#047857] dark:text-white"
+              />
+              <User className="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1">
+              Password
+            </label>
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                required
+                autoComplete="current-password"
+                placeholder="Masukkan password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full pl-10 pr-11 py-3 rounded-xl bg-slate-50 dark:bg-[#081612] border border-slate-200 dark:border-emerald-900/60 text-xs focus:outline-none focus:ring-2 focus:ring-[#047857] dark:text-white"
+              />
+              <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" />
+              <button
+                type="button"
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="absolute right-3.5 top-3.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors p-0.5 rounded-lg focus:outline-none"
+                title={showPassword ? "Sembunyikan password" : "Lihat password"}
+                aria-label={showPassword ? "Sembunyikan password" : "Lihat password"}
+              >
+                {showPassword ? (
+                  <EyeOff className="w-4 h-4 text-slate-500 hover:text-slate-700 dark:hover:text-white" />
+                ) : (
+                  <Eye className="w-4 h-4 text-slate-400 hover:text-slate-700 dark:hover:text-white" />
+                )}
+              </button>
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full py-3.5 rounded-xl bg-[#064E3B] hover:bg-[#047857] text-white font-extrabold text-xs shadow-lg transition-all active:scale-95 disabled:opacity-50"
+          >
+            {loading ? "Memverifikasi..." : "Masuk ke Dashboard Admin"}
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}

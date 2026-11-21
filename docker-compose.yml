@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  nextjs-app-alfurqon:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nextjs-app-alfurqon
+    restart: unless-stopped
+    ports:
+      - "3030:3030"
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+      - MYSQL_HOST=mysql-server
+      - MYSQL_PORT=3306
+      - MYSQL_USER=prayoga
+      - MYSQL_PASSWORD=Pr4y0g@
+      - MYSQL_DATABASE=website_alfurqon
+      - DATABASE_URL=mysql://prayoga:Pr4y0g%40@mysql-server:3306/website_alfurqon
+    networks:
+      - proxy-network
+
+networks:
+  proxy-network:
+    external: true

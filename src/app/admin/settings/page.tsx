@@ -1,0 +1,307 @@
+"use client";
+
+import React, { useState, useEffect } from "react";
+import { AdminSidebar } from "@/components/admin-sidebar";
+import { useData } from "@/context/data-context";
+import { Settings, Save, CheckCircle } from "lucide-react";
+import { ImageUploadInput } from "@/components/image-upload-input";
+
+export default function AdminSettingsPage() {
+  const { schoolInfo, updateSchoolInfo } = useData();
+
+  const [form, setForm] = useState({
+    name: schoolInfo.name,
+    tagline: schoolInfo.tagline,
+    accreditation: schoolInfo.accreditation,
+    npsn: schoolInfo.npsn,
+    foundation: schoolInfo.foundation,
+    address: schoolInfo.address,
+    email: schoolInfo.email,
+    whatsapp: schoolInfo.whatsapp,
+    vision: schoolInfo.vision,
+    missionsText: schoolInfo.missions ? schoolInfo.missions.join("\n") : "",
+    goalsText: schoolInfo.goals ? schoolInfo.goals.join("\n") : "",
+    headmasterName:
+      schoolInfo.headmasterName && schoolInfo.headmasterName !== "Suryanto, S.Pd., M.Pd."
+        ? schoolInfo.headmasterName
+        : "Dr. Suryanto, S.Pd., M.Pd.",
+    headmasterPhoto:
+      schoolInfo.headmasterPhoto &&
+      !schoolInfo.headmasterPhoto.includes("unsplash.com") &&
+      schoolInfo.headmasterPhoto !== "/foto-kepala-sekolah.png"
+        ? schoolInfo.headmasterPhoto
+        : "/Pak Sur.jpeg",
+    headmasterWelcome: schoolInfo.headmasterWelcome,
+  });
+
+  useEffect(() => {
+    if (schoolInfo) {
+      setForm({
+        name: schoolInfo.name || "",
+        tagline: schoolInfo.tagline || "",
+        accreditation: schoolInfo.accreditation || "",
+        npsn: schoolInfo.npsn || "",
+        foundation: schoolInfo.foundation || "",
+        address: schoolInfo.address || "",
+        email: schoolInfo.email || "",
+        whatsapp: schoolInfo.whatsapp || "",
+        vision: schoolInfo.vision || "",
+        missionsText: schoolInfo.missions ? schoolInfo.missions.join("\n") : "",
+        goalsText: schoolInfo.goals ? schoolInfo.goals.join("\n") : "",
+        headmasterName:
+          schoolInfo.headmasterName && schoolInfo.headmasterName !== "Suryanto, S.Pd., M.Pd."
+            ? schoolInfo.headmasterName
+            : "Dr. Suryanto, S.Pd., M.Pd.",
+        headmasterPhoto:
+          schoolInfo.headmasterPhoto &&
+          !schoolInfo.headmasterPhoto.includes("unsplash.com") &&
+          schoolInfo.headmasterPhoto !== "/foto-kepala-sekolah.png"
+            ? schoolInfo.headmasterPhoto
+            : "/Pak Sur.jpeg",
+        headmasterWelcome: schoolInfo.headmasterWelcome || "",
+      });
+    }
+  }, [schoolInfo]);
+
+  const [saved, setSaved] = useState(false);
+
+  const handleSave = (e: React.FormEvent) => {
+    e.preventDefault();
+    const missions = form.missionsText
+      .split("\n")
+      .map((s) => s.trim())
+      .filter((s) => s.length > 0);
+    const goals = form.goalsText
+      .split("\n")
+      .map((s) => s.trim())
+      .filter((s) => s.length > 0);
+
+    updateSchoolInfo({
+      name: form.name,
+      tagline: form.tagline,
+      accreditation: form.accreditation,
+      npsn: form.npsn,
+      foundation: form.foundation,
+      address: form.address,
+      email: form.email,
+      whatsapp: form.whatsapp,
+      vision: form.vision,
+      missions: missions.length > 0 ? missions : schoolInfo.missions,
+      goals: goals.length > 0 ? goals : schoolInfo.goals,
+      headmasterName: form.headmasterName,
+      headmasterPhoto: form.headmasterPhoto,
+      headmasterWelcome: form.headmasterWelcome,
+    });
+    setSaved(true);
+    setTimeout(() => setSaved(false), 3000);
+  };
+
+  return (
+    <div className="min-h-screen flex flex-col lg:flex-row bg-[#FDFBF7] dark:bg-[#081612] text-slate-800 dark:text-slate-100">
+      <AdminSidebar />
+
+      <main className="flex-1 p-4 sm:p-8 space-y-6 overflow-y-auto max-w-4xl w-full min-w-0">
+        <div className="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-emerald-900/40">
+          <div>
+            <h1 className="text-xl font-bold font-heading text-slate-900 dark:text-white">
+              Pengaturan Identitas & Profil Sekolah
+            </h1>
+            <p className="text-xs text-slate-500">Edit informasi kontak, visi, misi, dan sambutan di website utama.</p>
+          </div>
+        </div>
+
+        {saved && (
+          <div className="bg-emerald-100 dark:bg-emerald-950 p-4 rounded-xl text-emerald-800 dark:text-emerald-200 text-xs font-bold flex items-center gap-2 border border-emerald-300">
+            <CheckCircle className="w-4 h-4 text-emerald-600" />
+            <span>Perubahan berhasil disimpan! Tampilan di website publik telah diperbarui.</span>
+          </div>
+        )}
+
+        <form onSubmit={handleSave} className="bg-white dark:bg-[#0E241E] p-8 rounded-3xl border border-slate-200 dark:border-emerald-900/40 shadow-sm space-y-6 text-xs">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block font-bold text-slate-700 dark:text-slate-200 mb-1">Nama Sekolah *</label>
+              <input
+                type="text"
+                required
+                value={form.name}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
+                className="w-full p-3 rounded-xl bg-slate-50 dark:bg-[#081612] border border-slate-200 dark:border-emerald-900/60 font-bold"
+              />
+            </div>
+
+            <div>
+              <label className="block font-bold text-slate-700 dark:text-slate-200 mb-1">Akreditasi *</label>
+              <input
+                type="text"
+                required
+                value={form.accreditation}
+                onChange={(e) => setForm({ ...form, accreditation: e.target.value })}
+                className="w-full p-3 rounded-xl bg-slate-50 dark:bg-[#081612] border border-slate-200 dark:border-emerald-900/60 font-bold text-emerald-600"
+              />
+            </div>
+
+            <div>
+              <label className="block font-bold text-slate-700 dark:text-slate-200 mb-1">NPSN *</label>
+              <input
+                type="text"
+                required
+                value={form.npsn}
+                onChange={(e) => setForm({ ...form, npsn: e.target.value })}
+                className="w-full p-3 rounded-xl bg-slate-50 dark:bg-[#081612] border border-slate-200 dark:border-emerald-900/60"
+              />
+            </div>
+
+            <div>
+              <label className="block font-bold text-slate-700 dark:text-slate-200 mb-1">Nama Yayasan *</label>
+              <input
+                type="text"
+                required
+                value={form.foundation}
+                onChange={(e) => setForm({ ...form, foundation: e.target.value })}
+                className="w-full p-3 rounded-xl bg-slate-50 dark:bg-[#081612] border border-slate-200 dark:border-emerald-900/60"
+              />
+            </div>
+
+            <div>
+              <label className="block font-bold text-slate-700 dark:text-slate-200 mb-1">Email Resmi *</label>
+              <input
+                type="email"
+                required
+                value={form.email}
+                onChange={(e) => setForm({ ...form, email: e.target.value })}
+                className="w-full p-3 rounded-xl bg-slate-50 dark:bg-[#081612] border border-slate-200 dark:border-emerald-900/60"
+              />
+            </div>
+
+            <div>
+              <label className="block font-bold text-slate-700 dark:text-slate-200 mb-1">No. WhatsApp Admin *</label>
+              <input
+                type="text"
+                required
+                value={form.whatsapp}
+                onChange={(e) => setForm({ ...form, whatsapp: e.target.value })}
+                className="w-full p-3 rounded-xl bg-slate-50 dark:bg-[#081612] border border-slate-200 dark:border-emerald-900/60"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block font-bold text-slate-700 dark:text-slate-200 mb-1">Nama Kepala Sekolah *</label>
+            <input
+              type="text"
+              required
+              value={form.headmasterName}
+              onChange={(e) => setForm({ ...form, headmasterName: e.target.value })}
+              className="w-full p-3 rounded-xl bg-slate-50 dark:bg-[#081612] border border-slate-200 dark:border-emerald-900/60 font-semibold"
+            />
+          </div>
+
+          {/* Local Image Upload for Headmaster Photo */}
+          <div className="space-y-3 p-4 sm:p-5 rounded-2xl bg-slate-50 dark:bg-[#081612] border border-slate-200 dark:border-emerald-900/60">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <label className="block font-bold text-slate-800 dark:text-slate-100 text-xs sm:text-sm">
+                  Foto Profil Kepala Sekolah (Dr. Suryanto, S.Pd., M.Pd.) *
+                </label>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                  Foto ini otomatis terhubung ke Beranda (Selayang Pandang & Sambutan), Halaman Profil, Struktur Organisasi, dan Dewan Guru.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setForm((prev) => ({ ...prev, headmasterPhoto: "/Pak Sur.jpeg" }))}
+                className="self-start sm:self-auto px-3 py-1.5 rounded-lg bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 font-bold text-[11px] border border-emerald-300 dark:border-emerald-700/60 hover:bg-emerald-200 dark:hover:bg-emerald-900 transition-colors shrink-0 shadow-sm"
+              >
+                Gunakan Foto Asli (Pak Sur.jpeg)
+              </button>
+            </div>
+
+            <ImageUploadInput
+              value={form.headmasterPhoto}
+              onChange={(imgData) => setForm({ ...form, headmasterPhoto: imgData })}
+              label=""
+              aspect="portrait"
+            />
+          </div>
+
+          <div>
+            <label className="block font-bold text-slate-700 dark:text-slate-200 mb-1">Tagline Sekolah *</label>
+            <input
+              type="text"
+              required
+              value={form.tagline}
+              onChange={(e) => setForm({ ...form, tagline: e.target.value })}
+              className="w-full p-3 rounded-xl bg-slate-50 dark:bg-[#081612] border border-slate-200 dark:border-emerald-900/60"
+            />
+          </div>
+
+          <div>
+            <label className="block font-bold text-slate-700 dark:text-slate-200 mb-1">Alamat Lengkap *</label>
+            <input
+              type="text"
+              required
+              value={form.address}
+              onChange={(e) => setForm({ ...form, address: e.target.value })}
+              className="w-full p-3 rounded-xl bg-slate-50 dark:bg-[#081612] border border-slate-200 dark:border-emerald-900/60"
+            />
+          </div>
+
+          <div>
+            <label className="block font-bold text-slate-700 dark:text-slate-200 mb-1">Visi Utama Sekolah *</label>
+            <textarea
+              rows={2}
+              required
+              value={form.vision}
+              onChange={(e) => setForm({ ...form, vision: e.target.value })}
+              className="w-full p-3 rounded-xl bg-slate-50 dark:bg-[#081612] border border-slate-200 dark:border-emerald-900/60 font-semibold"
+            />
+          </div>
+
+          <div>
+            <label className="block font-bold text-slate-700 dark:text-slate-200 mb-1">Daftar Misi Sekolah (1 per baris) *</label>
+            <textarea
+              rows={5}
+              required
+              placeholder="Tuliskan tiap poin misi pada baris baru..."
+              value={form.missionsText}
+              onChange={(e) => setForm({ ...form, missionsText: e.target.value })}
+              className="w-full p-3 rounded-xl bg-slate-50 dark:bg-[#081612] border border-slate-200 dark:border-emerald-900/60 leading-relaxed font-medium"
+            />
+          </div>
+
+          <div>
+            <label className="block font-bold text-slate-700 dark:text-slate-200 mb-1">Daftar Tujuan Utama Sekolah (1 per baris) *</label>
+            <textarea
+              rows={4}
+              required
+              placeholder="Tuliskan tiap poin tujuan pada baris baru..."
+              value={form.goalsText}
+              onChange={(e) => setForm({ ...form, goalsText: e.target.value })}
+              className="w-full p-3 rounded-xl bg-slate-50 dark:bg-[#081612] border border-slate-200 dark:border-emerald-900/60 leading-relaxed font-medium"
+            />
+          </div>
+
+          <div>
+            <label className="block font-bold text-slate-700 dark:text-slate-200 mb-1">Sambutan Kepala Sekolah *</label>
+            <textarea
+              rows={3}
+              required
+              value={form.headmasterWelcome}
+              onChange={(e) => setForm({ ...form, headmasterWelcome: e.target.value })}
+              className="w-full p-3 rounded-xl bg-slate-50 dark:bg-[#081612] border border-slate-200 dark:border-emerald-900/60"
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="w-full py-4 rounded-xl bg-[#064E3B] hover:bg-[#047857] text-white font-extrabold text-xs shadow-lg flex items-center justify-center gap-2 transition-all active:scale-95"
+          >
+            <Save className="w-4 h-4" />
+            <span>Simpan Perubahan Profil Sekolah</span>
+          </button>
+        </form>
+      </main>
+    </div>
+  );
+}
